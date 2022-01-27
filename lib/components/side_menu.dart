@@ -51,7 +51,7 @@ class SideMenu extends StatelessWidget {
                     onPressed: () {},
                     icon: WebsafeSvg.asset("assets/Icons/Edit.svg", width: 16),
                     label: const Text(
-                      "پیام جدید",
+                      "ثبت نامه صادره",
                       style: TextStyle(color: Colors.white),
                     ),
                   ).addNeumorphism(
@@ -72,7 +72,7 @@ class SideMenu extends StatelessWidget {
                     icon: WebsafeSvg.asset(
                         "assets/Icons/Download.svg", width: 16),
                     label: const Text(
-                      "دریافت پیام؟",
+                      "ثبت نامه وارده",
                       style: TextStyle(color: kTextColor),
                     ),
                   ).addNeumorphism(),
@@ -80,7 +80,7 @@ class SideMenu extends StatelessWidget {
                   // Menu Items
                   SideMenuItem(
                     press: () {},
-                    title: "صندوق پیام",
+                    title: "کارتابل",
                     iconSrc: "assets/Icons/Inbox.svg",
                     isActive: true,
                     itemCount: 3,

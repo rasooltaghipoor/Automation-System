@@ -1,6 +1,7 @@
 import 'package:automation_system/components/side_menu.dart';
 import 'package:automation_system/responsive.dart';
 import 'package:automation_system/screens/email/email_screen.dart';
+import 'package:automation_system/screens/main/components/email_gridview.dart';
 import 'package:flutter/material.dart';
 import 'components/list_of_emails.dart';
 
@@ -20,8 +21,8 @@ class MainScreen extends StatelessWidget {
               child: ListOfEmails(),
             ),
             Expanded(
-              flex: 9,
-              child: EmailScreen(),
+              flex: 3,
+              child: SideMenu(),
             ),
           ],
         ),
@@ -29,13 +30,13 @@ class MainScreen extends StatelessWidget {
           children: [
             // Once our width is less then 1300 then it start showing errors
             // Now there is no error if our width is less then 1340
-            Expanded(
+            /*Expanded(
               flex: _size.width > 1340 ? 8 : 10,
               child: const EmailScreen(),
-            ),
+            ),*/
             Expanded(
-              flex: _size.width > 1340 ? 3 : 5,
-              child: const ListOfEmails(),
+              flex: _size.width > 1340 ? 10 : 16,
+              child: const EmailGridView(),
             ),
             Expanded(
               flex: _size.width > 1340 ? 2 : 4,
