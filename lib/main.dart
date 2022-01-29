@@ -1,4 +1,6 @@
 import 'package:automation_system/screens/main/main_screen.dart';
+import 'package:automation_system/screens/register/components/text_editor.dart';
+import 'package:automation_system/screens/register/incoming_letter.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -17,7 +19,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MainScreen(),
+      home: IncomingLetterScreen(),
     );
   }
 }

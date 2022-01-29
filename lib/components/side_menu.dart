@@ -35,7 +35,7 @@ class SideMenu extends StatelessWidget {
                       ),
                       const Spacer(),
                       // We don't want to show this close button on Desktop mood
-                      if (!Responsive.isDesktop(context)) CloseButton(),
+                      if (!Responsive.isDesktop(context)) const CloseButton(),
                     ],
                   ),
                   const SizedBox(height: kDefaultPadding),
