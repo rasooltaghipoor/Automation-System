@@ -78,31 +78,74 @@ class SideMenu extends StatelessWidget {
                   ).addNeumorphism(),
                   const SizedBox(height: kDefaultPadding * 2),
                   // Menu Items
-                  SideMenuItem(
-                    press: () {},
-                    title: "کارتابل",
-                    iconSrc: "assets/Icons/Inbox.svg",
-                    isActive: true,
-                    itemCount: 3,
+                  ExpansionTile(
+                    backgroundColor: kBgDarkColor,
+                    initiallyExpanded: true,
+                    title: SideMenuItem(
+                      press: () {},
+                      title: "کارتابل",
+                      iconSrc: "assets/Icons/Inbox.svg",
+                      isActive: true,
+                      itemCount: 3,
+                    ),
+                    children: <Widget>[
+                      SideMenuItem(
+                        press: () {},
+                        title: "جهت اقدام",
+                        iconSrc: "assets/Icons/File.svg",
+                        isActive: false,
+                      ),
+                      SideMenuItem(
+                        press: () {},
+                        title: "استحضار",
+                        iconSrc: "assets/Icons/File.svg",
+                        isActive: false,
+                      ),
+                      SideMenuItem(
+                        press: () {},
+                        title: "اطلاع",
+                        iconSrc: "assets/Icons/File.svg",
+                        isActive: false,
+                      ),
+                      SideMenuItem(
+                        press: () {},
+                        title: "امضا",
+                        iconSrc: "assets/Icons/File.svg",
+                        isActive: false,
+                      ),
+                      SideMenuItem(
+                        press: () {},
+                        title: "فوری",
+                        iconSrc: "assets/Icons/File.svg",
+                        isActive: false,
+                      ),
+                      SideMenuItem(
+                        press: () {},
+                        title: "خوانده شده",
+                        iconSrc: "assets/Icons/File.svg",
+                        isActive: false,
+                      ),
+                    ],
                   ),
+                  const SizedBox(height: kDefaultPadding * 2),
                   SideMenuItem(
                     press: () {},
-                    title: "ارسال شده",
-                    iconSrc: "assets/Icons/Send.svg",
-                    isActive: false,
-                  ),
-                  SideMenuItem(
-                    press: () {},
-                    title: "پیش نویس",
+                    title: "صورت جلسه",
                     iconSrc: "assets/Icons/File.svg",
                     isActive: false,
                   ),
                   SideMenuItem(
                     press: () {},
-                    title: "حذف شده",
+                    title: "بایگانی شخصی",
                     iconSrc: "assets/Icons/Trash.svg",
                     isActive: false,
                     showBorder: false,
+                  ),
+                  SideMenuItem(
+                    press: () {},
+                    title: "بایگانی اداری",
+                    iconSrc: "assets/Icons/File.svg",
+                    isActive: false,
                   ),
 
                   const SizedBox(height: kDefaultPadding * 2),

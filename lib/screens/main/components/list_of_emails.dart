@@ -57,7 +57,7 @@ class _ListOfEmailsState extends State<ListOfEmails> {
                           ),
                         if (!Responsive.isDesktop(context)) const SizedBox(
                             width: 5),
-                        Expanded(
+                        /*Expanded(
                           child: TextField(
                             onChanged: (value) {},
                             decoration: InputDecoration(
@@ -79,7 +79,7 @@ class _ListOfEmailsState extends State<ListOfEmails> {
                               ),
                             ),
                           ),
-                        ),
+                        ),*/
                       ],
                     ),
                   ),
