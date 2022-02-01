@@ -1,176 +1,93 @@
-import 'package:automation_system/utils/SizeConfiguration.dart';
-import 'package:flutter/material.dart';
-import 'package:websafe_svg/websafe_svg.dart';
 
-import '../../../constants.dart';
+import 'package:automation_system/constants.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class ScreenHeader extends StatelessWidget {
   const ScreenHeader({Key? key}) : super(key: key);
 
-  /*const ScreenHeader({
-    Key? key,
-    this.isActive = true,
-    this.email,
-    this.press,
-  }) : super(key: key);
-
-  final bool? isActive;
-  final Email? email;
-  final VoidCallback? press;*/
-
   @override
   Widget build(BuildContext context) {
-    //  Here the shadow is not showing properly
     return Padding(
-        padding: const EdgeInsets.symmetric(
-            horizontal: kDefaultPadding, vertical: kDefaultPadding / 2),
+        padding: const EdgeInsets.all(10),
         child: Directionality(
           textDirection: TextDirection.rtl,
-          child: Row(
-            children: [
-              Expanded(
-                flex: 6,
-                child:
-                Row(
-                  children: [
-                    /*Expanded(child:
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(4),
-                    child: Stack(
-                      children: <Widget>[
-                        Positioned.fill(
-                          child: Container(
-                            decoration: const BoxDecoration(
-                              gradient: LinearGradient(
-                                colors: <Color>[
-                                  Color(0xFF0D47A1),
-                                  Color(0xFF1976D2),
-                                  Color(0xFF42A5F5),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        TextButton(
-                          style: TextButton.styleFrom(
-                            padding: const EdgeInsets.all(16.0),
-                            primary: Colors.white,
-                            textStyle: const TextStyle(fontSize: 20),
-                          ),
-                          onPressed: () {},
-                          child: const Text('نامه جدید'),
+          child: Container(
+            color: kSecondaryColor,
+            child: Row(
+              children: [
+                Expanded(
+                    flex: 2,
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                      Image.asset(
+                      "assets/images/Logo Outlook.png"),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: const[
+                            Expanded(child: Text('رسول تقی پور')),
+                            Expanded(child: Text('هیات علمی')),
+                          ],
                         ),
                       ],
-                    ),
-                  ),),*/
-                    Expanded(child: Container(
-                      padding: const EdgeInsets.all(1),
-                      /*decoration: const BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: <Color>[
-                            Color(0xFF0D47A1),
-                            Color(0xFF1976D2),
-                            Color(0xFF42A5F5),
-                          ],
-                        ),
-                      ),*/
-                      height: SizeConfig.blockSizeHorizontal! * 10 *
-                          0.25,
-                      child: ElevatedButton(
-                        onPressed: () {},
-                        child: const Text('نامه جدید'),),
                     )
-                    ),
-                    Expanded(
-                        child: Container(
-                          padding: const EdgeInsets.all(1),
-                          height: SizeConfig.blockSizeHorizontal! * 10 *
-                              0.25,
-                          child: ElevatedButton(
-                            onPressed: () {},
-                            child: const Text('ارجاع سریع'),),
-                        )
-                    ),
-                    Expanded(child: Container(
-                      padding: const EdgeInsets.all(1),
-                      height: SizeConfig.blockSizeHorizontal! * 10 *
-                          0.25,
-                      child: ElevatedButton(
-                        onPressed: () {},
-                        child: Row(
-                          mainAxisAlignment:
-                          MainAxisAlignment.spaceEvenly,
-                          children: const[
-                            Icon(
-                              Icons.textsms,
-                              color: Colors.white,
-                              //size: SizeConfig.safeBlockHorizontal! * 12,
-                            ),
-                            Text(
-                              'امضای سریع',
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
-                        ),
-                      ),
-                    )
-                    ),
-                    Expanded(child: Container(
-                      padding: const EdgeInsets.all(1),
-                      height: SizeConfig.blockSizeHorizontal! * 10 *
-                          0.25,
-                      child: ElevatedButton(
-                        onPressed: () {},
-                        child: Row(
-                          mainAxisAlignment:
-                          MainAxisAlignment.spaceEvenly,
-                          children: const[
-                            Icon(
-                              Icons.library_books,
-                              color: Colors.white,
-                              //size: SizeConfig.safeBlockHorizontal! * 12,
-                            ),
-                            Text(
-                              'بایگانی',
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
-                        ),
-                      ),
-                    )
-                    ),
-                  ],
-                ),),
-              const Expanded(
-                flex: 1,
-                child: SizedBox(),),
-              Expanded(
-                flex: 3,
-                child: TextField(
-                  onChanged: (value) {},
-                  decoration: InputDecoration(
-                    hintText: "جستجو",
-                    fillColor: kBgLightColor,
-                    filled: true,
-                    suffixIcon: Padding(
-                      padding: const EdgeInsets.all(
-                          kDefaultPadding * 0.75), //15
-                      child: WebsafeSvg.asset(
-                        "assets/Icons/Search.svg",
-                        width: 24,
-                      ),
-                    ),
-                    border: const OutlineInputBorder(
-                      borderRadius: BorderRadius.all(
-                          Radius.circular(10)),
-                      borderSide: BorderSide.none,
-                    ),
-                  ),
                 ),
-              ),
-            ],
+                Expanded(
+                    flex: 5,
+                    child: Row(
+                    )
+                ),
+                Expanded(
+                    flex: 5,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        ElevatedButton.icon(
+                          icon: const Icon(
+                            Icons.settings,
+                            color: Colors.white,
+                            size: 24.0,
+                          ),
+                          label: const Text('تنظیمات صفحه'),
+                          onPressed: () {},
+                        ),
+                        ElevatedButton.icon(
+                          icon: const Icon(
+                            Icons.account_circle_rounded,
+                            color: Colors.white,
+                            size: 24.0,
+                          ),
+                          label: const Text('تنظیمات کاربری'),
+                          onPressed: () {},
+                        ),
+                        ElevatedButton.icon(
+                          icon: const Icon(
+                            Icons.info,
+                            color: Colors.white,
+                            size: 24.0,
+                          ),
+                          label: const Text('درباره نرم افزار'),
+                          onPressed: () {},
+                        ),
+                        IconButton(
+                          icon: const Icon(
+                            Icons.info,
+                            color: Colors.blue,
+                            size: 32.0,
+                          ),
+                          tooltip: 'درباره نرم افزار',
+                          onPressed: () {
+
+                          },
+                        ),
+                      ],
+                    )
+                ),
+              ],
+            ),
           ),
-        )
-    );
+        ));
   }
+
 }

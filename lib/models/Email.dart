@@ -1,18 +1,25 @@
 import 'package:flutter/material.dart';
 
 class Email {
-  final String? image, name, subject, body, time;
-  final bool? isAttachmentAvailable, isChecked;
+  final String? image, name, source, subject, body, time,type, requiredAction, idNumber;
+  final bool? isAttachmentAvailable, isChecked, isSelected, isOriginal, isConfidential;
   final Color? tagColor;
 
   Email({
-    this.time,
-    this.isChecked,
     this.image,
     this.name,
+    this.source,
     this.subject,
     this.body,
+    this.time,
+    this.type,
+    this.requiredAction,
+    this.idNumber,
     this.isAttachmentAvailable,
+    this.isChecked,
+    this.isSelected,
+    this.isOriginal,
+    this.isConfidential,
     this.tagColor,
   });
 }

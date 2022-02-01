@@ -43,76 +43,78 @@ class _NavigationBarState extends State<MyNavigationBar> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      /*appBar: AppBar(
+        backgroundColor: Colors.white,
+        /*appBar: AppBar(
         elevation: 20,
         title: const Text('GoogleNavBar'),
       ),
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
       ),*/
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              blurRadius: 20,
-              color: Colors.black.withOpacity(.1),
-            )
-          ],
-        ),
-        child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8),
-            child: Directionality(
-    textDirection: TextDirection.rtl,
-    child:GNav(
-              rippleColor: Colors.grey[300]!,
-              hoverColor: Colors.grey[100]!,
-              gap: 8,
-              activeColor: Colors.black,
-              iconSize: 24,
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-              duration: const Duration(milliseconds: 400),
-              tabBackgroundColor: Colors.grey[100]!,
-              color: Colors.black,
-              tabs: const [
-                GButton(
-                  backgroundColor: Colors.amber,
-                  iconActiveColor: Colors.blue,
-                  icon: LineIcons.book,
-                  text: 'نامه جدید',
+        bottomNavigationBar: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            boxShadow: [
+              BoxShadow(
+                blurRadius: 20,
+                color: Colors.black.withOpacity(.1),
+              )
+            ],
+          ),
+          child: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                  horizontal: 15.0, vertical: 8),
+              child: Directionality(
+                textDirection: TextDirection.rtl,
+                child: GNav(
+                  rippleColor: Colors.grey[300]!,
+                  hoverColor: Colors.grey[100]!,
+                  gap: 8,
+                  activeColor: Colors.black,
+                  iconSize: 24,
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 20, vertical: 12),
+                  duration: const Duration(milliseconds: 400),
+                  tabBackgroundColor: Colors.grey[100]!,
+                  color: Colors.black,
+                  tabs: const [
+                    GButton(
+                      backgroundColor: Colors.amber,
+                      iconActiveColor: Colors.blue,
+                      icon: LineIcons.book,
+                      text: 'نامه جدید',
+                    ),
+                    GButton(
+                      backgroundColor: Colors.amber,
+                      iconActiveColor: Colors.blue,
+                      icon: LineIcons.staylinked,
+                      text: 'ارجاع سریع',
+                    ),
+                    GButton(
+                      backgroundColor: Colors.amber,
+                      iconActiveColor: Colors.blue,
+                      icon: LineIcons.signature,
+                      text: 'امضای سریع',
+                    ),
+                    GButton(
+                      backgroundColor: Colors.amber,
+                      iconActiveColor: Colors.blue,
+                      icon: LineIcons.addressBook,
+                      text: 'بایگانی',
+                    ),
+                  ],
+                  selectedIndex: _selectedIndex,
+                  onTabChange: (index) {
+                    setState(() {
+                      _selectedIndex = index;
+                    });
+                  },
                 ),
-                GButton(
-                  backgroundColor: Colors.amber,
-                  iconActiveColor: Colors.blue,
-                  icon: LineIcons.staylinked,
-                  text: 'ارجاع سریع',
-                ),
-                GButton(
-                  backgroundColor: Colors.amber,
-                  iconActiveColor: Colors.blue,
-                  icon: LineIcons.signature,
-                  text: 'امضای سریع',
-                ),
-                GButton(
-                  backgroundColor: Colors.amber,
-                  iconActiveColor: Colors.blue,
-                  icon: LineIcons.addressBook,
-                  text: 'بایگانی',
-                ),
-              ],
-              selectedIndex: _selectedIndex,
-              onTabChange: (index) {
-                setState(() {
-                  _selectedIndex = index;
-                });
-              },
+              ),
             ),
           ),
-        ),
-      ),
-      )
+        )
     );
   }
 }
