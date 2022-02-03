@@ -1,4 +1,7 @@
+import 'package:automation_system/screens/email/email_screen.dart';
 import 'package:automation_system/screens/main/main_screen.dart';
+import 'package:automation_system/screens/register/components/text_editor.dart';
+import 'package:automation_system/screens/register/incoming_letter.dart';
 import 'package:flutter/material.dart';
 
 void main() {
