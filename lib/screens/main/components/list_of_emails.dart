@@ -2,6 +2,7 @@ import 'package:automation_system/components/side_menu.dart';
 import 'package:automation_system/models/Email.dart';
 import 'package:automation_system/responsive.dart';
 import 'package:automation_system/screens/email/email_screen.dart';
+import 'package:automation_system/screens/main/components/letter_card.dart';
 import 'package:flutter/material.dart';
 import 'package:websafe_svg/websafe_svg.dart';
 
@@ -117,7 +118,7 @@ class _ListOfEmailsState extends State<ListOfEmails> {
                       itemCount: emails.length,
                       // On mobile this active dosen't mean anything
                       itemBuilder: (context, index) =>
-                          EmailCard(
+                          LetterCard(
                             isActive: Responsive.isMobile(context)
                                 ? false
                                 : index == 0,
