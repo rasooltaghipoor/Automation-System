@@ -1,3 +1,4 @@
+import 'package:automation_system/components/side_drawer_menu.dart';
 import 'package:automation_system/components/side_menu.dart';
 import 'package:automation_system/responsive.dart';
 import 'package:automation_system/screens/email/email_screen.dart';
@@ -54,7 +55,7 @@ class MainScreen extends StatelessWidget {
               child: const EmailScreen(),
             ),*/
             Expanded(
-              flex: _size.width > 1340 ? 10 : 16,
+              flex: _size.width > 1340 ? 15 : 16,
               child: Column(children: const [
                 Expanded(
                   flex: 1,
@@ -69,7 +70,7 @@ class MainScreen extends StatelessWidget {
 
             ),
             Expanded(
-              flex: _size.width > 1340 ? 2 : 4,
+              flex: _size.width > 1340 ? 3 : 4,
               child: const SideMenu(),
             ),
           ],
