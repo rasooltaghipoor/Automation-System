@@ -28,7 +28,7 @@ class _ListOfEmailsState extends State<ListOfEmails> {
   Widget build(BuildContext context) {
     return Scaffold(
         key: _scaffoldKey,
-        drawer: ConstrainedBox(
+        endDrawer: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 250),
           child: const SideMenu(),
         ),
@@ -53,7 +53,7 @@ class _ListOfEmailsState extends State<ListOfEmails> {
                           IconButton(
                             icon: const Icon(Icons.menu),
                             onPressed: () {
-                              _scaffoldKey.currentState?.openDrawer();
+                              _scaffoldKey.currentState?.openEndDrawer();
                             },
                           ),
                         if (!Responsive.isDesktop(context)) const SizedBox(
