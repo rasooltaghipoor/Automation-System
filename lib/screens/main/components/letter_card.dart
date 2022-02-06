@@ -1,12 +1,13 @@
 import 'package:automation_system/models/Email.dart';
 import 'package:flutter/material.dart';
+import 'package:google_speech/generated/google/cloud/speech/v1p1beta1/cloud_speech.pb.dart';
 import 'package:websafe_svg/websafe_svg.dart';
 
 import '../../../constants.dart';
 import '../../../extensions.dart';
 
-class LetterCard extends StatelessWidget {
-  const LetterCard({
+class LetterCard extends StatefulWidget {
+  LetterCard({
     Key? key,
     this.isActive = true,
     this.email,
@@ -16,8 +17,13 @@ class LetterCard extends StatelessWidget {
   final bool? isActive;
   final Email? email;
   final VoidCallback? press;
-  final bool value = false;
+  bool? value = false;
 
+  @override
+  State<LetterCard> createState() => _LetterCardState();
+}
+
+class _LetterCardState extends State<LetterCard> {
   @override
   Widget build(BuildContext context) {
     //  Here the shadow is not showing properly
@@ -25,177 +31,218 @@ class LetterCard extends StatelessWidget {
       padding: const EdgeInsets.symmetric(
           horizontal: kDefaultPadding, vertical: kDefaultPadding / 2),
       child: InkWell(
-        onTap: press,
+        onTap: widget.press,
         child: Stack(
           children: [
             Container(
+              width: double.infinity,
               padding: const EdgeInsets.all(kDefaultPadding),
               decoration: BoxDecoration(
-                color: isActive! ? kPrimaryColor : kBgDarkColor,
+                color: widget.isActive! ? kPrimaryColor : kBgDarkColor,
                 borderRadius: BorderRadius.circular(15),
               ),
-              child: Row(
+              child: Wrap(
+                spacing: kDefaultPaddingSmaller,
+                runSpacing: kDefaultPaddingSmall,
                 children: [
-                  Expanded(
-                    flex: 1,
-                    child: Row(
-                      children: [
-                      Text( // Type: Incoming, Outgoing, ...
-                        email!.type!,
-                        style: Theme
-                            .of(context)
-                            .textTheme
-                            .caption
-                            ?.copyWith(
-                          color: isActive! ? Colors.white70 : null,
-                        ),
-                      ),
-                      Text( // Required Action
-                        email!.requiredAction!,
-                        style: Theme
-                            .of(context)
-                            .textTheme
-                            .caption
-                            ?.copyWith(
-                          color: isActive! ? Colors.white70 : null,
-                        ),
-                      ),
-                    ],
+                  //Row(
+                  //children: [
+                  SizedBox(
+                    width: 50,
+                    child: Text(
+                      // Type: Incoming, Outgoing, ...
+                      widget.email!.type!,
+                      /* style: Theme.of(context).textTheme.caption?.copyWith(
+                            color: widget.isActive! ? Colors.white70 : null,
+                          ),*/
                     ),
                   ),
-                  Expanded(
-                    flex: 1,
+                  const SizedBox(
+                    width: kDefaultPaddingMedium,
+                  ),
+                  SizedBox(
+                    width: 50,
+                    child: Text(
+                      // Required Action
+                      widget.email!.requiredAction!,
+                      /*style: Theme.of(context).textTheme.caption?.copyWith(
+                            color: widget.isActive! ? Colors.white70 : null,
+                          ),*/
+                    ),
+                  ),
+                  //],
+                  //),
+                  const SizedBox(
+                    width: kDefaultPaddingMedium,
+                  ),
+                  SizedBox(
+                    width: 50,
                     child: Column(
                       children: [
                         Checkbox(
-                          value: value,
+                          value: widget.value,
                           onChanged: (bool? value) {
-                            /*setState(() {
-                            this.value = value;
-                          });*/
+                            setState(() {
+                              widget.value = value;
+                            });
                           },
                         ),
-                        Text(email!.time!),
+                        const SizedBox(
+                          height: kDefaultPaddingSmall,
+                        ),
+                        Text(widget.email!.time!),
                       ],
                     ),
                   ),
-                  Expanded(
-                    flex: 6,
-                    child: Column(
-                      children: [
-                        Text(email!.subject!),
-                        Row(
-                          children: [
-                            SizedBox( // User Image
-                              width: 32,
-                              child: CircleAvatar(
-                                backgroundColor: Colors.transparent,
-                                backgroundImage: AssetImage(email!.image!),
-                              ),
-                            ),
-                            const SizedBox(width: kDefaultPadding / 2),
-                            Text(
-                                email!.name!
-                            ),
-                          ],
-                        ),
-                        Text(email!.source!),
-                        /*const SizedBox(height: kDefaultPadding / 2),
-                  Text(
-                    email!.body!,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.caption?.copyWith(
-                      height: 1.5,
-                      color: isActive! ? Colors.white70 : null,
-                    ),
-                  )*/
-                      ],
-                    ),
+                  const SizedBox(
+                    width: kDefaultPaddingMedium,
                   ),
-                  Expanded(
-                    flex: 2,
+                  SizedBox(
+                    width: 500,
                     child: Column(
+                      // Subject, Sender, Source
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        RichText(
-                          text: TextSpan(
-                            children: [
-                              const WidgetSpan(
-                                child: Icon(Icons.apartment_outlined, size: 14),
-                              ),
-                              const TextSpan(
-                                text: "شماره: ",
-                              ),
-                              TextSpan(
-                                text: email!.idNumber!,
-                              ),
-                            ],
+                        SizedBox(
+                          width: 500,
+                          child: Text(
+                            widget.email!.subject!,
                           ),
                         ),
-                        RichText(
-                          text: TextSpan(
+                        SizedBox(
+                          width: 500,
+                          child: Row(
                             children: [
-                              const WidgetSpan(
-                                child: Icon(Icons.date_range, size: 14),
-                              ),
-                              const TextSpan(
-                                text: "تاریخ: ",
-                              ),
-                              TextSpan(
-                                text: email!.time!,
-                              ),
-                            ],
-                          ),
-                        ),
-                        RichText(
-                          text: TextSpan(
-                            children: [
-                              if (email!.isAttachmentAvailable!)
-                                const WidgetSpan(
-                                  child: Icon(Icons.attach_file, size: 14),
+                              SizedBox(
+                                // User Image
+                                width: 32,
+                                child: CircleAvatar(
+                                  backgroundColor: Colors.transparent,
+                                  backgroundImage:
+                                      AssetImage(widget.email!.image!),
                                 ),
-                              const TextSpan(
-                                text: "پیوست: ",
                               ),
-                              TextSpan(
-                                text: email!.idNumber!,
-                              ),
+                              const SizedBox(width: kDefaultPadding / 2),
+                              Text(widget.email!.name!),
                             ],
+                          ),
+                        ),
+                        SizedBox(
+                          width: 500,
+                          child: Text(
+                            widget.email!.source!,
                           ),
                         ),
                       ],
                     ),
                   ),
-                  Expanded(
-                    flex: 1,
+                  const SizedBox(
+                    width: kDefaultPaddingMedium,
+                  ),
+                  SizedBox(
+                    width: 300,
                     child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        RichText(
-                          text: TextSpan(
-                            children: [
-                              if (email!.isOriginal!)
+                        SizedBox(
+                          width: 300,
+                          child: RichText(
+                            text: TextSpan(
+                              children: [
                                 const WidgetSpan(
-                                  child: Icon(Icons.crop_original, size: 14),
+                                  child:
+                                      Icon(Icons.apartment_outlined, size: 14),
                                 ),
-                              if (email!.isOriginal!)
                                 const TextSpan(
-                                  text: "اصل",
+                                  text: "شماره: ",
                                 ),
-                            ],
+                                TextSpan(
+                                  text: widget.email!.idNumber!,
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                        RichText(
-                          text: TextSpan(
-                            children: [
-                              if (email!.isConfidential!)
+                        SizedBox(
+                          width: 300,
+                          child: RichText(
+                            text: TextSpan(
+                              children: [
                                 const WidgetSpan(
-                                  child: Icon(Icons.privacy_tip, size: 14),
+                                  child: Icon(Icons.date_range, size: 14),
                                 ),
-                              if (email!.isConfidential!)
                                 const TextSpan(
-                                  text: "محرمانه",
+                                  text: "تاریخ: ",
                                 ),
-                            ],
+                                TextSpan(
+                                  text: widget.email!.time!,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 300,
+                          child: RichText(
+                            text: TextSpan(
+                              children: [
+                                if (widget.email!.isAttachmentAvailable!)
+                                  const WidgetSpan(
+                                    child: Icon(Icons.attach_file, size: 14),
+                                  ),
+                                const TextSpan(
+                                  text: "پیوست: ",
+                                ),
+                                TextSpan(
+                                  text: widget.email!.idNumber!,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(
+                    width: kDefaultPaddingMedium,
+                  ),
+                  SizedBox(
+                    width: 100,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          width: double.infinity,
+                          child: RichText(
+                            text: TextSpan(
+                              children: [
+                                if (widget.email!.isOriginal!)
+                                  const WidgetSpan(
+                                    child: Icon(Icons.crop_original, size: 14),
+                                  ),
+                                if (widget.email!.isOriginal!)
+                                  const TextSpan(
+                                    text: "اصل",
+                                  ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: double.infinity,
+                          child: RichText(
+                            text: TextSpan(
+                              children: [
+                                if (widget.email!.isConfidential!)
+                                  const WidgetSpan(
+                                    child: Icon(Icons.privacy_tip, size: 14),
+                                  ),
+                                if (widget.email!.isConfidential!)
+                                  const TextSpan(
+                                    text: "محرمانه",
+                                  ),
+                              ],
+                            ),
                           ),
                         ),
                       ],
@@ -220,7 +267,7 @@ class LetterCard extends StatelessWidget {
               topShadowColor: Colors.white60,
               bottomShadowColor: const Color(0xFF234395).withOpacity(0.15),
             ),
-            if (!email!.isChecked!)
+            if (!widget.email!.isChecked!)
               Positioned(
                 right: 8,
                 top: 8,
@@ -237,14 +284,14 @@ class LetterCard extends StatelessWidget {
                   offset: const Offset(2, 2),
                 ),
               ),
-            if (email!.tagColor != null)
+            if (widget.email!.tagColor != null)
               Positioned(
                 left: 8,
                 top: 0,
                 child: WebsafeSvg.asset(
                   "assets/Icons/Markup filled.svg",
                   height: 18,
-                  color: email!.tagColor!,
+                  color: widget.email!.tagColor!,
                 ),
               )
           ],

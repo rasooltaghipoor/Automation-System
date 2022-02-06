@@ -44,7 +44,7 @@ class _ListOfEmailsState extends State<ListOfEmails> {
                   // This is our Search bar
                   Padding(
                     padding:
-                    const EdgeInsets.symmetric(horizontal: kDefaultPadding),
+                        const EdgeInsets.symmetric(horizontal: kDefaultPadding),
                     child: Row(
                       children: [
                         // Once user click the menu icon the menu shows like drawer
@@ -56,8 +56,8 @@ class _ListOfEmailsState extends State<ListOfEmails> {
                               _scaffoldKey.currentState?.openEndDrawer();
                             },
                           ),
-                        if (!Responsive.isDesktop(context)) const SizedBox(
-                            width: 5),
+                        if (!Responsive.isDesktop(context))
+                          const SizedBox(width: 5),
                         /*Expanded(
                           child: TextField(
                             onChanged: (value) {},
@@ -87,7 +87,7 @@ class _ListOfEmailsState extends State<ListOfEmails> {
                   const SizedBox(height: kDefaultPadding),
                   Padding(
                     padding:
-                    const EdgeInsets.symmetric(horizontal: kDefaultPadding),
+                        const EdgeInsets.symmetric(horizontal: kDefaultPadding),
                     child: Row(
                       children: [
                         WebsafeSvg.asset(
@@ -117,22 +117,20 @@ class _ListOfEmailsState extends State<ListOfEmails> {
                     child: ListView.builder(
                       itemCount: emails.length,
                       // On mobile this active dosen't mean anything
-                      itemBuilder: (context, index) =>
-                          LetterCard(
-                            isActive: Responsive.isMobile(context)
-                                ? false
-                                : index == 0,
-                            email: emails[index],
-                            press: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      EmailScreen(email: emails[index]),
-                                ),
-                              );
-                            },
-                          ),
+                      itemBuilder: (context, index) => LetterCard(
+                        isActive:
+                            Responsive.isMobile(context) ? false : index == 0,
+                        email: emails[index],
+                        press: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  EmailScreen(email: emails[index]),
+                            ),
+                          );
+                        },
+                      ),
                     ),
                   ),
                 ],

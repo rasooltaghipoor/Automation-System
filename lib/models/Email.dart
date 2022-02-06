@@ -1,8 +1,20 @@
 import 'package:flutter/material.dart';
 
 class Email {
-  final String? name, image, source, subject, body, time,type, requiredAction, idNumber;
-  final bool? isAttachmentAvailable, isChecked, isSelected, isOriginal, isConfidential;
+  final String? name,
+      image,
+      source,
+      subject,
+      body,
+      time,
+      type,
+      requiredAction,
+      idNumber;
+  final bool? isAttachmentAvailable,
+      isChecked,
+      isSelected,
+      isOriginal,
+      isConfidential;
   final Color? tagColor;
 
   Email({
@@ -82,9 +94,9 @@ List demo_data = [
     "name": "محمد لکزیان",
     "image": "assets/images/user_3.png",
     "source": "ریاست",
-    "subject": "درخواست وام بدون بهره",
+    "subject": "درخواست وام در مسایل شرعی و البته بدون بهره",
     "time": "15:32",
-    "type": 'وارده',
+    "type": 'وارده با مفتهیمی یب یب مغایر',
     "requiredAction": 'اقدام',
     "idNumber": '112/سب/۴۴۵۶',
     "isAttachmentAvailable": true,
