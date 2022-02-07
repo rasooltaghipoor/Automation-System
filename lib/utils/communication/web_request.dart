@@ -27,7 +27,7 @@ Future<dynamic> fetchTimeProgram(String cid, String mDate, String sTime) async {
     //print(utf8.decode(response.bodyBytes));
     final responseBody = utf8.decode(response.bodyBytes);
     final parsed = json.decode(responseBody);
-    return null;
+    return null; //**************************TimeProgram.fromMap(parsed);
   } else {
     throw Exception('Unable to fetch info from the REST API');
   }
