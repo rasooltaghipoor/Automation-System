@@ -1,4 +1,5 @@
 import 'package:automation_system/models/Email.dart';
+import 'package:automation_system/utils/SizeConfiguration.dart';
 import 'package:flutter/material.dart';
 import 'package:google_speech/generated/google/cloud/speech/v1p1beta1/cloud_speech.pb.dart';
 import 'package:websafe_svg/websafe_svg.dart';
@@ -45,92 +46,91 @@ class _LetterCardState extends State<LetterCard> {
                 spacing: kDefaultPaddingSmaller,
                 runSpacing: kDefaultPaddingSmall,
                 children: [
-                  //Row(
-                  //children: [
                   SizedBox(
-                    width: 50,
-                    child: Text(
-                      // Type: Incoming, Outgoing, ...
-                      widget.email!.type!,
-                      /* style: Theme.of(context).textTheme.caption?.copyWith(
-                            color: widget.isActive! ? Colors.white70 : null,
-                          ),*/
-                    ),
-                  ),
-                  const SizedBox(
-                    width: kDefaultPaddingMedium,
-                  ),
-                  SizedBox(
-                    width: 50,
-                    child: Text(
-                      // Required Action
-                      widget.email!.requiredAction!,
-                      /*style: Theme.of(context).textTheme.caption?.copyWith(
-                            color: widget.isActive! ? Colors.white70 : null,
-                          ),*/
-                    ),
-                  ),
-                  //],
-                  //),
-                  const SizedBox(
-                    width: kDefaultPaddingMedium,
-                  ),
-                  SizedBox(
-                    width: 50,
-                    child: Column(
-                      children: [
-                        Checkbox(
-                          value: widget.value,
-                          onChanged: (bool? value) {
-                            setState(() {
-                              widget.value = value;
-                            });
-                          },
-                        ),
-                        const SizedBox(
-                          height: kDefaultPaddingSmall,
-                        ),
-                        Text(widget.email!.time!),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(
-                    width: kDefaultPaddingMedium,
-                  ),
-                  SizedBox(
-                    width: 500,
-                    child: Column(
-                      // Subject, Sender, Source
-                      mainAxisAlignment: MainAxisAlignment.start,
+                    width: SizeConfig.safeBlockHorizontal! * 50,
+                    child: Row(
                       children: [
                         SizedBox(
-                          width: 500,
-                          child: Text(
-                            widget.email!.subject!,
+                          width: SizeConfig.safeBlockHorizontal! * 3,
+                          child: RotatedBox(
+                            quarterTurns: 3,
+                            child: Text(widget.email!.type!),
                           ),
                         ),
+                        const SizedBox(
+                          width: kDefaultPaddingMedium,
+                        ),
                         SizedBox(
-                          width: 500,
-                          child: Row(
+                          width: SizeConfig.safeBlockHorizontal! * 3,
+                          child: RotatedBox(
+                            quarterTurns: 3,
+                            child: Text(widget.email!.requiredAction!),
+                          ),
+                        ),
+                        //],
+                        //),
+                        const SizedBox(
+                          width: kDefaultPaddingMedium,
+                        ),
+                        SizedBox(
+                          width: SizeConfig.safeBlockHorizontal! * 3,
+                          child: Column(
                             children: [
-                              SizedBox(
-                                // User Image
-                                width: 32,
-                                child: CircleAvatar(
-                                  backgroundColor: Colors.transparent,
-                                  backgroundImage:
-                                      AssetImage(widget.email!.image!),
-                                ),
+                              Checkbox(
+                                value: widget.value,
+                                onChanged: (bool? value) {
+                                  setState(() {
+                                    widget.value = value;
+                                  });
+                                },
                               ),
-                              const SizedBox(width: kDefaultPadding / 2),
-                              Text(widget.email!.name!),
+                              const SizedBox(
+                                height: kDefaultPaddingSmall,
+                              ),
+                              Text(widget.email!.time!),
                             ],
                           ),
                         ),
+                        const SizedBox(
+                          width: kDefaultPaddingMedium,
+                        ),
                         SizedBox(
-                          width: 500,
-                          child: Text(
-                            widget.email!.source!,
+                          width: SizeConfig.safeBlockHorizontal! * 30,
+                          child: Column(
+                            // Subject, Sender, Source
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              SizedBox(
+                                width: SizeConfig.safeBlockHorizontal! * 30,
+                                child: Text(
+                                  widget.email!.subject!,
+                                ),
+                              ),
+                              SizedBox(
+                                width: SizeConfig.safeBlockHorizontal! * 30,
+                                child: Row(
+                                  children: [
+                                    SizedBox(
+                                      // User Image
+                                      width: 32,
+                                      child: CircleAvatar(
+                                        backgroundColor: Colors.transparent,
+                                        backgroundImage:
+                                            AssetImage(widget.email!.image!),
+                                      ),
+                                    ),
+                                    const SizedBox(width: kDefaultPadding / 2),
+                                    Text(widget.email!.name!),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(
+                                width: SizeConfig.safeBlockHorizontal! * 30,
+                                child: Text(
+                                  widget.email!.source!,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ],
@@ -140,12 +140,12 @@ class _LetterCardState extends State<LetterCard> {
                     width: kDefaultPaddingMedium,
                   ),
                   SizedBox(
-                    width: 300,
+                    width: SizeConfig.safeBlockHorizontal! * 30,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         SizedBox(
-                          width: 300,
+                          width: double.infinity,
                           child: RichText(
                             text: TextSpan(
                               children: [
@@ -164,7 +164,7 @@ class _LetterCardState extends State<LetterCard> {
                           ),
                         ),
                         SizedBox(
-                          width: 300,
+                          width: double.infinity,
                           child: RichText(
                             text: TextSpan(
                               children: [
@@ -182,7 +182,7 @@ class _LetterCardState extends State<LetterCard> {
                           ),
                         ),
                         SizedBox(
-                          width: 300,
+                          width: double.infinity,
                           child: RichText(
                             text: TextSpan(
                               children: [
