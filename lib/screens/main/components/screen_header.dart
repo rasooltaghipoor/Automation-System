@@ -1,4 +1,3 @@
-
 import 'package:automation_system/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -19,8 +18,7 @@ class ScreenHeader extends StatelessWidget {
                 Expanded(
                   flex: 1,
                   child: ListTile(
-                    leading: Image.asset(
-                        "assets/images/Logo Outlook.png"),
+                    leading: Image.asset("assets/images/Logo Outlook.png"),
                     //backgroundColor: Colors.purple,
                     title: const Text('اتوماسیون یار'),
                     subtitle: const Text('برنامه اتوماسیون اداری هوشمند'),
@@ -31,7 +29,9 @@ class ScreenHeader extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text('1400/02/24'),
-                      SizedBox(height: 10,),
+                      SizedBox(
+                        height: 10,
+                      ),
                       Text('صفحه اصلی'),
                     ],
                   ),
@@ -48,9 +48,7 @@ class ScreenHeader extends StatelessWidget {
                             size: 32.0,
                           ),
                           tooltip: 'تنظیمات کاربری',
-                          onPressed: () {
-
-                          },
+                          onPressed: () {},
                         ),
                         /*ElevatedButton.icon(
                           icon: const Icon(
@@ -68,13 +66,10 @@ class ScreenHeader extends StatelessWidget {
                             size: 32.0,
                           ),
                           tooltip: 'درباره نرم افزار',
-                          onPressed: () {
-
-                          },
+                          onPressed: () {},
                         ),
                       ],
-                    )
-                ),
+                    )),
               ],
             ),
           ),

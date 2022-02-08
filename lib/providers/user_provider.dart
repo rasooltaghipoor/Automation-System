@@ -2,11 +2,11 @@ import 'package:automation_system/models/User.dart';
 import 'package:flutter/foundation.dart';
 
 class UserProvider with ChangeNotifier {
-  User _user = new User();
+  UserModel? _user;
 
-  User get user => _user;
+  UserModel? get user => _user;
 
-  void setUser(User user) {
+  void setUser(UserModel user) {
     _user = user;
     notifyListeners();
   }

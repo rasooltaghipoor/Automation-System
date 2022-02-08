@@ -1,6 +1,8 @@
 import 'package:automation_system/components/side_drawer_menu.dart';
+import 'package:automation_system/providers/user_provider.dart';
 import 'package:automation_system/responsive.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:websafe_svg/websafe_svg.dart';
 
 import '../constants.dart';
@@ -19,7 +21,6 @@ class SideMenu extends StatefulWidget {
 }
 
 class _SideMenuState extends State<SideMenu> {
-
   int _activeIndex = 0;
 
   @override
@@ -30,12 +31,12 @@ class _SideMenuState extends State<SideMenu> {
         color: kBgLightColor,
         child: SafeArea(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: kDefaultPaddingSmaller),
+            padding:
+                const EdgeInsets.symmetric(horizontal: kDefaultPaddingSmaller),
             child: Directionality(
               textDirection: TextDirection.rtl,
               child: Column(
                 children: [
-
                   /*Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
@@ -50,15 +51,25 @@ class _SideMenuState extends State<SideMenu> {
                       ),
                     ],
                   ),*/
-                  ListTile(
-                    leading: CircleAvatar(
-                      child: Image.asset(
-                          "assets/images/user_3.png"),
-                      //backgroundColor: Colors.purple,
-                    ),
-                    title: Text('مجمد محمد زاده'),
-                    subtitle: Text('هیات علمی واحد'),
-                    trailing: Icon(Icons.add_a_photo),
+                  Consumer<UserProvider>(
+                    builder: (context, userModel, child) {
+                      return ListTile(
+                        leading: CircleAvatar(
+                          child: userModel.user != null
+                              ? Image.network(
+                                  mainUrl + userModel.user!.userData[0].img!)
+                              : Image.asset("assets/images/user_3.png"),
+                          //backgroundColor: Colors.purple,
+                        ),
+                        title: userModel.user != null
+                            ? Text(userModel.user!.userData[0].name!)
+                            : Text('نام کاربر'),
+                        subtitle: userModel.user != null
+                            ? Text(userModel.user!.userData[0].role!)
+                            : Text('نقش کاربر'),
+                        trailing: Icon(Icons.add_a_photo),
+                      );
+                    },
                   ),
 
                   const SizedBox(height: kDefaultPadding * 2),
@@ -76,7 +87,7 @@ class _SideMenuState extends State<SideMenu> {
                         },
                         title: "جهت اقدام",
                         iconSrc: "assets/Icons/File.svg",
-                        isActive: _activeIndex == 0? true : false,
+                        isActive: _activeIndex == 0 ? true : false,
                         itemCount: 6,
                       ),
                       SideMenuItem(
@@ -87,7 +98,7 @@ class _SideMenuState extends State<SideMenu> {
                         },
                         title: "استحضار",
                         iconSrc: "assets/Icons/File.svg",
-                        isActive: _activeIndex == 1? true : false,
+                        isActive: _activeIndex == 1 ? true : false,
                         itemCount: 2,
                       ),
                       SideMenuItem(
@@ -98,7 +109,7 @@ class _SideMenuState extends State<SideMenu> {
                         },
                         title: "اطلاع",
                         iconSrc: "assets/Icons/File.svg",
-                        isActive: _activeIndex == 2? true : false,
+                        isActive: _activeIndex == 2 ? true : false,
                         itemCount: 3,
                       ),
                       SideMenuItem(
@@ -109,7 +120,7 @@ class _SideMenuState extends State<SideMenu> {
                         },
                         title: "امضا",
                         iconSrc: "assets/Icons/File.svg",
-                        isActive: _activeIndex == 3? true : false,
+                        isActive: _activeIndex == 3 ? true : false,
                         itemCount: 13,
                       ),
                       SideMenuItem(
@@ -120,7 +131,7 @@ class _SideMenuState extends State<SideMenu> {
                         },
                         title: "فوری",
                         iconSrc: "assets/Icons/File.svg",
-                        isActive: _activeIndex == 4? true : false,
+                        isActive: _activeIndex == 4 ? true : false,
                         itemCount: 1,
                       ),
                       SideMenuItem(
@@ -131,7 +142,7 @@ class _SideMenuState extends State<SideMenu> {
                         },
                         title: "خوانده شده",
                         iconSrc: "assets/Icons/File.svg",
-                        isActive: _activeIndex == 5? true : false,
+                        isActive: _activeIndex == 5 ? true : false,
                       ),
                     ],
                   ),
@@ -144,7 +155,7 @@ class _SideMenuState extends State<SideMenu> {
                     },
                     title: "صورت جلسه",
                     iconSrc: "assets/Icons/File.svg",
-                    isActive: _activeIndex == 6? true : false,
+                    isActive: _activeIndex == 6 ? true : false,
                   ),
                   SideMenuItem(
                     press: () {
@@ -154,7 +165,7 @@ class _SideMenuState extends State<SideMenu> {
                     },
                     title: "بایگانی شخصی",
                     iconSrc: "assets/Icons/Trash.svg",
-                    isActive: _activeIndex == 7? true : false,
+                    isActive: _activeIndex == 7 ? true : false,
                   ),
                   SideMenuItem(
                     press: () {
@@ -164,7 +175,7 @@ class _SideMenuState extends State<SideMenu> {
                     },
                     title: "بایگانی اداری",
                     iconSrc: "assets/Icons/File.svg",
-                    isActive: _activeIndex == 8? true : false,
+                    isActive: _activeIndex == 8 ? true : false,
                   ),
 
                   const SizedBox(height: kDefaultPadding * 2),

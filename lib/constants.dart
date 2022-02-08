@@ -16,4 +16,4 @@ const kDefaultPaddingMedium = 15.0;
 const kDefaultPaddingSmall = 10.0;
 const kDefaultPaddingSmaller = 5.0;
 
-const mainUrl = "";
+const mainUrl = "http://cms.iau-neyshabur.ac.ir/";

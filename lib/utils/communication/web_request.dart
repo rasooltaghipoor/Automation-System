@@ -1,7 +1,11 @@
 import 'dart:convert';
 import 'package:automation_system/constants.dart';
+import 'package:automation_system/models/MenuDetails.dart';
+import 'package:automation_system/models/User.dart';
+import 'package:automation_system/providers/user_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 
 /// Checks Internet connection
 /*Future<void> checkNetConnection() async {
@@ -28,6 +32,92 @@ Future<dynamic> fetchTimeProgram(String cid, String mDate, String sTime) async {
     final responseBody = utf8.decode(response.bodyBytes);
     final parsed = json.decode(responseBody);
     return null; //**************************TimeProgram.fromMap(parsed);
+  } else {
+    throw Exception('Unable to fetch info from the REST API');
+  }
+}
+
+/// Reads some data about current date from the server
+Future<void> getUserDetails(String? userID) async {
+  final response =
+      await http.get(Uri.parse(mainUrl + 'api/Account/info/$userID/'));
+  print(mainUrl + 'api/Account/info/$userID/');
+  if (response.statusCode == 200) {
+    print(utf8.decode(response.bodyBytes));
+    final responseBody = utf8.decode(response.bodyBytes);
+    final responseData = json.decode(responseBody);
+    if (responseData['Result'] == 'OK') {
+      // We deserialize read data but only use Date field for now
+      UserModel data = UserModel.fromMap(responseData);
+      print('name: ' + data.userData[0].name!);
+    } else {
+      throw Exception('Unable to fetch info from the REST API');
+    }
+  } else {
+    throw Exception('Unable to fetch info from the REST API');
+  }
+}
+
+/// Reads some data about current date from the server
+Future<void> getUserDetails2(BuildContext context, String? userID) async {
+  final response =
+      await http.get(Uri.parse(mainUrl + 'api/Account/info/$userID/'));
+  print(mainUrl + 'api/Account/info/$userID/');
+  if (response.statusCode == 200) {
+    print(utf8.decode(response.bodyBytes));
+    final responseBody = utf8.decode(response.bodyBytes);
+    final responseData = json.decode(responseBody);
+    if (responseData['Result'] == 'OK') {
+      // We deserialize read data but only use Date field for now
+      UserModel data = UserModel.fromMap(responseData);
+      print('name: ' + data.userData[0].name!);
+      Provider.of<UserProvider>(context, listen: false).setUser(data);
+    } else {
+      throw Exception('Unable to fetch info from the REST API');
+    }
+  } else {
+    throw Exception('Unable to fetch info from the REST API');
+  }
+}
+
+/// Reads some data about current date from the server
+Future<void> getSideMenuData(String userID) async {
+  final response =
+      await http.get(Uri.parse(mainUrl + 'api/Cartable/Count/$userID/'));
+  print(mainUrl + 'api/Cartable/Count/$userID/');
+  if (response.statusCode == 200) {
+    print(utf8.decode(response.bodyBytes));
+    final responseBody = utf8.decode(response.bodyBytes);
+    final responseData = json.decode(responseBody);
+    if (responseData['result'] == 'OK') {
+      // We deserialize read data but only use Date field for now
+      SideMenuModel data = SideMenuModel.fromMap(responseData);
+      print('name: ' + data.menuData[0].title!);
+    } else {
+      throw Exception('Unable to fetch info from the REST API');
+    }
+  } else {
+    throw Exception('Unable to fetch info from the REST API');
+  }
+}
+
+/// Reads some data about current date from the server
+Future<List<MenuItemsData>> getSideMenuData2(String userID) async {
+  final response =
+      await http.get(Uri.parse(mainUrl + 'api/Cartable/Count/$userID/'));
+  print(mainUrl + 'api/Cartable/Count/$userID/');
+  if (response.statusCode == 200) {
+    print(utf8.decode(response.bodyBytes));
+    final responseBody = utf8.decode(response.bodyBytes);
+    final responseData = json.decode(responseBody);
+    if (responseData['result'] == 'OK') {
+      // We deserialize read data but only use Date field for now
+      SideMenuModel data = SideMenuModel.fromMap(responseData);
+      print('name: ' + data.menuData[0].title!);
+      return data.menuData;
+    } else {
+      throw Exception('Unable to fetch info from the REST API');
+    }
   } else {
     throw Exception('Unable to fetch info from the REST API');
   }
