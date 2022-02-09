@@ -2,9 +2,11 @@ import 'dart:async';
 import 'package:automation_system/models/User.dart';
 import 'package:automation_system/providers/auth.dart';
 import 'package:automation_system/providers/user_provider.dart';
+import 'package:automation_system/responsive.dart';
 import 'package:automation_system/utils/SizeConfiguration.dart';
 import 'package:automation_system/utils/shared_vars.dart';
 import 'package:automation_system/utils/useful_widgets.dart';
+import 'package:automation_system/utils/validators.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -29,11 +31,11 @@ class _LoginState extends State<Login> {
 
   Future<bool> showNetConnectionPopup() async {
     return await showDialog(
-          //show confirm dialogue
-          //the return value will be from "Yes" or "No" options
-          context: context,
-          builder: (context) => netAlertDialog(context),
-        ) ??
+      //show confirm dialogue
+      //the return value will be from "Yes" or "No" options
+      context: context,
+      builder: (context) => netAlertDialog(context),
+    ) ??
         false; //if showDialouge had returned null, then return false
   }
 
@@ -41,7 +43,7 @@ class _LoginState extends State<Login> {
   void initState() {
     super.initState();
 
-    _timer = new Timer(const Duration(milliseconds: 3000), () {
+    _timer = Timer(const Duration(milliseconds: 3000), () {
       if (!SharedVars.isNetConnected) showNetConnectionPopup();
     });
   }
@@ -54,18 +56,18 @@ class _LoginState extends State<Login> {
 
     final usernameField = TextFormField(
       autofocus: false,
-      //validator: validateEmail,
+      validator: validateEmail,
       initialValue: _username,
       onSaved: (value) => _username = value!,
       decoration:
-          buildInputDecoration("Confirm password", Icons.account_circle),
+      buildInputDecoration("Confirm password", Icons.account_circle),
     );
 
     final passwordField = TextFormField(
         autofocus: false,
         obscureText: true,
         validator: (value) =>
-            value!.isEmpty ? "لطفا رمز عبور را وارد نمایید." : null,
+        value!.isEmpty ? "لطفا رمز عبور را وارد نمایید." : null,
         onSaved: (value) => _password = value!,
         decoration: buildInputDecoration("Confirm password", Icons.lock),
         inputFormatters: [
@@ -74,13 +76,13 @@ class _LoginState extends State<Login> {
 
     var loading = Row(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
+      children: const [
         CircularProgressIndicator(),
         Text(" در حال اتصال ... لطفا منتظر بمانید")
       ],
     );
 
-    var doLogin = () {
+    void doLogin() {
       // if(SharedVars.isNetConnected) {
       final form = formKey.currentState;
 
@@ -88,15 +90,15 @@ class _LoginState extends State<Login> {
         form.save();
 
         final Future<Map<String, dynamic>> successfulMessage =
-            auth.login(_username!, _password!);
+        auth.login(_username!, _password!);
 
         successfulMessage.then((response) {
           if (response['status']) {
             User user = response['user'];
 
             //******Provider.of<UserProvider>(context, listen: false).setUser(user);
-            SharedVars.currentDate = response['date'];
-            Navigator.pushReplacementNamed(context, '/manager_menu');
+            //SharedVars.currentDate = response['date'];
+            Navigator.pushReplacementNamed(context, '/main_screen');
           } else {
             final snackBar = mySnackBar(
                 'نام کاربری یا رمز عبور اشتباه است', SharedVars.appBarColor);
@@ -113,17 +115,25 @@ class _LoginState extends State<Login> {
       //   final snackBar = mySnackBar('عدم اتصال به سرور. لطفا اتصال اینترنت را چک کنید.');
       //   ScaffoldMessenger.of(context).showSnackBar(snackBar);
       // }
-    };
+    }
+
+    ;
 
     return SafeArea(
       child: Scaffold(
         appBar: myCustomAppBar('دانشگاه آزاد اسلامی واحد نیشابور',
             SizeConfig.safeBlockVertical! * 10, null),
         body: Container(
-          padding: EdgeInsets.fromLTRB(
+          padding: Responsive.isMobile(context) ?
+          EdgeInsets.fromLTRB(
               SizeConfig.safeBlockHorizontal! * 15,
               SizeConfig.safeBlockHorizontal! * 10,
               SizeConfig.safeBlockHorizontal! * 15,
+              SizeConfig.safeBlockHorizontal! * 10)
+              : EdgeInsets.fromLTRB(
+              SizeConfig.safeBlockHorizontal! * 30,
+              SizeConfig.safeBlockHorizontal! * 10,
+              SizeConfig.safeBlockHorizontal! * 30,
               SizeConfig.safeBlockHorizontal! * 10),
           child: ListView(
             children: <Widget>[
@@ -133,11 +143,11 @@ class _LoginState extends State<Login> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Image.asset(
-                      "assets/appimages/azad.png",
+                      "assets/images/Logo Outlook.png",
                       width: SizeConfig.safeBlockHorizontal! * 15,
                       height: SizeConfig.safeBlockHorizontal! * 15 * 1.25,
                     ),
-                    Text(
+                    const Text(
                       "اپلیکیشن رتبه بندی کارمندان",
                       style: TextStyle(fontFamily: SharedVars.fontFamily),
                     ),

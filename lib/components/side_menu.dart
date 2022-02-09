@@ -1,4 +1,5 @@
 import 'package:automation_system/components/side_drawer_menu.dart';
+import 'package:automation_system/providers/menu_provider.dart';
 import 'package:automation_system/providers/user_provider.dart';
 import 'package:automation_system/responsive.dart';
 import 'package:flutter/material.dart';
@@ -74,113 +75,180 @@ class _SideMenuState extends State<SideMenu> {
 
                   const SizedBox(height: kDefaultPadding * 2),
                   // Menu Items
-                  ExpansionTile(
-                    backgroundColor: Colors.white,
-                    initiallyExpanded: true,
-                    title: const Text('کارتابل'),
-                    children: <Widget>[
-                      SideMenuItem(
-                        press: () {
-                          setState(() {
-                            _activeIndex = 0;
-                          });
-                        },
-                        title: "جهت اقدام",
-                        iconSrc: "assets/Icons/File.svg",
-                        isActive: _activeIndex == 0 ? true : false,
-                        itemCount: 6,
-                      ),
-                      SideMenuItem(
-                        press: () {
-                          setState(() {
-                            _activeIndex = 1;
-                          });
-                        },
-                        title: "استحضار",
-                        iconSrc: "assets/Icons/File.svg",
-                        isActive: _activeIndex == 1 ? true : false,
-                        itemCount: 2,
-                      ),
-                      SideMenuItem(
-                        press: () {
-                          setState(() {
-                            _activeIndex = 2;
-                          });
-                        },
-                        title: "اطلاع",
-                        iconSrc: "assets/Icons/File.svg",
-                        isActive: _activeIndex == 2 ? true : false,
-                        itemCount: 3,
-                      ),
-                      SideMenuItem(
-                        press: () {
-                          setState(() {
-                            _activeIndex = 3;
-                          });
-                        },
-                        title: "امضا",
-                        iconSrc: "assets/Icons/File.svg",
-                        isActive: _activeIndex == 3 ? true : false,
-                        itemCount: 13,
-                      ),
-                      SideMenuItem(
-                        press: () {
-                          setState(() {
-                            _activeIndex = 4;
-                          });
-                        },
-                        title: "فوری",
-                        iconSrc: "assets/Icons/File.svg",
-                        isActive: _activeIndex == 4 ? true : false,
-                        itemCount: 1,
-                      ),
-                      SideMenuItem(
-                        press: () {
-                          setState(() {
-                            _activeIndex = 5;
-                          });
-                        },
-                        title: "خوانده شده",
-                        iconSrc: "assets/Icons/File.svg",
-                        isActive: _activeIndex == 5 ? true : false,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: kDefaultPadding * 2),
-                  SideMenuItem(
-                    press: () {
-                      setState(() {
-                        _activeIndex = 6;
-                      });
-                    },
-                    title: "صورت جلسه",
-                    iconSrc: "assets/Icons/File.svg",
-                    isActive: _activeIndex == 6 ? true : false,
-                  ),
-                  SideMenuItem(
-                    press: () {
-                      setState(() {
-                        _activeIndex = 7;
-                      });
-                    },
-                    title: "بایگانی شخصی",
-                    iconSrc: "assets/Icons/Trash.svg",
-                    isActive: _activeIndex == 7 ? true : false,
-                  ),
-                  SideMenuItem(
-                    press: () {
-                      setState(() {
-                        _activeIndex = 8;
-                      });
-                    },
-                    title: "بایگانی اداری",
-                    iconSrc: "assets/Icons/File.svg",
-                    isActive: _activeIndex == 8 ? true : false,
-                  ),
+                  Consumer<MenuProvider>(
+                    builder: (context, menuModel, child) {
+                      return Column(
+                        children: [
+                          ExpansionTile(
+                            backgroundColor: Colors.white,
+                            initiallyExpanded: true,
+                            title: const Text('کارتابل'),
+                            /*leading: ListTile(
+                      onTap: () {},
+                      title: Text('sdfdfd'),
+                    ),*/
+                            children: <Widget>[
+                              SideMenuItem(
+                                press: () {
+                                  setState(() {
+                                    _activeIndex = 0;
+                                  });
+                                },
+                                title: menuModel.sideMenu != null
+                                    ? menuModel.sideMenu!.menuData[0].title
+                                    : "...",
+                                iconSrc: "assets/Icons/File.svg",
+                                isActive: _activeIndex == 0 ? true : false,
+                                itemCount: menuModel.sideMenu != null
+                                    ? int.parse(
+                                        menuModel.sideMenu!.menuData[0].count!)
+                                    : 0,
+                              ),
+                              SideMenuItem(
+                                press: () {
+                                  setState(() {
+                                    _activeIndex = 1;
+                                  });
+                                },
+                                title: menuModel.sideMenu != null
+                                    ? menuModel.sideMenu!.menuData[1].title
+                                    : "...",
+                                iconSrc: "assets/Icons/File.svg",
+                                isActive: _activeIndex == 1 ? true : false,
+                                itemCount: menuModel.sideMenu != null
+                                    ? int.parse(
+                                        menuModel.sideMenu!.menuData[1].count!)
+                                    : 0,
+                              ),
+                              SideMenuItem(
+                                press: () {
+                                  setState(() {
+                                    _activeIndex = 2;
+                                  });
+                                },
+                                title: menuModel.sideMenu != null
+                                    ? menuModel.sideMenu!.menuData[2].title
+                                    : "...",
+                                iconSrc: "assets/Icons/File.svg",
+                                isActive: _activeIndex == 2 ? true : false,
+                                itemCount: menuModel.sideMenu != null
+                                    ? int.parse(
+                                        menuModel.sideMenu!.menuData[2].count!)
+                                    : 0,
+                              ),
+                              SideMenuItem(
+                                press: () {
+                                  setState(() {
+                                    _activeIndex = 3;
+                                  });
+                                },
+                                title: menuModel.sideMenu != null
+                                    ? menuModel.sideMenu!.menuData[3].title
+                                    : "...",
+                                iconSrc: "assets/Icons/File.svg",
+                                isActive: _activeIndex == 3 ? true : false,
+                                itemCount: menuModel.sideMenu != null
+                                    ? int.parse(
+                                        menuModel.sideMenu!.menuData[3].count!)
+                                    : 0,
+                              ),
+                              SideMenuItem(
+                                press: () {
+                                  setState(() {
+                                    _activeIndex = 4;
+                                  });
+                                },
+                                title: menuModel.sideMenu != null
+                                    ? menuModel.sideMenu!.menuData[4].title
+                                    : "...",
+                                iconSrc: "assets/Icons/File.svg",
+                                isActive: _activeIndex == 4 ? true : false,
+                                itemCount: menuModel.sideMenu != null
+                                    ? int.parse(
+                                        menuModel.sideMenu!.menuData[4].count!)
+                                    : 0,
+                              ),
+                              SideMenuItem(
+                                  press: () {
+                                    setState(() {
+                                      _activeIndex = 5;
+                                    });
+                                  },
+                                  title: menuModel.sideMenu != null
+                                      ? menuModel.sideMenu!.menuData[5].title
+                                      : "...",
+                                  iconSrc: "assets/Icons/File.svg",
+                                  isActive: _activeIndex == 5 ? true : false,
+                                  itemCount: menuModel.sideMenu != null
+                                      ? int.parse(menuModel
+                                          .sideMenu!.menuData[5].count!)
+                                      : 0),
+                              SideMenuItem(
+                                press: () {
+                                  setState(() {
+                                    _activeIndex = 6;
+                                  });
+                                },
+                                title: menuModel.sideMenu != null
+                                    ? menuModel.sideMenu!.menuData[6].title
+                                    : "...",
+                                iconSrc: "assets/Icons/File.svg",
+                                isActive: _activeIndex == 6 ? true : false,
+                                itemCount: menuModel.sideMenu != null
+                                    ? int.parse(
+                                        menuModel.sideMenu!.menuData[6].count!)
+                                    : 0,
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: kDefaultPadding * 2),
+                          SideMenuItem(
+                            press: () {
+                              setState(() {
+                                _activeIndex = 7;
+                              });
+                            },
+                            title: menuModel.sideMenu != null
+                                ? menuModel.sideMenu!.menuData[7].title
+                                : "...",
+                            iconSrc: "assets/Icons/File.svg",
+                            isActive: _activeIndex == 7 ? true : false,
+                            itemCount: menuModel.sideMenu != null
+                                ? int.parse(
+                                    menuModel.sideMenu!.menuData[7].count!)
+                                : 0,
+                          ),
+                          SideMenuItem(
+                            press: () {
+                              setState(() {
+                                _activeIndex = 8;
+                              });
+                            },
+                            title: menuModel.sideMenu != null
+                                ? menuModel.sideMenu!.menuData[8].title
+                                : "...",
+                            iconSrc: "assets/Icons/File.svg",
+                            isActive: _activeIndex == 8 ? true : false,
+                            itemCount: 800, //FIXME invalid data from the server
+                          ),
+                          SideMenuItem(
+                            press: () {
+                              setState(() {
+                                _activeIndex = 9;
+                              });
+                            },
+                            title: "بایگانی اداری",
+                            iconSrc: "assets/Icons/File.svg",
+                            isActive: _activeIndex == 9 ? true : false,
+                          ),
 
-                  const SizedBox(height: kDefaultPadding * 2),
-                  // Tags
-                  const Tags(),
+                          const SizedBox(height: kDefaultPadding * 2),
+                          // Tags
+                          const Tags(),
+                        ],
+                      );
+                    },
+                  ),
                 ],
               ),
             ),

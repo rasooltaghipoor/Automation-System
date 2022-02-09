@@ -1,5 +1,6 @@
 import 'package:automation_system/models/User.dart';
 import 'package:automation_system/providers/auth.dart';
+import 'package:automation_system/providers/menu_provider.dart';
 import 'package:automation_system/providers/user_provider.dart';
 import 'package:automation_system/screens/login_screen.dart';
 import 'package:automation_system/screens/main/main_screen.dart';
@@ -42,6 +43,7 @@ class MyApp extends StatelessWidget {
         providers: [
           ChangeNotifierProvider(create: (_) => AuthProvider()),
           ChangeNotifierProvider(create: (_) => UserProvider()),
+          ChangeNotifierProvider(create: (_) => MenuProvider()),
         ],
         child: MaterialApp(
             title: '',
@@ -50,7 +52,7 @@ class MyApp extends StatelessWidget {
               primarySwatch: Colors.blue,
               visualDensity: VisualDensity.adaptivePlatformDensity,
             ),
-            home: MainScreen(),
+            home: Login('309'),
             routes: {
               '/main_screen': (context) => MainScreen(),
               //'/login': (context) => Login(),

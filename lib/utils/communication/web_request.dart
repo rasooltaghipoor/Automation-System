@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:automation_system/constants.dart';
 import 'package:automation_system/models/MenuDetails.dart';
 import 'package:automation_system/models/User.dart';
+import 'package:automation_system/providers/menu_provider.dart';
 import 'package:automation_system/providers/user_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
@@ -81,7 +82,7 @@ Future<void> getUserDetails2(BuildContext context, String? userID) async {
 }
 
 /// Reads some data about current date from the server
-Future<void> getSideMenuData(String userID) async {
+Future<void> getSideMenuData(BuildContext context, String userID) async {
   final response =
       await http.get(Uri.parse(mainUrl + 'api/Cartable/Count/$userID/'));
   print(mainUrl + 'api/Cartable/Count/$userID/');
@@ -93,6 +94,7 @@ Future<void> getSideMenuData(String userID) async {
       // We deserialize read data but only use Date field for now
       SideMenuModel data = SideMenuModel.fromMap(responseData);
       print('name: ' + data.menuData[0].title!);
+      Provider.of<MenuProvider>(context, listen: false).setMenu(data);
     } else {
       throw Exception('Unable to fetch info from the REST API');
     }

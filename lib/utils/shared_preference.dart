@@ -9,7 +9,7 @@ class UserPreferences {
 
     prefs.setInt("userId", user.userId!);
     prefs.setString("name", user.name!);
-    prefs.setString("email", user.email!);
+    prefs.setString("email", user.username!);
     prefs.setString("phone", user.phone!);
     prefs.setString("type", user.type!);
     prefs.setString("token", "token");
@@ -35,7 +35,7 @@ class UserPreferences {
     return User(
         userId: userId,
         name: name,
-        email: email,
+        username: email,
         phone: phone,
         type: type,
         token: token,

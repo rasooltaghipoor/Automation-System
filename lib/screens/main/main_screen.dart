@@ -1,5 +1,6 @@
 import 'package:automation_system/components/side_drawer_menu.dart';
 import 'package:automation_system/components/side_menu.dart';
+import 'package:automation_system/providers/auth.dart';
 import 'package:automation_system/responsive.dart';
 import 'package:automation_system/screens/email/email_screen.dart';
 import 'package:automation_system/screens/main/components/email_gridview.dart';
@@ -9,6 +10,7 @@ import 'package:automation_system/screens/main/components/screen_header.dart';
 import 'package:automation_system/utils/SizeConfiguration.dart';
 import 'package:automation_system/utils/communication/web_request.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'components/list_of_emails.dart';
 
 class MainScreen extends StatelessWidget {
@@ -16,8 +18,9 @@ class MainScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    getUserDetails2(context, '309');
-    getSideMenuData('309');
+    //Provider.of<AuthProvider>(context).login('309', '309');
+    /*getUserDetails2(context, '309');
+    getSideMenuData(context, '309');*/
     SizeConfig().init(context);
     // It provide us the width and height
     Size _size = MediaQuery.of(context).size;

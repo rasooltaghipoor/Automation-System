@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 class User {
   int? userId;
   String? name;
-  String? email;
+  String? username;
   String? phone;
   String? type;
   String? token;
@@ -13,7 +13,7 @@ class User {
   User(
       {this.userId,
       this.name,
-      this.email,
+      this.username,
       this.phone,
       this.type,
       this.token,
@@ -23,7 +23,7 @@ class User {
     return User(
         userId: responseData['id'],
         name: responseData['name'],
-        email: responseData['email'],
+        username: responseData['email'],
         phone: responseData['phone'],
         type: responseData['type'],
         token: responseData['access_token'],

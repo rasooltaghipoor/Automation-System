@@ -30,26 +30,28 @@ class AuthProvider with ChangeNotifier {
   Status get registeredInStatus => _registeredInStatus;
   PassStatus get passStatus => _passStatus;
 
-  Future<Map<String, dynamic>> login(String email, String password) async {
+  Future<Map<String, dynamic>> login(String username, String password) async {
     var result;
 
     _loggedInStatus = Status.Authenticating;
     notifyListeners();
 
     Map<String, String> queryParameters = {
-      'user': email,
+      //'user': username,
       'pass': password //EncryptionUtil().encryptContent(password)
     };
     print(queryParameters.values);
 
     print('login...');
-    final response = await post(
-      Uri.parse(mainUrl + '/startupJSON.aspx'),
+    /*final response = await post(
+      Uri.parse(mainUrl + 'api/Account/login/$username'),
       headers: <String, String>{
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
       },
       body: queryParameters,
-    );
+    );*/
+    final response = await get(
+        Uri.parse(mainUrl + 'api/Account/login/$username?pass=$password'));
     // final response = await get(SharedVars.mainURL + '/LoginJSON.aspx?user=$email&pass=$password');
     print(response.body);
     if (response.statusCode == 200) {
@@ -57,11 +59,11 @@ class AuthProvider with ChangeNotifier {
       final Map<String, dynamic> responseData = json.decode(responseBody);
 
       print(responseData);
-      if (responseData['Login'] == 'OK') {
+      if (responseData['Result'] == 'OK') {
         User authUser = User(
             userId: 0,
-            name: responseData['ProfName'],
-            email: email,
+            name: '', //responseData['ProfName'],
+            username: username,
             phone: '',
             type: 'teacher',
             token: responseData['Token'],
@@ -72,12 +74,18 @@ class AuthProvider with ChangeNotifier {
           'status': true,
           'message': 'Successful',
           'user': authUser,
-          'date': responseData['Time']
+          //'date': responseData['Time']
         };
 
-        SharedVars.username = email;
+        SharedVars.username = username;
         SharedVars.password = password;
         UserPreferences().saveUser(authUser);
+
+        print('Testing the token....');
+        String ff = authUser.token!;
+        final response2 =
+            await get(Uri.parse(mainUrl + 'api/Account/Auth/1?token=$ff'));
+        print(response2.body);
       } else {
         _loggedInStatus = Status.NotLoggedIn;
         notifyListeners();
