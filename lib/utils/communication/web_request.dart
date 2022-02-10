@@ -1,9 +1,12 @@
 import 'dart:convert';
 import 'package:automation_system/constants.dart';
+import 'package:automation_system/models/Cartable.dart';
 import 'package:automation_system/models/MenuDetails.dart';
 import 'package:automation_system/models/User.dart';
+import 'package:automation_system/providers/cartable_provider.dart';
 import 'package:automation_system/providers/menu_provider.dart';
 import 'package:automation_system/providers/user_provider.dart';
+import 'package:automation_system/utils/shared_vars.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
@@ -122,5 +125,48 @@ Future<List<MenuItemsData>> getSideMenuData2(String userID) async {
     }
   } else {
     throw Exception('Unable to fetch info from the REST API');
+  }
+}
+
+Future<void> getCartableData(BuildContext context, String action) async {
+  final response = await http.get(Uri.parse(
+      mainUrl + 'api/Cartable/List/${SharedVars.username}?action=$action'));
+  print(mainUrl + 'api/Cartable/List/${SharedVars.username}?action=$action');
+  if (response.statusCode == 200) {
+    print(utf8.decode(response.bodyBytes));
+    final responseBody = utf8.decode(response.bodyBytes);
+    final responseData = json.decode(responseBody);
+    if (responseData['result'] == 'OK') {
+      // We deserialize read data but only use Date field for now
+      CartableModel data = CartableModel.fromMap(responseData);
+      print('name: ' + data.catableData[0].fromTitle!);
+      Provider.of<CartableProvider>(context, listen: false).setCartable(data);
+    } else {
+      throw Exception('Unable to fetch info from the REST API');
+    }
+  } else {
+    throw Exception('Unable to fetch info from the REST API');
+  }
+}
+
+Future<void> testToken() async {
+  var result;
+
+  print('login...');
+  final response = await http.get(
+    Uri.parse(mainUrl + 'api/Test/test/Bearer'),
+    headers: <String, String>{
+      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+      'Authorization': 'Bearer 1213213mytoken'
+      //'ApiKey': '1213213mytoken'
+    },
+  );
+  /*final response = await get(
+        Uri.parse(mainUrl + 'api/Account/login/$username?pass=$password'));*/
+  // final response = await get(SharedVars.mainURL + '/LoginJSON.aspx?user=$email&pass=$password');
+  print(response.body);
+  if (response.statusCode == 200) {
+    final responseBody = utf8.decode(response.bodyBytes);
+    final Map<String, dynamic> responseData = json.decode(responseBody);
   }
 }

@@ -2,6 +2,7 @@ import 'package:automation_system/components/side_drawer_menu.dart';
 import 'package:automation_system/providers/menu_provider.dart';
 import 'package:automation_system/providers/user_provider.dart';
 import 'package:automation_system/responsive.dart';
+import 'package:automation_system/utils/communication/web_request.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:websafe_svg/websafe_svg.dart';
@@ -93,6 +94,8 @@ class _SideMenuState extends State<SideMenu> {
                                   setState(() {
                                     _activeIndex = 0;
                                   });
+                                  getCartableData(context,
+                                      menuModel.sideMenu!.menuData[0].action!);
                                 },
                                 title: menuModel.sideMenu != null
                                     ? menuModel.sideMenu!.menuData[0].title
@@ -109,6 +112,8 @@ class _SideMenuState extends State<SideMenu> {
                                   setState(() {
                                     _activeIndex = 1;
                                   });
+                                  getCartableData(context,
+                                      menuModel.sideMenu!.menuData[1].action!);
                                 },
                                 title: menuModel.sideMenu != null
                                     ? menuModel.sideMenu!.menuData[1].title
@@ -125,6 +130,8 @@ class _SideMenuState extends State<SideMenu> {
                                   setState(() {
                                     _activeIndex = 2;
                                   });
+                                  getCartableData(context,
+                                      menuModel.sideMenu!.menuData[2].action!);
                                 },
                                 title: menuModel.sideMenu != null
                                     ? menuModel.sideMenu!.menuData[2].title
@@ -141,6 +148,8 @@ class _SideMenuState extends State<SideMenu> {
                                   setState(() {
                                     _activeIndex = 3;
                                   });
+                                  getCartableData(context,
+                                      menuModel.sideMenu!.menuData[3].action!);
                                 },
                                 title: menuModel.sideMenu != null
                                     ? menuModel.sideMenu!.menuData[3].title
@@ -157,6 +166,8 @@ class _SideMenuState extends State<SideMenu> {
                                   setState(() {
                                     _activeIndex = 4;
                                   });
+                                  getCartableData(context,
+                                      menuModel.sideMenu!.menuData[4].action!);
                                 },
                                 title: menuModel.sideMenu != null
                                     ? menuModel.sideMenu!.menuData[4].title
@@ -173,6 +184,10 @@ class _SideMenuState extends State<SideMenu> {
                                     setState(() {
                                       _activeIndex = 5;
                                     });
+                                    getCartableData(
+                                        context,
+                                        menuModel
+                                            .sideMenu!.menuData[5].action!);
                                   },
                                   title: menuModel.sideMenu != null
                                       ? menuModel.sideMenu!.menuData[5].title
@@ -188,6 +203,8 @@ class _SideMenuState extends State<SideMenu> {
                                   setState(() {
                                     _activeIndex = 6;
                                   });
+                                  getCartableData(context,
+                                      menuModel.sideMenu!.menuData[6].action!);
                                 },
                                 title: menuModel.sideMenu != null
                                     ? menuModel.sideMenu!.menuData[6].title
@@ -207,6 +224,8 @@ class _SideMenuState extends State<SideMenu> {
                               setState(() {
                                 _activeIndex = 7;
                               });
+                              getCartableData(context,
+                                  menuModel.sideMenu!.menuData[7].action!);
                             },
                             title: menuModel.sideMenu != null
                                 ? menuModel.sideMenu!.menuData[7].title
@@ -223,15 +242,16 @@ class _SideMenuState extends State<SideMenu> {
                               setState(() {
                                 _activeIndex = 8;
                               });
+                              getCartableData(context,
+                                  menuModel.sideMenu!.menuData[8].action!);
                             },
                             title: menuModel.sideMenu != null
                                 ? menuModel.sideMenu!.menuData[8].title
                                 : "...",
                             iconSrc: "assets/Icons/File.svg",
                             isActive: _activeIndex == 8 ? true : false,
-                            itemCount: 800, //FIXME invalid data from the server
                           ),
-                          SideMenuItem(
+                          /*SideMenuItem(
                             press: () {
                               setState(() {
                                 _activeIndex = 9;
@@ -240,7 +260,7 @@ class _SideMenuState extends State<SideMenu> {
                             title: "بایگانی اداری",
                             iconSrc: "assets/Icons/File.svg",
                             isActive: _activeIndex == 9 ? true : false,
-                          ),
+                          ),*/
 
                           const SizedBox(height: kDefaultPadding * 2),
                           // Tags

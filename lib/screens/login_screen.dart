@@ -2,8 +2,8 @@ import 'dart:async';
 import 'package:automation_system/models/User.dart';
 import 'package:automation_system/providers/auth.dart';
 import 'package:automation_system/providers/user_provider.dart';
-import 'package:automation_system/responsive.dart';
 import 'package:automation_system/utils/SizeConfiguration.dart';
+import 'package:automation_system/utils/communication/web_request.dart';
 import 'package:automation_system/utils/shared_vars.dart';
 import 'package:automation_system/utils/useful_widgets.dart';
 import 'package:automation_system/utils/validators.dart';
@@ -31,11 +31,11 @@ class _LoginState extends State<Login> {
 
   Future<bool> showNetConnectionPopup() async {
     return await showDialog(
-      //show confirm dialogue
-      //the return value will be from "Yes" or "No" options
-      context: context,
-      builder: (context) => netAlertDialog(context),
-    ) ??
+          //show confirm dialogue
+          //the return value will be from "Yes" or "No" options
+          context: context,
+          builder: (context) => netAlertDialog(context),
+        ) ??
         false; //if showDialouge had returned null, then return false
   }
 
@@ -50,24 +50,27 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
+    //testToken();
     AuthProvider auth = Provider.of<AuthProvider>(context);
     SizeConfig().init(context);
     SharedVars.buttonFontSize = SizeConfig.blockSizeHorizontal! * 4;
 
     final usernameField = TextFormField(
       autofocus: false,
-      validator: validateEmail,
+      validator: (value) => value!.isEmpty
+          ? "لطفا نام کاربری را وارد نمایید."
+          : null, //validateEmail,
       initialValue: _username,
       onSaved: (value) => _username = value!,
       decoration:
-      buildInputDecoration("Confirm password", Icons.account_circle),
+          buildInputDecoration("Confirm password", Icons.account_circle),
     );
 
     final passwordField = TextFormField(
         autofocus: false,
         obscureText: true,
         validator: (value) =>
-        value!.isEmpty ? "لطفا رمز عبور را وارد نمایید." : null,
+            value!.isEmpty ? "لطفا رمز عبور را وارد نمایید." : null,
         onSaved: (value) => _password = value!,
         decoration: buildInputDecoration("Confirm password", Icons.lock),
         inputFormatters: [
@@ -90,7 +93,7 @@ class _LoginState extends State<Login> {
         form.save();
 
         final Future<Map<String, dynamic>> successfulMessage =
-        auth.login(_username!, _password!);
+            auth.login(_username!, _password!);
 
         successfulMessage.then((response) {
           if (response['status']) {
@@ -124,16 +127,10 @@ class _LoginState extends State<Login> {
         appBar: myCustomAppBar('دانشگاه آزاد اسلامی واحد نیشابور',
             SizeConfig.safeBlockVertical! * 10, null),
         body: Container(
-          padding: Responsive.isMobile(context) ?
-          EdgeInsets.fromLTRB(
+          padding: EdgeInsets.fromLTRB(
               SizeConfig.safeBlockHorizontal! * 15,
               SizeConfig.safeBlockHorizontal! * 10,
               SizeConfig.safeBlockHorizontal! * 15,
-              SizeConfig.safeBlockHorizontal! * 10)
-              : EdgeInsets.fromLTRB(
-              SizeConfig.safeBlockHorizontal! * 30,
-              SizeConfig.safeBlockHorizontal! * 10,
-              SizeConfig.safeBlockHorizontal! * 30,
               SizeConfig.safeBlockHorizontal! * 10),
           child: ListView(
             children: <Widget>[

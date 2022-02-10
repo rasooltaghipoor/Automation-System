@@ -1,3 +1,4 @@
+import 'package:automation_system/models/Cartable.dart';
 import 'package:automation_system/models/Email.dart';
 import 'package:automation_system/utils/SizeConfiguration.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +17,7 @@ class LetterCard extends StatefulWidget {
   }) : super(key: key);
 
   final bool? isActive;
-  final Email? email;
+  final CartableData? email;
   final VoidCallback? press;
   bool? value = false;
 
@@ -54,7 +55,7 @@ class _LetterCardState extends State<LetterCard> {
                           width: SizeConfig.safeBlockHorizontal! * 3,
                           child: RotatedBox(
                             quarterTurns: 3,
-                            child: Text(widget.email!.type!),
+                            child: Text(widget.email!.letterTypeTitle!),
                           ),
                         ),
                         const SizedBox(
@@ -64,7 +65,7 @@ class _LetterCardState extends State<LetterCard> {
                           width: SizeConfig.safeBlockHorizontal! * 3,
                           child: RotatedBox(
                             quarterTurns: 3,
-                            child: Text(widget.email!.requiredAction!),
+                            child: Text(widget.email!.actionTypeTitle!),
                           ),
                         ),
                         //],
@@ -87,7 +88,7 @@ class _LetterCardState extends State<LetterCard> {
                               const SizedBox(
                                 height: kDefaultPaddingSmall,
                               ),
-                              Text(widget.email!.time!),
+                              Text(widget.email!.hDate!),
                             ],
                           ),
                         ),
@@ -103,7 +104,7 @@ class _LetterCardState extends State<LetterCard> {
                               SizedBox(
                                 width: SizeConfig.safeBlockHorizontal! * 30,
                                 child: Text(
-                                  widget.email!.subject!,
+                                  widget.email!.header!,
                                 ),
                               ),
                               SizedBox(
@@ -115,19 +116,19 @@ class _LetterCardState extends State<LetterCard> {
                                       width: 32,
                                       child: CircleAvatar(
                                         backgroundColor: Colors.transparent,
-                                        backgroundImage:
-                                            AssetImage(widget.email!.image!),
+                                        child: Image.network(mainUrl +
+                                            widget.email!.profilePic!),
                                       ),
                                     ),
                                     const SizedBox(width: kDefaultPadding / 2),
-                                    Text(widget.email!.name!),
+                                    Text(widget.email!.sourceTitle!),
                                   ],
                                 ),
                               ),
                               SizedBox(
                                 width: SizeConfig.safeBlockHorizontal! * 30,
                                 child: Text(
-                                  widget.email!.source!,
+                                  widget.email!.fromTitle!,
                                 ),
                               ),
                             ],
@@ -157,7 +158,7 @@ class _LetterCardState extends State<LetterCard> {
                                   text: "شماره: ",
                                 ),
                                 TextSpan(
-                                  text: widget.email!.idNumber!,
+                                  text: widget.email!.letterNumber!,
                                 ),
                               ],
                             ),
@@ -175,7 +176,7 @@ class _LetterCardState extends State<LetterCard> {
                                   text: "تاریخ: ",
                                 ),
                                 TextSpan(
-                                  text: widget.email!.time!,
+                                  text: widget.email!.letterDate!,
                                 ),
                               ],
                             ),
@@ -186,7 +187,7 @@ class _LetterCardState extends State<LetterCard> {
                           child: RichText(
                             text: TextSpan(
                               children: [
-                                if (widget.email!.isAttachmentAvailable!)
+                                if (int.parse(widget.email!.attachCount!) > 0)
                                   const WidgetSpan(
                                     child: Icon(Icons.attach_file, size: 14),
                                   ),
@@ -194,7 +195,7 @@ class _LetterCardState extends State<LetterCard> {
                                   text: "پیوست: ",
                                 ),
                                 TextSpan(
-                                  text: widget.email!.idNumber!,
+                                  text: widget.email!.attachCount!,
                                 ),
                               ],
                             ),
@@ -216,14 +217,12 @@ class _LetterCardState extends State<LetterCard> {
                           child: RichText(
                             text: TextSpan(
                               children: [
-                                if (widget.email!.isOriginal!)
-                                  const WidgetSpan(
-                                    child: Icon(Icons.crop_original, size: 14),
-                                  ),
-                                if (widget.email!.isOriginal!)
-                                  const TextSpan(
-                                    text: "اصل",
-                                  ),
+                                const WidgetSpan(
+                                  child: Icon(Icons.crop_original, size: 14),
+                                ),
+                                TextSpan(
+                                  text: widget.email!.refTitle!,
+                                ),
                               ],
                             ),
                           ),
@@ -233,14 +232,12 @@ class _LetterCardState extends State<LetterCard> {
                           child: RichText(
                             text: TextSpan(
                               children: [
-                                if (widget.email!.isConfidential!)
-                                  const WidgetSpan(
-                                    child: Icon(Icons.privacy_tip, size: 14),
-                                  ),
-                                if (widget.email!.isConfidential!)
-                                  const TextSpan(
-                                    text: "محرمانه",
-                                  ),
+                                const WidgetSpan(
+                                  child: Icon(Icons.privacy_tip, size: 14),
+                                ),
+                                TextSpan(
+                                  text: widget.email!.securityTypeTitle!,
+                                ),
                               ],
                             ),
                           ),
@@ -267,7 +264,7 @@ class _LetterCardState extends State<LetterCard> {
               topShadowColor: Colors.white60,
               bottomShadowColor: const Color(0xFF234395).withOpacity(0.15),
             ),
-            if (!widget.email!.isChecked!)
+            /*if (!widget.email!.isChecked!)
               Positioned(
                 right: 8,
                 top: 8,
@@ -293,7 +290,7 @@ class _LetterCardState extends State<LetterCard> {
                   height: 18,
                   color: widget.email!.tagColor!,
                 ),
-              )
+              )*/
           ],
         ),
       ),

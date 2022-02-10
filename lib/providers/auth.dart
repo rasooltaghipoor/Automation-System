@@ -50,8 +50,14 @@ class AuthProvider with ChangeNotifier {
       },
       body: queryParameters,
     );*/
-    final response = await get(
-        Uri.parse(mainUrl + 'api/Account/login/$username?pass=$password'));
+    /*final response = await get(
+        Uri.parse(mainUrl + 'api/Account/login/$username?pass=$password'));*/
+    final uri = Uri.http('cms.iau-neyshabur.ac.ir',
+        '/api/Account/login/$username', queryParameters);
+    final response = await get(uri, headers: {
+      //HttpHeaders.contentTypeHeader: 'application/form',
+      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+    });
     // final response = await get(SharedVars.mainURL + '/LoginJSON.aspx?user=$email&pass=$password');
     print(response.body);
     if (response.statusCode == 200) {
@@ -81,11 +87,11 @@ class AuthProvider with ChangeNotifier {
         SharedVars.password = password;
         UserPreferences().saveUser(authUser);
 
-        print('Testing the token....');
+        /*print('Testing the token....');
         String ff = authUser.token!;
         final response2 =
             await get(Uri.parse(mainUrl + 'api/Account/Auth/1?token=$ff'));
-        print(response2.body);
+        print(response2.body);*/
       } else {
         _loggedInStatus = Status.NotLoggedIn;
         notifyListeners();

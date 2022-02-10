@@ -19,7 +19,7 @@ MaterialButton longButtons(String title, VoidCallback fun,
             fontSize: SharedVars.buttonFontSize),
       ),
     ),
-    height: SizeConfig.blockSizeHorizontal! * 80 * 0.17,
+    height: SizeConfig.safeBlockVertical! * 50 * 0.17,
     minWidth: SizeConfig.blockSizeHorizontal! * 80,
     shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.all(

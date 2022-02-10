@@ -1,9 +1,11 @@
 import 'package:automation_system/components/side_menu.dart';
 import 'package:automation_system/models/Email.dart';
+import 'package:automation_system/providers/cartable_provider.dart';
 import 'package:automation_system/responsive.dart';
 import 'package:automation_system/screens/email/email_screen.dart';
 import 'package:automation_system/screens/main/components/letter_card.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:websafe_svg/websafe_svg.dart';
 
 import '../../../constants.dart';
@@ -114,23 +116,31 @@ class _ListOfEmailsState extends State<ListOfEmails> {
                   ),
                   const SizedBox(height: kDefaultPadding),
                   Expanded(
-                    child: ListView.builder(
-                      itemCount: emails.length,
-                      // On mobile this active dosen't mean anything
-                      itemBuilder: (context, index) => LetterCard(
-                        isActive:
-                            Responsive.isMobile(context) ? false : index == 0,
-                        email: emails[index],
-                        press: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  EmailScreen(email: emails[index]),
-                            ),
-                          );
-                        },
-                      ),
+                    child: Consumer<CartableProvider>(
+                      builder: (context, cartableModel, child) {
+                        return cartableModel.cartable == null
+                            ? const Center(child: CircularProgressIndicator())
+                            : ListView.builder(
+                                itemCount:
+                                    cartableModel.cartable!.catableData.length,
+                                // On mobile this active dosen't mean anything
+                                itemBuilder: (context, index) => LetterCard(
+                                      isActive: Responsive.isMobile(context)
+                                          ? false
+                                          : index == 0,
+                                      email: cartableModel
+                                          .cartable!.catableData[index],
+                                      press: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => EmailScreen(
+                                                email: emails[index]),
+                                          ),
+                                        );
+                                      },
+                                    ));
+                      },
                     ),
                   ),
                 ],

@@ -19,8 +19,9 @@ class MainScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //Provider.of<AuthProvider>(context).login('309', '309');
-    /*getUserDetails2(context, '309');
-    getSideMenuData(context, '309');*/
+    getUserDetails2(context, '309');
+    getSideMenuData(context, '309');
+    getCartableData(context, 'All');
     SizeConfig().init(context);
     // It provide us the width and height
     Size _size = MediaQuery.of(context).size;
