@@ -65,10 +65,10 @@ class _SideMenuState extends State<SideMenu> {
                         ),
                         title: userModel.user != null
                             ? Text(userModel.user!.userData[0].name!)
-                            : Text('نام کاربر'),
+                            : const Text('نام کاربر'),
                         subtitle: userModel.user != null
                             ? Text(userModel.user!.userData[0].role!)
-                            : Text('نقش کاربر'),
+                            : const Text('نقش کاربر'),
                         trailing: Icon(Icons.add_a_photo),
                       );
                     },
