@@ -1,5 +1,6 @@
 import 'package:automation_system/models/Cartable.dart';
 import 'package:automation_system/models/Email.dart';
+import 'package:automation_system/responsive.dart';
 import 'package:automation_system/utils/SizeConfiguration.dart';
 import 'package:flutter/material.dart';
 import 'package:google_speech/generated/google/cloud/speech/v1p1beta1/cloud_speech.pb.dart';
@@ -29,124 +30,142 @@ class _LetterCardState extends State<LetterCard> {
   @override
   Widget build(BuildContext context) {
     //  Here the shadow is not showing properly
+    final zarib1 = Responsive.isDesktop(context)
+        ? 1
+        : (Responsive.isTablet(context) ? 1.5 : 2);
+    final zarib2 = Responsive.isDesktop(context)
+        ? 1
+        : (Responsive.isTablet(context) ? 3 : 4);
     return Padding(
       padding: const EdgeInsets.symmetric(
           horizontal: kDefaultPadding, vertical: kDefaultPadding / 2),
       child: InkWell(
         onTap: widget.press,
-        child: Stack(
-          children: [
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(kDefaultPadding),
-              decoration: BoxDecoration(
-                color: widget.isActive! ? kPrimaryColor : kBgDarkColor,
-                borderRadius: BorderRadius.circular(15),
-              ),
-              child: Wrap(
-                spacing: kDefaultPaddingSmaller,
-                runSpacing: kDefaultPaddingSmall,
-                children: [
-                  SizedBox(
-                    width: SizeConfig.safeBlockHorizontal! * 50,
-                    child: Row(
-                      children: [
-                        SizedBox(
-                          width: SizeConfig.safeBlockHorizontal! * 3,
-                          child: RotatedBox(
-                            quarterTurns: 3,
-                            child: Text(widget.email!.letterTypeTitle!),
-                          ),
-                        ),
-                        const SizedBox(
-                          width: kDefaultPaddingMedium,
-                        ),
-                        SizedBox(
-                          width: SizeConfig.safeBlockHorizontal! * 3,
-                          child: RotatedBox(
-                            quarterTurns: 3,
-                            child: Text(widget.email!.actionTypeTitle!),
-                          ),
-                        ),
-                        //],
-                        //),
-                        const SizedBox(
-                          width: kDefaultPaddingMedium,
-                        ),
-                        SizedBox(
-                          width: SizeConfig.safeBlockHorizontal! * 3,
-                          child: Column(
-                            children: [
-                              Checkbox(
-                                value: widget.value,
-                                onChanged: (bool? value) {
-                                  setState(() {
-                                    widget.value = value;
-                                  });
-                                },
-                              ),
-                              const SizedBox(
-                                height: kDefaultPaddingSmall,
-                              ),
-                              Text(widget.email!.hDate!),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(
-                          width: kDefaultPaddingMedium,
-                        ),
-                        SizedBox(
-                          width: SizeConfig.safeBlockHorizontal! * 30,
-                          child: Column(
-                            // Subject, Sender, Source
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              SizedBox(
-                                width: SizeConfig.safeBlockHorizontal! * 30,
-                                child: Text(
-                                  widget.email!.header!,
-                                ),
-                              ),
-                              SizedBox(
-                                width: SizeConfig.safeBlockHorizontal! * 30,
-                                child: Row(
-                                  children: [
-                                    SizedBox(
-                                      // User Image
-                                      width: 32,
-                                      child: CircleAvatar(
-                                        backgroundColor: Colors.transparent,
-                                        child: Image.network(mainUrl +
-                                            widget.email!.profilePic!),
-                                      ),
-                                    ),
-                                    const SizedBox(width: kDefaultPadding / 2),
-                                    Text(widget.email!.sourceTitle!),
-                                  ],
-                                ),
-                              ),
-                              SizedBox(
-                                width: SizeConfig.safeBlockHorizontal! * 30,
-                                child: Text(
-                                  widget.email!.fromTitle!,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
+        //child: Stack(
+        //children: [
+        child: Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(kDefaultPaddingSmall),
+          decoration: BoxDecoration(
+            color: widget.isActive! ? kPrimaryColor : kBgDarkColor,
+            borderRadius: BorderRadius.circular(15),
+          ),
+          child: Wrap(
+            spacing: kDefaultPaddingSmaller,
+            runSpacing: kDefaultPaddingSmall,
+            children: [
+              Container(
+                //color: Colors.amberAccent,
+                width: Responsive.isDesktop(context)
+                    ? SizeConfig.safeBlockHorizontal! * 45
+                    : SizeConfig.safeBlockHorizontal! * 90,
+                child: Row(
+                  children: [
+                    SizedBox(
+                      width: SizeConfig.safeBlockHorizontal! * 2 * zarib1,
+                      child: RotatedBox(
+                        quarterTurns: 3,
+                        child: Text(widget.email!.letterTypeTitle!),
+                      ),
                     ),
-                  ),
-                  const SizedBox(
-                    width: kDefaultPaddingMedium,
-                  ),
-                  SizedBox(
-                    width: SizeConfig.safeBlockHorizontal! * 30,
-                    child: Column(
+                    /*const SizedBox(
+                      width: kDefaultPaddingMedium,
+                    ),*/
+                    SizedBox(
+                      width: SizeConfig.safeBlockHorizontal! * 2 * zarib1,
+                      child: RotatedBox(
+                        quarterTurns: 3,
+                        child: Text(widget.email!.actionTypeTitle!),
+                      ),
+                    ),
+                    //],
+                    //),
+                    const SizedBox(
+                      width: kDefaultPaddingMedium,
+                    ),
+                    SizedBox(
+                      width: SizeConfig.safeBlockHorizontal! * 4 * zarib1,
+                      child: Column(
+                        children: [
+                          Checkbox(
+                            value: widget.value,
+                            onChanged: (bool? value) {
+                              setState(() {
+                                widget.value = value;
+                              });
+                            },
+                          ),
+                          const SizedBox(
+                            height: kDefaultPaddingSmall,
+                          ),
+                          Text(widget.email!.hDate!),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(
+                      width: kDefaultPaddingMedium,
+                    ),
+                    SizedBox(
+                      width: SizeConfig.safeBlockHorizontal! * 30 * zarib1,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        // Subject, Sender, Source
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            width: double.infinity,
+                            child: Text(
+                              widget.email!.header!,
+                              style: const TextStyle(
+                                  color: Colors.blue,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          SizedBox(
+                            width: double.infinity,
+                            child: Row(
+                              children: [
+                                SizedBox(
+                                  // User Image
+                                  width: 32,
+                                  child: CircleAvatar(
+                                    backgroundColor: Colors.transparent,
+                                    child: Image.network(
+                                        mainUrl + widget.email!.profilePic!),
+                                  ),
+                                ),
+                                const SizedBox(width: kDefaultPadding / 2),
+                                Text(widget.email!.fromTitle!),
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            width: double.infinity,
+                            child: Text(
+                              'فرستنده اصلی: ' + widget.email!.sourceTitle!,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              /* const SizedBox(
+                width: kDefaultPaddingMedium,
+              ),*/
+              Container(
+                //color: Colors.white70,
+                width: Responsive.isDesktop(context)
+                    ? SizeConfig.safeBlockHorizontal! * 20
+                    : SizeConfig.safeBlockHorizontal! * 90,
+                child: Row(
+                  children: [
+                    Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         SizedBox(
-                          width: double.infinity,
+                          width: SizeConfig.safeBlockHorizontal! * 10 * zarib2,
                           child: RichText(
                             text: TextSpan(
                               children: [
@@ -165,7 +184,7 @@ class _LetterCardState extends State<LetterCard> {
                           ),
                         ),
                         SizedBox(
-                          width: double.infinity,
+                          width: SizeConfig.safeBlockHorizontal! * 10 * zarib2,
                           child: RichText(
                             text: TextSpan(
                               children: [
@@ -183,7 +202,7 @@ class _LetterCardState extends State<LetterCard> {
                           ),
                         ),
                         SizedBox(
-                          width: double.infinity,
+                          width: SizeConfig.safeBlockHorizontal! * 10 * zarib2,
                           child: RichText(
                             text: TextSpan(
                               children: [
@@ -203,49 +222,52 @@ class _LetterCardState extends State<LetterCard> {
                         ),
                       ],
                     ),
-                  ),
-                  const SizedBox(
-                    width: kDefaultPaddingMedium,
-                  ),
-                  SizedBox(
-                    width: 100,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          width: double.infinity,
-                          child: RichText(
-                            text: TextSpan(
-                              children: [
-                                const WidgetSpan(
-                                  child: Icon(Icons.crop_original, size: 14),
-                                ),
-                                TextSpan(
-                                  text: widget.email!.refTitle!,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: double.infinity,
-                          child: RichText(
-                            text: TextSpan(
-                              children: [
-                                const WidgetSpan(
-                                  child: Icon(Icons.privacy_tip, size: 14),
-                                ),
-                                TextSpan(
-                                  text: widget.email!.securityTypeTitle!,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
+                    const SizedBox(
+                      width: kDefaultPaddingMedium,
                     ),
-                  ),
-                  /*Column(
+                    SizedBox(
+                      //width: 100,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            width: SizeConfig.safeBlockHorizontal! * 7 * zarib2,
+                            child: RichText(
+                              text: TextSpan(
+                                children: [
+                                  const WidgetSpan(
+                                    child: Icon(Icons.crop_original, size: 14),
+                                  ),
+                                  TextSpan(
+                                    text: ' ' + widget.email!.refTitle!,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            width: SizeConfig.safeBlockHorizontal! * 7 * zarib2,
+                            child: RichText(
+                              text: TextSpan(
+                                children: [
+                                  const WidgetSpan(
+                                    child: Icon(Icons.privacy_tip, size: 14),
+                                  ),
+                                  TextSpan(
+                                    text:
+                                        ' ' + widget.email!.securityTypeTitle!,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              /*Column(
                     children: [
                       const SizedBox(height: 5),
                       if (email!.isAttachmentAvailable!)
@@ -255,16 +277,16 @@ class _LetterCardState extends State<LetterCard> {
                         )
                     ],
                   ),*/
-                ],
-              ),
-            ).addNeumorphism(
-              blurRadius: 15,
-              borderRadius: 15,
-              offset: const Offset(5, 5),
-              topShadowColor: Colors.white60,
-              bottomShadowColor: const Color(0xFF234395).withOpacity(0.15),
-            ),
-            /*if (!widget.email!.isChecked!)
+            ],
+          ),
+        ).addNeumorphism(
+          blurRadius: 15,
+          borderRadius: 15,
+          offset: const Offset(5, 5),
+          topShadowColor: Colors.white60,
+          bottomShadowColor: const Color(0xFF234395).withOpacity(0.15),
+        ),
+        /*if (!widget.email!.isChecked!)
               Positioned(
                 right: 8,
                 top: 8,
@@ -291,8 +313,8 @@ class _LetterCardState extends State<LetterCard> {
                   color: widget.email!.tagColor!,
                 ),
               )*/
-          ],
-        ),
+        // ],
+        //),
       ),
     );
   }
