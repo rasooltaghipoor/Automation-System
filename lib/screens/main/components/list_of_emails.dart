@@ -1,9 +1,11 @@
 import 'package:automation_system/components/side_menu.dart';
 import 'package:automation_system/models/Email.dart';
 import 'package:automation_system/providers/cartable_provider.dart';
+import 'package:automation_system/providers/menu_provider.dart';
 import 'package:automation_system/responsive.dart';
 import 'package:automation_system/screens/email/email_screen.dart';
 import 'package:automation_system/screens/main/components/letter_card.dart';
+import 'package:automation_system/utils/SizeConfiguration.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:websafe_svg/websafe_svg.dart';
@@ -92,15 +94,18 @@ class _ListOfEmailsState extends State<ListOfEmails> {
                         const EdgeInsets.symmetric(horizontal: kDefaultPadding),
                     child: Row(
                       children: [
-                        WebsafeSvg.asset(
-                          "assets/Icons/Angle down.svg",
-                          width: 16,
-                          color: Colors.black,
-                        ),
+                        Icon(Icons.email),
                         const SizedBox(width: 5),
-                        const Text(
-                          "مرتب سازی بر اساس تاریخ",
-                          style: TextStyle(fontWeight: FontWeight.w500),
+                        Consumer<CartableProvider>(
+                          builder: (context, cartableModel, child) {
+                            return Text(
+                              cartableModel.letterListTitle,
+                              style: TextStyle(
+                                  fontSize: SizeConfig.safeBlockVertical! * 2,
+                                  color: const Color.fromARGB(255, 2, 19, 94),
+                                  fontWeight: FontWeight.w500),
+                            );
+                          },
                         ),
                         const Spacer(),
                         MaterialButton(

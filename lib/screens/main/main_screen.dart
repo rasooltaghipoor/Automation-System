@@ -1,5 +1,6 @@
 import 'package:automation_system/components/side_drawer_menu.dart';
 import 'package:automation_system/components/side_menu.dart';
+import 'package:automation_system/models/MenuDetails.dart';
 import 'package:automation_system/providers/auth.dart';
 import 'package:automation_system/responsive.dart';
 import 'package:automation_system/screens/email/email_screen.dart';
@@ -21,7 +22,7 @@ class MainScreen extends StatelessWidget {
     //Provider.of<AuthProvider>(context).login('309', '309');
     getUserDetails2(context, '309');
     getSideMenuData(context, '309');
-    getCartableData(context, 'All');
+    getCartableData(context, MenuItemsData('همه نامه ها', '0', 'All'));
     SizeConfig().init(context);
     // It provide us the width and height
     Size _size = MediaQuery.of(context).size;

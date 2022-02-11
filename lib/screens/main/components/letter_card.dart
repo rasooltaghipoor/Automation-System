@@ -183,6 +183,9 @@ class _LetterCardState extends State<LetterCard> {
                             ),
                           ),
                         ),
+                        const SizedBox(
+                          height: kDefaultPaddingSmaller,
+                        ),
                         SizedBox(
                           width: SizeConfig.safeBlockHorizontal! * 10 * zarib2,
                           child: RichText(
@@ -201,6 +204,7 @@ class _LetterCardState extends State<LetterCard> {
                             ),
                           ),
                         ),
+                        const SizedBox(height: kDefaultPaddingSmaller),
                         SizedBox(
                           width: SizeConfig.safeBlockHorizontal! * 10 * zarib2,
                           child: RichText(
@@ -245,6 +249,7 @@ class _LetterCardState extends State<LetterCard> {
                               ),
                             ),
                           ),
+                          const SizedBox(height: kDefaultPaddingSmaller),
                           SizedBox(
                             width: SizeConfig.safeBlockHorizontal! * 7 * zarib2,
                             child: RichText(

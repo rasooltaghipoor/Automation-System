@@ -128,10 +128,12 @@ Future<List<MenuItemsData>> getSideMenuData2(String userID) async {
   }
 }
 
-Future<void> getCartableData(BuildContext context, String action) async {
-  final response = await http.get(Uri.parse(
-      mainUrl + 'api/Cartable/List/${SharedVars.username}?action=$action'));
-  print(mainUrl + 'api/Cartable/List/${SharedVars.username}?action=$action');
+Future<void> getCartableData(
+    BuildContext context, MenuItemsData itemData) async {
+  final response = await http.get(Uri.parse(mainUrl +
+      'api/Cartable/List/${SharedVars.username}?action=${itemData.action}'));
+  print(mainUrl +
+      'api/Cartable/List/${SharedVars.username}?action=${itemData.action}');
   if (response.statusCode == 200) {
     print(utf8.decode(response.bodyBytes));
     final responseBody = utf8.decode(response.bodyBytes);
@@ -140,7 +142,8 @@ Future<void> getCartableData(BuildContext context, String action) async {
       // We deserialize read data but only use Date field for now
       CartableModel data = CartableModel.fromMap(responseData);
       print('name: ' + data.catableData[0].fromTitle!);
-      Provider.of<CartableProvider>(context, listen: false).setCartable(data);
+      Provider.of<CartableProvider>(context, listen: false)
+          .setCartable(data, itemData.title!);
     } else {
       throw Exception('Unable to fetch info from the REST API');
     }

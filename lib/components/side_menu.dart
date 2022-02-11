@@ -94,8 +94,8 @@ class _SideMenuState extends State<SideMenu> {
                                   setState(() {
                                     _activeIndex = 0;
                                   });
-                                  getCartableData(context,
-                                      menuModel.sideMenu!.menuData[0].action!);
+                                  getCartableData(
+                                      context, menuModel.sideMenu!.menuData[0]);
                                 },
                                 title: menuModel.sideMenu != null
                                     ? menuModel.sideMenu!.menuData[0].title
@@ -112,8 +112,8 @@ class _SideMenuState extends State<SideMenu> {
                                   setState(() {
                                     _activeIndex = 1;
                                   });
-                                  getCartableData(context,
-                                      menuModel.sideMenu!.menuData[1].action!);
+                                  getCartableData(
+                                      context, menuModel.sideMenu!.menuData[1]);
                                 },
                                 title: menuModel.sideMenu != null
                                     ? menuModel.sideMenu!.menuData[1].title
@@ -130,8 +130,8 @@ class _SideMenuState extends State<SideMenu> {
                                   setState(() {
                                     _activeIndex = 2;
                                   });
-                                  getCartableData(context,
-                                      menuModel.sideMenu!.menuData[2].action!);
+                                  getCartableData(
+                                      context, menuModel.sideMenu!.menuData[2]);
                                 },
                                 title: menuModel.sideMenu != null
                                     ? menuModel.sideMenu!.menuData[2].title
@@ -148,8 +148,8 @@ class _SideMenuState extends State<SideMenu> {
                                   setState(() {
                                     _activeIndex = 3;
                                   });
-                                  getCartableData(context,
-                                      menuModel.sideMenu!.menuData[3].action!);
+                                  getCartableData(
+                                      context, menuModel.sideMenu!.menuData[3]);
                                 },
                                 title: menuModel.sideMenu != null
                                     ? menuModel.sideMenu!.menuData[3].title
@@ -166,8 +166,8 @@ class _SideMenuState extends State<SideMenu> {
                                   setState(() {
                                     _activeIndex = 4;
                                   });
-                                  getCartableData(context,
-                                      menuModel.sideMenu!.menuData[4].action!);
+                                  getCartableData(
+                                      context, menuModel.sideMenu!.menuData[4]);
                                 },
                                 title: menuModel.sideMenu != null
                                     ? menuModel.sideMenu!.menuData[4].title
@@ -184,10 +184,8 @@ class _SideMenuState extends State<SideMenu> {
                                     setState(() {
                                       _activeIndex = 5;
                                     });
-                                    getCartableData(
-                                        context,
-                                        menuModel
-                                            .sideMenu!.menuData[5].action!);
+                                    getCartableData(context,
+                                        menuModel.sideMenu!.menuData[5]);
                                   },
                                   title: menuModel.sideMenu != null
                                       ? menuModel.sideMenu!.menuData[5].title
@@ -203,8 +201,8 @@ class _SideMenuState extends State<SideMenu> {
                                   setState(() {
                                     _activeIndex = 6;
                                   });
-                                  getCartableData(context,
-                                      menuModel.sideMenu!.menuData[6].action!);
+                                  getCartableData(
+                                      context, menuModel.sideMenu!.menuData[6]);
                                 },
                                 title: menuModel.sideMenu != null
                                     ? menuModel.sideMenu!.menuData[6].title
@@ -224,8 +222,8 @@ class _SideMenuState extends State<SideMenu> {
                               setState(() {
                                 _activeIndex = 7;
                               });
-                              getCartableData(context,
-                                  menuModel.sideMenu!.menuData[7].action!);
+                              getCartableData(
+                                  context, menuModel.sideMenu!.menuData[7]);
                             },
                             title: menuModel.sideMenu != null
                                 ? menuModel.sideMenu!.menuData[7].title
@@ -242,8 +240,8 @@ class _SideMenuState extends State<SideMenu> {
                               setState(() {
                                 _activeIndex = 8;
                               });
-                              getCartableData(context,
-                                  menuModel.sideMenu!.menuData[8].action!);
+                              getCartableData(
+                                  context, menuModel.sideMenu!.menuData[8]);
                             },
                             title: menuModel.sideMenu != null
                                 ? menuModel.sideMenu!.menuData[8].title
