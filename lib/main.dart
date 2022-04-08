@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:responsive_framework/responsive_framework.dart';
 
 void main() {
   runApp(const MyApp());
@@ -31,9 +32,9 @@ class MyApp extends StatelessWidget {
       ]);*/
     } else {
       SharedVars.isWebApp = false;
-      SystemChrome.setPreferredOrientations([
-        DeviceOrientation.portraitUp,
-      ]);
+      // SystemChrome.setPreferredOrientations([
+      //   DeviceOrientation.portraitUp,
+      // ]);
     }
 
     Future<User> getUserData() => UserPreferences().getUser();
@@ -48,6 +49,15 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider(create: (_) => CartableProvider()),
         ],
         child: MaterialApp(
+            builder: (context, widget) => ResponsiveWrapper.builder(
+              ClampingScrollWrapper.builder(context, widget!),
+              breakpoints: const [
+                ResponsiveBreakpoint.resize(350, name: MOBILE),
+                ResponsiveBreakpoint.autoScale(600, name: TABLET),
+                ResponsiveBreakpoint.resize(800, name: DESKTOP),
+                ResponsiveBreakpoint.autoScale(1700, name: 'XL'),
+              ],
+            ),
             title: '',
             theme: ThemeData(
               fontFamily: 'Koodak',
@@ -55,6 +65,7 @@ class MyApp extends StatelessWidget {
               visualDensity: VisualDensity.adaptivePlatformDensity,
             ),
             home: Login('309'),
+            debugShowCheckedModeBanner: false,
             routes: {
               '/main_screen': (context) => MainScreen(),
               //'/login': (context) => Login(),
