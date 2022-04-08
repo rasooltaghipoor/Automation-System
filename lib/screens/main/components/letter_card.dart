@@ -1,12 +1,16 @@
+import 'package:automation_system/models/Cartable.dart';
 import 'package:automation_system/models/Email.dart';
+import 'package:automation_system/responsive.dart';
+import 'package:automation_system/utils/SizeConfiguration.dart';
 import 'package:flutter/material.dart';
+import 'package:google_speech/generated/google/cloud/speech/v1p1beta1/cloud_speech.pb.dart';
 import 'package:websafe_svg/websafe_svg.dart';
 
 import '../../../constants.dart';
 import '../../../extensions.dart';
 
-class LetterCard extends StatelessWidget {
-  const LetterCard({
+class LetterCard extends StatefulWidget {
+  LetterCard({
     Key? key,
     this.isActive = true,
     this.email,
@@ -14,194 +18,261 @@ class LetterCard extends StatelessWidget {
   }) : super(key: key);
 
   final bool? isActive;
-  final Email? email;
+  final CartableData? email;
   final VoidCallback? press;
-  final bool value = false;
+  bool? value = false;
 
+  @override
+  State<LetterCard> createState() => _LetterCardState();
+}
+
+class _LetterCardState extends State<LetterCard> {
   @override
   Widget build(BuildContext context) {
     //  Here the shadow is not showing properly
+    final zarib1 = Responsive.isDesktop(context)
+        ? 1
+        : (Responsive.isTablet(context) ? 1.5 : 2);
+    final zarib2 = Responsive.isDesktop(context)
+        ? 1
+        : (Responsive.isTablet(context) ? 3 : 4);
     return Padding(
       padding: const EdgeInsets.symmetric(
           horizontal: kDefaultPadding, vertical: kDefaultPadding / 2),
       child: InkWell(
-        onTap: press,
-        child: Stack(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(kDefaultPadding),
-              decoration: BoxDecoration(
-                color: isActive! ? kPrimaryColor : kBgDarkColor,
-                borderRadius: BorderRadius.circular(15),
+        onTap: widget.press,
+        //child: Stack(
+        //children: [
+        child: Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(kDefaultPaddingSmall),
+          decoration: BoxDecoration(
+            color: widget.isActive! ? kPrimaryColor : kBgDarkColor,
+            borderRadius: BorderRadius.circular(15),
+          ),
+          child: Wrap(
+            spacing: kDefaultPaddingSmaller,
+            runSpacing: kDefaultPaddingSmall,
+            children: [
+              Container(
+                //color: Colors.amberAccent,
+                width: Responsive.isDesktop(context)
+                    ? SizeConfig.safeBlockHorizontal! * 45
+                    : SizeConfig.safeBlockHorizontal! * 90,
+                child: Row(
+                  children: [
+                    SizedBox(
+                      width: SizeConfig.safeBlockHorizontal! * 2 * zarib1,
+                      child: RotatedBox(
+                        quarterTurns: 3,
+                        child: Text(widget.email!.letterTypeTitle!),
+                      ),
+                    ),
+                    /*const SizedBox(
+                      width: kDefaultPaddingMedium,
+                    ),*/
+                    SizedBox(
+                      width: SizeConfig.safeBlockHorizontal! * 2 * zarib1,
+                      child: RotatedBox(
+                        quarterTurns: 3,
+                        child: Text(widget.email!.actionTypeTitle!),
+                      ),
+                    ),
+                    //],
+                    //),
+                    const SizedBox(
+                      width: kDefaultPaddingMedium,
+                    ),
+                    SizedBox(
+                      width: SizeConfig.safeBlockHorizontal! * 4 * zarib1,
+                      child: Column(
+                        children: [
+                          Checkbox(
+                            value: widget.value,
+                            onChanged: (bool? value) {
+                              setState(() {
+                                widget.value = value;
+                              });
+                            },
+                          ),
+                          const SizedBox(
+                            height: kDefaultPaddingSmall,
+                          ),
+                          Text(widget.email!.hDate!),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(
+                      width: kDefaultPaddingMedium,
+                    ),
+                    SizedBox(
+                      width: SizeConfig.safeBlockHorizontal! * 30 * zarib1,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        // Subject, Sender, Source
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            width: double.infinity,
+                            child: Text(
+                              widget.email!.header!,
+                              style: const TextStyle(
+                                  color: Colors.blue,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          SizedBox(
+                            width: double.infinity,
+                            child: Row(
+                              children: [
+                                SizedBox(
+                                  // User Image
+                                  width: 32,
+                                  child: CircleAvatar(
+                                    backgroundColor: Colors.transparent,
+                                    child: Image.network(
+                                        mainUrl + widget.email!.profilePic!),
+                                  ),
+                                ),
+                                const SizedBox(width: kDefaultPadding / 2),
+                                Text(widget.email!.fromTitle!),
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            width: double.infinity,
+                            child: Text(
+                              'فرستنده اصلی: ' + widget.email!.sourceTitle!,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
-              child: Row(
-                children: [
-                  Expanded(
-                    flex: 1,
-                    child: Row(
+              /* const SizedBox(
+                width: kDefaultPaddingMedium,
+              ),*/
+              Container(
+                //color: Colors.white70,
+                width: Responsive.isDesktop(context)
+                    ? SizeConfig.safeBlockHorizontal! * 20
+                    : SizeConfig.safeBlockHorizontal! * 90,
+                child: Row(
+                  children: [
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                      Text( // Type: Incoming, Outgoing, ...
-                        email!.type!,
-                        style: Theme
-                            .of(context)
-                            .textTheme
-                            .caption
-                            ?.copyWith(
-                          color: isActive! ? Colors.white70 : null,
+                        SizedBox(
+                          width: SizeConfig.safeBlockHorizontal! * 10 * zarib2,
+                          child: RichText(
+                            text: TextSpan(
+                              children: [
+                                const WidgetSpan(
+                                  child:
+                                      Icon(Icons.apartment_outlined, size: 14),
+                                ),
+                                const TextSpan(
+                                  text: "شماره: ",
+                                ),
+                                TextSpan(
+                                  text: widget.email!.letterNumber!,
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
-                      ),
-                      Text( // Required Action
-                        email!.requiredAction!,
-                        style: Theme
-                            .of(context)
-                            .textTheme
-                            .caption
-                            ?.copyWith(
-                          color: isActive! ? Colors.white70 : null,
+                        const SizedBox(
+                          height: kDefaultPaddingSmaller,
                         ),
-                      ),
-                    ],
-                    ),
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: Column(
-                      children: [
-                        Checkbox(
-                          value: value,
-                          onChanged: (bool? value) {
-                            /*setState(() {
-                            this.value = value;
-                          });*/
-                          },
+                        SizedBox(
+                          width: SizeConfig.safeBlockHorizontal! * 10 * zarib2,
+                          child: RichText(
+                            text: TextSpan(
+                              children: [
+                                const WidgetSpan(
+                                  child: Icon(Icons.date_range, size: 14),
+                                ),
+                                const TextSpan(
+                                  text: "تاریخ: ",
+                                ),
+                                TextSpan(
+                                  text: widget.email!.letterDate!,
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
-                        Text(email!.time!),
+                        const SizedBox(height: kDefaultPaddingSmaller),
+                        SizedBox(
+                          width: SizeConfig.safeBlockHorizontal! * 10 * zarib2,
+                          child: RichText(
+                            text: TextSpan(
+                              children: [
+                                if (int.parse(widget.email!.attachCount!) > 0)
+                                  const WidgetSpan(
+                                    child: Icon(Icons.attach_file, size: 14),
+                                  ),
+                                const TextSpan(
+                                  text: "پیوست: ",
+                                ),
+                                TextSpan(
+                                  text: widget.email!.attachCount!,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
                       ],
                     ),
-                  ),
-                  Expanded(
-                    flex: 6,
-                    child: Column(
-                      children: [
-                        Text(email!.subject!),
-                        Row(
-                          children: [
-                            SizedBox( // User Image
-                              width: 32,
-                              child: CircleAvatar(
-                                backgroundColor: Colors.transparent,
-                                backgroundImage: AssetImage(email!.image!),
+                    const SizedBox(
+                      width: kDefaultPaddingMedium,
+                    ),
+                    SizedBox(
+                      //width: 100,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            width: SizeConfig.safeBlockHorizontal! * 7 * zarib2,
+                            child: RichText(
+                              text: TextSpan(
+                                children: [
+                                  const WidgetSpan(
+                                    child: Icon(Icons.crop_original, size: 14),
+                                  ),
+                                  TextSpan(
+                                    text: ' ' + widget.email!.refTitle!,
+                                  ),
+                                ],
                               ),
                             ),
-                            const SizedBox(width: kDefaultPadding / 2),
-                            Text(
-                                email!.name!
+                          ),
+                          const SizedBox(height: kDefaultPaddingSmaller),
+                          SizedBox(
+                            width: SizeConfig.safeBlockHorizontal! * 7 * zarib2,
+                            child: RichText(
+                              text: TextSpan(
+                                children: [
+                                  const WidgetSpan(
+                                    child: Icon(Icons.privacy_tip, size: 14),
+                                  ),
+                                  TextSpan(
+                                    text:
+                                        ' ' + widget.email!.securityTypeTitle!,
+                                  ),
+                                ],
+                              ),
                             ),
-                          ],
-                        ),
-                        Text(email!.source!),
-                        /*const SizedBox(height: kDefaultPadding / 2),
-                  Text(
-                    email!.body!,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.caption?.copyWith(
-                      height: 1.5,
-                      color: isActive! ? Colors.white70 : null,
+                          ),
+                        ],
+                      ),
                     ),
-                  )*/
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                    flex: 2,
-                    child: Column(
-                      children: [
-                        RichText(
-                          text: TextSpan(
-                            children: [
-                              const WidgetSpan(
-                                child: Icon(Icons.apartment_outlined, size: 14),
-                              ),
-                              const TextSpan(
-                                text: "شماره: ",
-                              ),
-                              TextSpan(
-                                text: email!.idNumber!,
-                              ),
-                            ],
-                          ),
-                        ),
-                        RichText(
-                          text: TextSpan(
-                            children: [
-                              const WidgetSpan(
-                                child: Icon(Icons.date_range, size: 14),
-                              ),
-                              const TextSpan(
-                                text: "تاریخ: ",
-                              ),
-                              TextSpan(
-                                text: email!.time!,
-                              ),
-                            ],
-                          ),
-                        ),
-                        RichText(
-                          text: TextSpan(
-                            children: [
-                              if (email!.isAttachmentAvailable!)
-                                const WidgetSpan(
-                                  child: Icon(Icons.attach_file, size: 14),
-                                ),
-                              const TextSpan(
-                                text: "پیوست: ",
-                              ),
-                              TextSpan(
-                                text: email!.idNumber!,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: Column(
-                      children: [
-                        RichText(
-                          text: TextSpan(
-                            children: [
-                              if (email!.isOriginal!)
-                                const WidgetSpan(
-                                  child: Icon(Icons.crop_original, size: 14),
-                                ),
-                              if (email!.isOriginal!)
-                                const TextSpan(
-                                  text: "اصل",
-                                ),
-                            ],
-                          ),
-                        ),
-                        RichText(
-                          text: TextSpan(
-                            children: [
-                              if (email!.isConfidential!)
-                                const WidgetSpan(
-                                  child: Icon(Icons.privacy_tip, size: 14),
-                                ),
-                              if (email!.isConfidential!)
-                                const TextSpan(
-                                  text: "محرمانه",
-                                ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  /*Column(
+                  ],
+                ),
+              ),
+              /*Column(
                     children: [
                       const SizedBox(height: 5),
                       if (email!.isAttachmentAvailable!)
@@ -211,16 +282,16 @@ class LetterCard extends StatelessWidget {
                         )
                     ],
                   ),*/
-                ],
-              ),
-            ).addNeumorphism(
-              blurRadius: 15,
-              borderRadius: 15,
-              offset: const Offset(5, 5),
-              topShadowColor: Colors.white60,
-              bottomShadowColor: const Color(0xFF234395).withOpacity(0.15),
-            ),
-            if (!email!.isChecked!)
+            ],
+          ),
+        ).addNeumorphism(
+          blurRadius: 15,
+          borderRadius: 15,
+          offset: const Offset(5, 5),
+          topShadowColor: Colors.white60,
+          bottomShadowColor: const Color(0xFF234395).withOpacity(0.15),
+        ),
+        /*if (!widget.email!.isChecked!)
               Positioned(
                 right: 8,
                 top: 8,
@@ -237,18 +308,18 @@ class LetterCard extends StatelessWidget {
                   offset: const Offset(2, 2),
                 ),
               ),
-            if (email!.tagColor != null)
+            if (widget.email!.tagColor != null)
               Positioned(
                 left: 8,
                 top: 0,
                 child: WebsafeSvg.asset(
                   "assets/Icons/Markup filled.svg",
                   height: 18,
-                  color: email!.tagColor!,
+                  color: widget.email!.tagColor!,
                 ),
-              )
-          ],
-        ),
+              )*/
+        // ],
+        //),
       ),
     );
   }

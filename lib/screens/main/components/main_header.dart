@@ -27,15 +27,15 @@ class MainHeader extends StatelessWidget {
         child: Directionality(
           textDirection: TextDirection.rtl,
           child: Container(
-          color: kGrayColor,
-          child: Row(
-            children: [
-              Expanded(
-                flex: 6,
-                child:
-                Row(
-                  children: [
-                    /*Expanded(child:
+            color: kBgDarkColor,
+            child: Row(
+              children: [
+                Expanded(
+                  flex: 6,
+                  child:
+                  Row(
+                    children: [
+                      /*Expanded(child:
                   ClipRRect(
                     borderRadius: BorderRadius.circular(4),
                     child: Stack(
@@ -65,9 +65,9 @@ class MainHeader extends StatelessWidget {
                       ],
                     ),
                   ),),*/
-                    Expanded(child: Container(
-                      padding: const EdgeInsets.all(1),
-                      /*decoration: const BoxDecoration(
+                       Container(
+                            padding: const EdgeInsets.all(1),
+                            /*decoration: const BoxDecoration(
                         gradient: LinearGradient(
                           colors: <Color>[
                             Color(0xFF0D47A1),
@@ -76,87 +76,94 @@ class MainHeader extends StatelessWidget {
                           ],
                         ),
                       ),*/
-                      height: SizeConfig.blockSizeHorizontal! * 10 *
-                          0.25,
-                      child: ElevatedButton(
-                        onPressed: () {},
-                        child: const Text('نامه جدید'),),
-                    )
-                    ),
-                    Expanded(
-                        child: Container(
-                          padding: const EdgeInsets.all(1),
-                          height: SizeConfig.blockSizeHorizontal! * 10 *
-                              0.25,
-                          child: ElevatedButton.icon(
-                            onPressed: () {},
-                            icon: const Icon(
-                              Icons.favorite,
-                              color: Colors.pink,
-                              size: 24.0,
-                            ),
-                            label: const Text('ارجاع سریع'),),
-                        )
-                    ),
-                    Expanded(child: Container(
-                      padding: const EdgeInsets.all(1),
-                      height: SizeConfig.blockSizeHorizontal! * 10 *
-                          0.25,
-                      child: ElevatedButton.icon(
-                        onPressed: () {},
-                        icon: const Icon(
-                          Icons.assignment,
-                          //color: Colors.pink,
-                          size: 24.0,
-                        ),
-                        label: const Text('امضای سریع'),),
-                    )
-                    ),
-                    Expanded(child: Container(
-                      padding: const EdgeInsets.all(1),
-                      height: SizeConfig.blockSizeHorizontal! * 10 *
-                          0.25,
-                      child: ElevatedButton.icon(
-                        onPressed: () {},
-                        icon: const Icon(
-                          Icons.favorite,
-                          color: Colors.pink,
-                          size: 24.0,
-                        ),
-                        label: const Text('بایگانی'),),
-                    )
-                    ),
-                  ],
-                ),),
-              const Expanded(
-                flex: 1,
-                child: SizedBox(),),
-              Expanded(
-                flex: 3,
-                child: TextField(
-                  onChanged: (value) {},
-                  decoration: InputDecoration(
-                    hintText: "جستجو",
-                    fillColor: kBgLightColor,
-                    filled: true,
-                    suffixIcon: Padding(
-                      padding: const EdgeInsets.all(
-                          kDefaultPadding * 0.75), //15
-                      child: WebsafeSvg.asset(
-                        "assets/Icons/Search.svg",
-                        width: 24,
+                            height: 45,
+                            width: 140,
+                            child: ElevatedButton(
+                              onPressed: () {},
+                              style: ElevatedButton.styleFrom(
+                                primary: Colors.green,
+                                /*textStyle: const TextStyle(
+                                color: Colors.white,
+                                fontSize:
+                                SharedVars.buttonFontSize * 0.8,
+                                fontWeight: FontWeight.bold)*/
+                              ),
+                              child: const Text('نامه جدید'),),
+                          ),
+
+                      Container(
+                            padding: const EdgeInsets.all(1),
+                            height: 45,
+                            width: 140,
+                            child: ElevatedButton.icon(
+                              onPressed: () {},
+                              icon: const Icon(
+                                Icons.point_of_sale,
+                                color: Colors.white,
+                                size: 24.0,
+                              ),
+                              label: const Text('ارجاع سریع'),),
+
                       ),
-                    ),
-                    border: const OutlineInputBorder(
-                      borderRadius: BorderRadius.all(
-                          Radius.circular(10)),
-                      borderSide: BorderSide.none,
+                      Container(
+                        padding: const EdgeInsets.all(1),
+                        height: 45,
+                        width: 140,
+                        child: ElevatedButton.icon(
+                          onPressed: () {},
+                          icon: const Icon(
+                            Icons.assignment,
+                            //color: Colors.pink,
+                            size: 24.0,
+                          ),
+                          label: const Text('امضای سریع'),),
+
+                      ),
+                       Container(
+                        padding: const EdgeInsets.all(1),
+                        height: 45,
+                        width: 140,
+                        child: ElevatedButton.icon(
+                          onPressed: () {},
+                          icon: const Icon(
+                            Icons.save_outlined,
+                            color: Colors.white,
+                            size: 24.0,
+                          ),
+                          label: const Text('بایگانی'),),
+
+                      ),
+                    ],
+                  ),),
+                const Expanded(
+                  flex: 1,
+                  child: SizedBox(),),
+                Expanded(
+                  flex: 3,
+                  child: TextField(
+                    onChanged: (value) {},
+                    decoration: InputDecoration(
+                      hintText: "جستجو",
+                      fillColor: kBgLightColor,
+                      filled: true,
+                      suffixIcon: Padding(
+                        padding: const EdgeInsets.all(
+                            kDefaultPadding * 0.75), //15
+                        child: WebsafeSvg.asset(
+                          "assets/Icons/Search.svg",
+                          width: 24,
+                        ),
+                      ),
+                      border: const OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                            Radius.circular(10)),
+                        borderSide: BorderSide.none,
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
-          ),),
+              ],
+            ),),
         )
     );
   }

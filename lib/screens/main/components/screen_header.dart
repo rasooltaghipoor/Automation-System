@@ -1,4 +1,3 @@
-
 import 'package:automation_system/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -13,55 +12,45 @@ class ScreenHeader extends StatelessWidget {
         child: Directionality(
           textDirection: TextDirection.rtl,
           child: Container(
-            color: kSecondaryColor,
+            color: kBgDarkColor,
             child: Row(
               children: [
                 Expanded(
-                    flex: 2,
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                      Image.asset(
-                      "assets/images/Logo Outlook.png"),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: const[
-                            Expanded(child: Text('رسول تقی پور')),
-                            Expanded(child: Text('هیات علمی')),
-                          ],
-                        ),
-                      ],
-                    )
+                  flex: 1,
+                  child: ListTile(
+                    leading: Image.asset("assets/images/Logo Outlook.png"),
+                    //backgroundColor: Colors.purple,
+                    title: const Text('اتوماسیون یار'),
+                    subtitle: const Text('برنامه اتوماسیون اداری هوشمند'),
+                  ),
                 ),
                 Expanded(
-                    flex: 5,
-                    child: Row(
-                    )
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text('1400/02/24'),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Text('صفحه اصلی'),
+                    ],
+                  ),
                 ),
                 Expanded(
-                    flex: 5,
+                    flex: 1,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        ElevatedButton.icon(
+                        IconButton(
                           icon: const Icon(
                             Icons.settings,
-                            color: Colors.white,
-                            size: 24.0,
+                            color: Colors.blue,
+                            size: 32.0,
                           ),
-                          label: const Text('تنظیمات صفحه'),
+                          tooltip: 'تنظیمات کاربری',
                           onPressed: () {},
                         ),
-                        ElevatedButton.icon(
-                          icon: const Icon(
-                            Icons.account_circle_rounded,
-                            color: Colors.white,
-                            size: 24.0,
-                          ),
-                          label: const Text('تنظیمات کاربری'),
-                          onPressed: () {},
-                        ),
-                        ElevatedButton.icon(
+                        /*ElevatedButton.icon(
                           icon: const Icon(
                             Icons.info,
                             color: Colors.white,
@@ -69,7 +58,7 @@ class ScreenHeader extends StatelessWidget {
                           ),
                           label: const Text('درباره نرم افزار'),
                           onPressed: () {},
-                        ),
+                        ),*/
                         IconButton(
                           icon: const Icon(
                             Icons.info,
@@ -77,17 +66,13 @@ class ScreenHeader extends StatelessWidget {
                             size: 32.0,
                           ),
                           tooltip: 'درباره نرم افزار',
-                          onPressed: () {
-
-                          },
+                          onPressed: () {},
                         ),
                       ],
-                    )
-                ),
+                    )),
               ],
             ),
           ),
         ));
   }
-
 }
