@@ -1,5 +1,6 @@
 import 'package:automation_system/utils/SizeConfiguration.dart';
 import 'package:flutter/material.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:websafe_svg/websafe_svg.dart';
 
 import '../../../constants.dart';
@@ -30,44 +31,15 @@ class MainHeader extends StatelessWidget {
             color: kBgDarkColor,
             child: Row(
               children: [
-                Expanded(
-                  flex: 6,
-                  child:
-                  Row(
-                    children: [
-                      /*Expanded(child:
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(4),
-                    child: Stack(
-                      children: <Widget>[
-                        Positioned.fill(
-                          child: Container(
-                            decoration: const BoxDecoration(
-                              gradient: LinearGradient(
-                                colors: <Color>[
-                                  Color(0xFF0D47A1),
-                                  Color(0xFF1976D2),
-                                  Color(0xFF42A5F5),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        TextButton(
-                          style: TextButton.styleFrom(
-                            padding: const EdgeInsets.all(16.0),
-                            primary: Colors.white,
-                            textStyle: const TextStyle(fontSize: 20),
-                          ),
-                          onPressed: () {},
-                          child: const Text('نامه جدید'),
-                        ),
-                      ],
-                    ),
-                  ),),*/
-                       Container(
-                            padding: const EdgeInsets.all(1),
-                            /*decoration: const BoxDecoration(
+                ResponsiveVisibility(
+                  hiddenWhen: const [Condition.smallerThan(name: DESKTOP)],
+                  child: Expanded(
+                    flex: 6,
+                    child: Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(1),
+                          /*decoration: const BoxDecoration(
                         gradient: LinearGradient(
                           colors: <Color>[
                             Color(0xFF0D47A1),
@@ -76,68 +48,70 @@ class MainHeader extends StatelessWidget {
                           ],
                         ),
                       ),*/
-                            height: 45,
-                            width: 140,
-                            child: ElevatedButton(
-                              onPressed: () {},
-                              style: ElevatedButton.styleFrom(
-                                primary: Colors.green,
-                                /*textStyle: const TextStyle(
+                          height: 45,
+                          width: 140,
+                          child: ElevatedButton(
+                            onPressed: () {},
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.green,
+                              /*textStyle: const TextStyle(
                                 color: Colors.white,
                                 fontSize:
                                 SharedVars.buttonFontSize * 0.8,
                                 fontWeight: FontWeight.bold)*/
-                              ),
-                              child: const Text('نامه جدید'),),
+                            ),
+                            child: const Text('نامه جدید'),
                           ),
-
-                      Container(
-                            padding: const EdgeInsets.all(1),
-                            height: 45,
-                            width: 140,
-                            child: ElevatedButton.icon(
-                              onPressed: () {},
-                              icon: const Icon(
-                                Icons.point_of_sale,
-                                color: Colors.white,
-                                size: 24.0,
-                              ),
-                              label: const Text('ارجاع سریع'),),
-
-                      ),
-                      Container(
-                        padding: const EdgeInsets.all(1),
-                        height: 45,
-                        width: 140,
-                        child: ElevatedButton.icon(
-                          onPressed: () {},
-                          icon: const Icon(
-                            Icons.assignment,
-                            //color: Colors.pink,
-                            size: 24.0,
+                        ),
+                        Container(
+                          padding: const EdgeInsets.all(1),
+                          height: 45,
+                          width: 140,
+                          child: ElevatedButton.icon(
+                            onPressed: () {},
+                            icon: const Icon(
+                              Icons.point_of_sale,
+                              color: Colors.white,
+                              size: 24.0,
+                            ),
+                            label: const Text('ارجاع سریع'),
                           ),
-                          label: const Text('امضای سریع'),),
-
-                      ),
-                       Container(
-                        padding: const EdgeInsets.all(1),
-                        height: 45,
-                        width: 140,
-                        child: ElevatedButton.icon(
-                          onPressed: () {},
-                          icon: const Icon(
-                            Icons.save_outlined,
-                            color: Colors.white,
-                            size: 24.0,
+                        ),
+                        Container(
+                          padding: const EdgeInsets.all(1),
+                          height: 45,
+                          width: 140,
+                          child: ElevatedButton.icon(
+                            onPressed: () {},
+                            icon: const Icon(
+                              Icons.assignment,
+                              //color: Colors.pink,
+                              size: 24.0,
+                            ),
+                            label: const Text('امضای سریع'),
                           ),
-                          label: const Text('بایگانی'),),
-
-                      ),
-                    ],
-                  ),),
-                const Expanded(
+                        ),
+                        Container(
+                          padding: const EdgeInsets.all(1),
+                          height: 45,
+                          width: 140,
+                          child: ElevatedButton.icon(
+                            onPressed: () {},
+                            icon: const Icon(
+                              Icons.save_outlined,
+                              color: Colors.white,
+                              size: 24.0,
+                            ),
+                            label: const Text('بایگانی'),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                /*const Expanded(
                   flex: 1,
-                  child: SizedBox(),),
+                  child: SizedBox(),),*/
                 Expanded(
                   flex: 3,
                   child: TextField(
@@ -147,24 +121,23 @@ class MainHeader extends StatelessWidget {
                       fillColor: kBgLightColor,
                       filled: true,
                       suffixIcon: Padding(
-                        padding: const EdgeInsets.all(
-                            kDefaultPadding * 0.75), //15
+                        padding:
+                        const EdgeInsets.all(kDefaultPadding * 0.75), //15
                         child: WebsafeSvg.asset(
                           "assets/Icons/Search.svg",
                           width: 24,
                         ),
                       ),
                       border: const OutlineInputBorder(
-                        borderRadius: BorderRadius.all(
-                            Radius.circular(10)),
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
                         borderSide: BorderSide.none,
                       ),
                     ),
                   ),
                 ),
               ],
-            ),),
-        )
-    );
+            ),
+          ),
+        ));
   }
 }

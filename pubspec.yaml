@@ -51,6 +51,7 @@ dependencies:
   http: ^0.13.3
   provider: ^6.0.2
   shared_preferences: ^2.0.13
+  responsive_framework: ^0.1.7
 
 dev_dependencies:
   flutter_test:
@@ -109,6 +110,11 @@ flutter:
   # see https://flutter.dev/custom-fonts/#from-packages
 
   fonts:
+  #         weight: 700
+  #
+  # For details regarding fonts from package dependencies,
+  # see https://flutter.dev/custom-fonts/#from-packages
+
     - family: Koodak
       fonts:
         - asset: assets/fonts/Yekan.ttf
