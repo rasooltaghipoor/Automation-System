@@ -127,18 +127,22 @@ class _LoginState extends State<Login> {
         appBar: myCustomAppBar('دانشگاه آزاد اسلامی واحد نیشابور',
             SizeConfig.safeBlockVertical! * 10, null),
         body: Container(
-          decoration: BoxDecoration(
+          /*decoration: BoxDecoration(
               //color: Colors.yellow[100],
               border: Border.all(
                 color: Colors.black,
               ),
               borderRadius: BorderRadius.all(
-                  Radius.circular(SizeConfig.safeBlockHorizontal! * 4))),
+                  Radius.circular(SizeConfig.safeBlockHorizontal! * 4))),*/
           //color: Colors.lightBlue[100],
-          padding: const EdgeInsets.fromLTRB(50, 40, 50, 40),
-          width: MediaQuery.of(context).size.width >= 1100
-              ? SizeConfig.safeBlockHorizontal! * 40
-              : SizeConfig.safeBlockHorizontal! * 80,
+          padding: MediaQuery.of(context).size.width <
+                  MediaQuery.of(context).size.height
+              ? const EdgeInsets.fromLTRB(50, 40, 50, 40)
+              : const EdgeInsets.fromLTRB(400, 40, 400, 40),
+          /*width: MediaQuery.of(context).size.width <
+                  MediaQuery.of(context).size.height
+              ? SizeConfig.safeBlockHorizontal! * 80
+              : SizeConfig.safeBlockHorizontal! * 40,*/
           child: ListView(
             children: <Widget>[
               Form(

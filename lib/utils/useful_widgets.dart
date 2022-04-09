@@ -14,9 +14,7 @@ MaterialButton longButtons(String title, VoidCallback fun,
       child: Text(
         title,
         textAlign: TextAlign.center,
-        style: TextStyle(
-            fontFamily: SharedVars.fontFamily,
-            fontSize: SharedVars.buttonFontSize),
+        style: TextStyle(fontFamily: SharedVars.fontFamily, fontSize: 20),
       ),
     ),
     height: SizeConfig.safeBlockVertical! * 50 * 0.17,
@@ -46,7 +44,7 @@ AppBar myCustomAppBar(String title, double height, Icon? icon) {
     toolbarHeight: height,
     title: Text(
       title,
-      style: TextStyle(fontSize: SizeConfig.safeBlockHorizontal! * 1.5),
+      style: TextStyle(fontSize: 20),
     ),
     centerTitle: true,
     shape: RoundedRectangleBorder(
