@@ -120,18 +120,12 @@ class _LoginState extends State<Login> {
       // }
     }
 
-    ;
-
     return SafeArea(
       child: Scaffold(
         appBar: myCustomAppBar('دانشگاه آزاد اسلامی واحد نیشابور',
             SizeConfig.safeBlockVertical! * 10, null),
         body: Container(
-          padding: EdgeInsets.fromLTRB(
-              SizeConfig.safeBlockHorizontal! * 15,
-              SizeConfig.safeBlockHorizontal! * 10,
-              SizeConfig.safeBlockHorizontal! * 15,
-              SizeConfig.safeBlockHorizontal! * 10),
+          padding: EdgeInsets.fromLTRB(100, 40, 100, 40),
           child: ListView(
             children: <Widget>[
               Form(
@@ -141,8 +135,8 @@ class _LoginState extends State<Login> {
                   children: [
                     Image.asset(
                       "assets/images/Logo Outlook.png",
-                      width: SizeConfig.safeBlockHorizontal! * 15,
-                      height: SizeConfig.safeBlockHorizontal! * 15 * 1.25,
+                      width: 50,
+                      height: 50 * 1.25,
                     ),
                     const Text(
                       "اپلیکیشن رتبه بندی کارمندان",

@@ -122,7 +122,7 @@ class MainHeader extends StatelessWidget {
                       filled: true,
                       suffixIcon: Padding(
                         padding:
-                        const EdgeInsets.all(kDefaultPadding * 0.75), //15
+                            const EdgeInsets.all(kDefaultPadding * 0.75), //15
                         child: WebsafeSvg.asset(
                           "assets/Icons/Search.svg",
                           width: 24,

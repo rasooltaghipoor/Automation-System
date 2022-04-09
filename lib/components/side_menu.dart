@@ -24,6 +24,7 @@ class SideMenu extends StatefulWidget {
 
 class _SideMenuState extends State<SideMenu> {
   int _activeIndex = 0;
+  final ScrollController _mycontroller2 = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +34,7 @@ class _SideMenuState extends State<SideMenu> {
         color: kBgLightColor,
         child: SafeArea(
           child: SingleChildScrollView(
+            controller: _mycontroller2,
             padding:
                 const EdgeInsets.symmetric(horizontal: kDefaultPaddingSmaller),
             child: Directionality(

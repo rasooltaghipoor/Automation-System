@@ -73,9 +73,10 @@ class EmailCard extends StatelessWidget {
                         children: [
                           Text(
                             email!.time!,
-                            style: Theme.of(context).textTheme.caption?.copyWith(
-                                  color: isActive! ? Colors.white70 : null,
-                                ),
+                            style:
+                                Theme.of(context).textTheme.caption?.copyWith(
+                                      color: isActive! ? Colors.white70 : null,
+                                    ),
                           ),
                           const SizedBox(height: 5),
                           if (email!.isAttachmentAvailable!)

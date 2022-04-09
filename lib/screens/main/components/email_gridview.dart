@@ -55,7 +55,7 @@ class _EmailGridViewState extends State<EmailGridView> {
                   // This is our Search bar
                   Padding(
                     padding:
-                    const EdgeInsets.symmetric(horizontal: kDefaultPadding),
+                        const EdgeInsets.symmetric(horizontal: kDefaultPadding),
                     child: Row(
                       children: [
                         // Once user click the menu icon the menu shows like drawer
@@ -67,8 +67,8 @@ class _EmailGridViewState extends State<EmailGridView> {
                               _scaffoldKey.currentState?.openDrawer();
                             },
                           ),
-                        if (!Responsive.isDesktop(context)) const SizedBox(
-                            width: 5),
+                        if (!Responsive.isDesktop(context))
+                          const SizedBox(width: 5),
                         Expanded(
                           child: TextField(
                             onChanged: (value) {},
@@ -85,8 +85,8 @@ class _EmailGridViewState extends State<EmailGridView> {
                                 ),
                               ),
                               border: const OutlineInputBorder(
-                                borderRadius: BorderRadius.all(
-                                    Radius.circular(10)),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10)),
                                 borderSide: BorderSide.none,
                               ),
                             ),
@@ -98,7 +98,7 @@ class _EmailGridViewState extends State<EmailGridView> {
                   const SizedBox(height: kDefaultPadding),
                   Padding(
                     padding:
-                    const EdgeInsets.symmetric(horizontal: kDefaultPadding),
+                        const EdgeInsets.symmetric(horizontal: kDefaultPadding),
                     child: Row(
                       children: [
                         WebsafeSvg.asset(
@@ -222,12 +222,12 @@ class EmployeeDataSource extends DataGridSource {
   EmployeeDataSource({required List<Employee> employeeData}) {
     _employeeData = employeeData
         .map<DataGridRow>((e) => DataGridRow(cells: [
-      DataGridCell<int>(columnName: 'id', value: e.id),
-      DataGridCell<String>(columnName: 'name', value: e.name),
-      DataGridCell<String>(
-          columnName: 'designation', value: e.designation),
-      DataGridCell<int>(columnName: 'salary', value: e.salary),
-    ]))
+              DataGridCell<int>(columnName: 'id', value: e.id),
+              DataGridCell<String>(columnName: 'name', value: e.name),
+              DataGridCell<String>(
+                  columnName: 'designation', value: e.designation),
+              DataGridCell<int>(columnName: 'salary', value: e.salary),
+            ]))
         .toList();
   }
 
@@ -240,11 +240,11 @@ class EmployeeDataSource extends DataGridSource {
   DataGridRowAdapter buildRow(DataGridRow row) {
     return DataGridRowAdapter(
         cells: row.getCells().map<Widget>((e) {
-          return Container(
-            alignment: Alignment.center,
-            padding: const EdgeInsets.all(8.0),
-            child: Text(e.value.toString()),
-          );
-        }).toList());
+      return Container(
+        alignment: Alignment.center,
+        padding: const EdgeInsets.all(8.0),
+        child: Text(e.value.toString()),
+      );
+    }).toList());
   }
 }

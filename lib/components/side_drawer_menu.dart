@@ -14,14 +14,12 @@ class SideDrawerMenu extends StatelessWidget {
       backgroundColor: Colors.amber,
       child: Directionality(
         textDirection: TextDirection.rtl,
-        child:
-        ListView(
+        child: ListView(
           children: [
             DrawerHeader(
               child: ListTile(
                 leading: CircleAvatar(
-                  child: Image.asset(
-                      "assets/images/user_3.png"),
+                  child: Image.asset("assets/images/user_3.png"),
                   //backgroundColor: Colors.purple,
                 ),
                 title: Text('مجمد محمد زاده'),
@@ -34,34 +32,34 @@ class SideDrawerMenu extends StatelessWidget {
               initiallyExpanded: true,
               title: Text('کارتابل'),
               children: <Widget>[
-                TextButton(onPressed: (){},
-                    style: TextButton.styleFrom(
-                      backgroundColor: Colors.yellow,
-                      textStyle: const TextStyle(fontSize: 20),
-                    ),
-                    child: Text('sdfdfsd'),
+                TextButton(
+                  onPressed: () {},
+                  style: TextButton.styleFrom(
+                    backgroundColor: Colors.yellow,
+                    textStyle: const TextStyle(fontSize: 20),
+                  ),
+                  child: Text('sdfdfsd'),
                 ),
 
                 //Expanded(
-                    //child:
-                    Container(
-                      padding: const EdgeInsets.all(1),
-                      height: SizeConfig.blockSizeHorizontal! * 10 *
-                          0.25,
-                      child: ElevatedButton.icon(
-                        onPressed: () {},
-                        icon: const Icon(
-                          Icons.favorite,
-                          color: Colors.pink,
-                          size: 24.0,
-                        ),
-                        label: const Text('ارجاع سریع'),),
+                //child:
+                Container(
+                  padding: const EdgeInsets.all(1),
+                  height: SizeConfig.blockSizeHorizontal! * 10 * 0.25,
+                  child: ElevatedButton.icon(
+                    onPressed: () {},
+                    icon: const Icon(
+                      Icons.favorite,
+                      color: Colors.pink,
+                      size: 24.0,
                     ),
+                    label: const Text('ارجاع سریع'),
+                  ),
+                ),
                 Container(
                   width: double.infinity,
                   padding: const EdgeInsets.all(1),
-                  height: SizeConfig.blockSizeHorizontal! * 10 *
-                      0.25,
+                  height: SizeConfig.blockSizeHorizontal! * 10 * 0.25,
                   child: ElevatedButton.icon(
                     onPressed: () {},
                     icon: const Icon(
@@ -69,12 +67,12 @@ class SideDrawerMenu extends StatelessWidget {
                       color: Colors.pink,
                       size: 24.0,
                     ),
-                    label: const Text('ارجاع سریع'),),
+                    label: const Text('ارجاع سریع'),
+                  ),
                 ),
                 Container(
                   padding: const EdgeInsets.all(1),
-                  height: SizeConfig.blockSizeHorizontal! * 10 *
-                      0.25,
+                  height: SizeConfig.blockSizeHorizontal! * 10 * 0.25,
                   child: ElevatedButton.icon(
                     onPressed: () {},
                     icon: const Icon(
@@ -82,7 +80,8 @@ class SideDrawerMenu extends StatelessWidget {
                       color: Colors.pink,
                       size: 24.0,
                     ),
-                    label: const Text('ارجاع سریع'),),
+                    label: const Text('ارجاع سریع'),
+                  ),
                 ),
                 //),
                 ListTile(
@@ -103,7 +102,8 @@ class SideDrawerMenu extends StatelessWidget {
                     style: TextStyle(color: Colors.white54),
                   ),
                 ),
-              ],),
+              ],
+            ),
             Text('کارتابل'),
             DrawerListTile(
               title: "جهت اقدام",
@@ -116,7 +116,8 @@ class SideDrawerMenu extends StatelessWidget {
                 title: "استحضار",
                 svgSrc: "assets/Icons/Inbox.svg",
                 press: () {},
-              ),),
+              ),
+            ),
             DrawerListTile(
               title: "اطلاع",
               svgSrc: "assets/Icons/Inbox.svg",
@@ -180,12 +181,13 @@ class SideDrawerMenu extends StatelessWidget {
               press: () {},
             ),
           ],
-        ),),
+        ),
+      ),
     );
   }
 }
 
-class DrawerButtonItem{
+class DrawerButtonItem {
   const DrawerButtonItem({
     Key? key,
     // For selecting those three line once press "Command+D"

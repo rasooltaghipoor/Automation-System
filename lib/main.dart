@@ -13,6 +13,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:responsive_framework/responsive_framework.dart';
+import 'package:responsive_framework/responsive_wrapper.dart';
 
 void main() {
   runApp(const MyApp());
@@ -50,14 +51,14 @@ class MyApp extends StatelessWidget {
         ],
         child: MaterialApp(
             builder: (context, widget) => ResponsiveWrapper.builder(
-              ClampingScrollWrapper.builder(context, widget!),
-              breakpoints: const [
-                ResponsiveBreakpoint.resize(350, name: MOBILE),
-                ResponsiveBreakpoint.autoScale(600, name: TABLET),
-                ResponsiveBreakpoint.resize(800, name: DESKTOP),
-                ResponsiveBreakpoint.autoScale(1700, name: 'XL'),
-              ],
-            ),
+                  ClampingScrollWrapper.builder(context, widget!),
+                  breakpoints: const [
+                    ResponsiveBreakpoint.resize(350, name: MOBILE),
+                    ResponsiveBreakpoint.autoScale(600, name: TABLET),
+                    ResponsiveBreakpoint.resize(800, name: DESKTOP),
+                    ResponsiveBreakpoint.autoScale(1700, name: 'XL'),
+                  ],
+                ),
             title: '',
             theme: ThemeData(
               fontFamily: 'Koodak',

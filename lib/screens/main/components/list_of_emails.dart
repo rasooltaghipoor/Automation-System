@@ -27,6 +27,7 @@ class ListOfEmails extends StatefulWidget {
 
 class _ListOfEmailsState extends State<ListOfEmails> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final ScrollController _mycontroller1 = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -126,6 +127,7 @@ class _ListOfEmailsState extends State<ListOfEmails> {
                         return cartableModel.cartable == null
                             ? const Center(child: CircularProgressIndicator())
                             : ListView.builder(
+                                controller: _mycontroller1,
                                 itemCount:
                                     cartableModel.cartable!.catableData.length,
                                 // On mobile this active dosen't mean anything
