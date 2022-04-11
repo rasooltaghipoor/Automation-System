@@ -23,6 +23,8 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   final formKey = new GlobalKey<FormState>();
 
+  String dropdownValue = 'فنی مهندسی';
+
   String? _username, _password;
 
   _LoginState(this._username);
@@ -125,7 +127,22 @@ class _LoginState extends State<Login> {
         appBar: myCustomAppBar('دانشگاه آزاد اسلامی واحد نیشابور',
             SizeConfig.safeBlockVertical! * 10, null),
         body: Container(
-          padding: EdgeInsets.fromLTRB(100, 40, 100, 40),
+          /*decoration: BoxDecoration(
+              //color: Colors.yellow[100],
+              border: Border.all(
+                color: Colors.black,
+              ),
+              borderRadius: BorderRadius.all(
+                  Radius.circular(SizeConfig.safeBlockHorizontal! * 4))),*/
+          //color: Colors.lightBlue[100],
+          padding: MediaQuery.of(context).size.width <
+                  MediaQuery.of(context).size.height
+              ? const EdgeInsets.fromLTRB(50, 40, 50, 40)
+              : const EdgeInsets.fromLTRB(400, 40, 400, 40),
+          /*width: MediaQuery.of(context).size.width <
+                  MediaQuery.of(context).size.height
+              ? SizeConfig.safeBlockHorizontal! * 80
+              : SizeConfig.safeBlockHorizontal! * 40,*/
           child: ListView(
             children: <Widget>[
               Form(
@@ -139,10 +156,45 @@ class _LoginState extends State<Login> {
                       height: 50 * 1.25,
                     ),
                     const Text(
-                      "اپلیکیشن رتبه بندی کارمندان",
+                      "سیستم مدیریت منابع انسانی",
                       style: TextStyle(fontFamily: SharedVars.fontFamily),
                     ),
                     SizedBox(height: SizeConfig.safeBlockVertical! * 8),
+                    const Text("دانشگاه"),
+                    //Expanded(
+                    Container(
+                        alignment: Alignment.center,
+                        padding:
+                            EdgeInsets.all(SizeConfig.safeBlockHorizontal! * 2),
+                        child: DropdownButton<String>(
+                          //hint: new Text("انتخاب ساختمان"),
+                          isExpanded: true,
+                          value: dropdownValue,
+                          //icon: const Icon(Icons.arrow_downward),
+                          iconSize: 24,
+                          elevation: 16,
+                          style: const TextStyle(color: Colors.deepPurple),
+                          underline: Container(
+                            height: 2,
+                            color: Colors.deepPurpleAccent,
+                          ),
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              dropdownValue = newValue!;
+                            });
+                          },
+                          items: SharedVars.universities.keys
+                              .map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Center(
+                                child: Text(
+                                  value,
+                                ),
+                              ),
+                            );
+                          }).toList(),
+                        )),
                     label("نام کاربری"),
                     SizedBox(height: SizeConfig.safeBlockVertical),
                     usernameField,

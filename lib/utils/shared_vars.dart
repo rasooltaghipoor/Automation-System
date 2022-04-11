@@ -22,4 +22,12 @@ class SharedVars {
   static bool isWebApp = false;
   static var privateUrl = "http://teacher.iau-neyshabur.ac.ir";
   static var publicUrl = "http://teacher.iau-neyshabur.ac.ir";
+
+  static var universities = {
+    'فنی مهندسی': '1',
+    'علوم پایه': '2',
+    'علوم انسانی': '3',
+    'تربیت بدنی': '4',
+    'دانشکده مهارت (سما)': '5'
+  };
 }
