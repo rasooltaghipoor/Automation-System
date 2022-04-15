@@ -387,6 +387,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.11.1"
+  persian_datetime_picker:
+    dependency: "direct main"
+    description:
+      name: persian_datetime_picker
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.4.0"
   petitparser:
     dependency: transitive
     description:

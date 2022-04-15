@@ -3,6 +3,7 @@ import 'package:automation_system/providers/auth.dart';
 import 'package:automation_system/providers/cartable_provider.dart';
 import 'package:automation_system/providers/menu_provider.dart';
 import 'package:automation_system/providers/user_provider.dart';
+import 'package:automation_system/screens/daily_reuest_screen.dart';
 import 'package:automation_system/screens/login_screen.dart';
 import 'package:automation_system/screens/main/main_screen.dart';
 import 'package:automation_system/screens/role_screen.dart';
@@ -70,7 +71,7 @@ class MyApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             routes: {
               '/main_screen': (context) => MainScreen(),
-              '/role_screen': (context) => RoleScreen(),
+              '/role_screen': (context) => DailyRequestScreen(),
               //'/login': (context) => Login(),
             }));
   }
