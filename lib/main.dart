@@ -5,6 +5,7 @@ import 'package:automation_system/providers/menu_provider.dart';
 import 'package:automation_system/providers/user_provider.dart';
 import 'package:automation_system/screens/login_screen.dart';
 import 'package:automation_system/screens/main/main_screen.dart';
+import 'package:automation_system/screens/role_screen.dart';
 import 'package:automation_system/utils/communication/web_request.dart';
 import 'package:automation_system/utils/shared_preference.dart';
 import 'package:automation_system/utils/shared_vars.dart';
@@ -69,6 +70,7 @@ class MyApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             routes: {
               '/main_screen': (context) => MainScreen(),
+              '/role_screen': (context) => RoleScreen(),
               //'/login': (context) => Login(),
             }));
   }
