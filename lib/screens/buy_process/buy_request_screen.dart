@@ -1,12 +1,13 @@
+import 'package:automation_system/screens/buy_process/components/item_data.dart';
 import 'package:automation_system/utils/SizeConfiguration.dart';
 import 'package:flutter/material.dart';
 import 'package:persian_datetime_picker/persian_datetime_picker.dart';
 
-class DailyRequestScreen extends StatefulWidget {
-  const DailyRequestScreen({Key? key}) : super(key: key);
+class BuyRequestScreen extends StatefulWidget {
+  const BuyRequestScreen({Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _DailyRequestScreenState();
+  State<StatefulWidget> createState() => _BuyRequestScreenState();
 }
 
 class _FormData {
@@ -16,7 +17,7 @@ class _FormData {
   String desc = '';
 }
 
-class _DailyRequestScreenState extends State<DailyRequestScreen> {
+class _BuyRequestScreenState extends State<BuyRequestScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final _FormData _data = _FormData();
   TextEditingController dateController = TextEditingController();
@@ -29,6 +30,14 @@ class _DailyRequestScreenState extends State<DailyRequestScreen> {
     'تربیت بدنی': '4',
     'دانشکده مهارت (سما)': '5'
   };
+
+  List<Widget> _itemList = [];
+
+  void _addItemWidget() {
+    setState(() {
+      _itemList.add(ItemWidget());
+    });
+  }
 
   void submit() {
     final form = _formKey.currentState;
@@ -147,6 +156,11 @@ class _DailyRequestScreenState extends State<DailyRequestScreen> {
                         onSaved: (value) {
                           _data.desc = value!;
                         }),
+                    /* ListView.builder(
+                        itemCount: _itemList.length,
+                        itemBuilder: (context, index) {
+                          return _itemList[index];
+                        }),*/
                     Container(
                       width: screenSize.width,
                       child: ElevatedButton(
@@ -161,6 +175,11 @@ class _DailyRequestScreenState extends State<DailyRequestScreen> {
                   ],
                 ),
               ))),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _addItemWidget,
+        tooltip: 'Add',
+        child: Icon(Icons.add),
+      ),
     );
   }
 }
