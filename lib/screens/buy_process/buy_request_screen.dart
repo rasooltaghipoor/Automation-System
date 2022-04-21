@@ -35,6 +35,7 @@ class _BuyRequestScreenState extends State<BuyRequestScreen> {
 
   void _addItemWidget() {
     setState(() {
+      print('dddddddddddddddddddddddddd');
       _itemList.add(ItemWidget());
     });
   }
@@ -54,7 +55,7 @@ class _BuyRequestScreenState extends State<BuyRequestScreen> {
   @override
   void initState() {
     dateController.text = '1401/01/20'; //SharedVars.currentDate;
-
+    _addItemWidget();
     super.initState();
   }
 
@@ -80,10 +81,12 @@ class _BuyRequestScreenState extends State<BuyRequestScreen> {
   @override
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
+    //TODO This line of code should be removed in the future
+    SizeConfig().init(context);
 
     return Scaffold(
       body: Container(
-          padding: EdgeInsets.all(20.0),
+          margin: const EdgeInsets.all(20),
           child: Directionality(
               textDirection: TextDirection.rtl,
               child: Form(
@@ -156,11 +159,28 @@ class _BuyRequestScreenState extends State<BuyRequestScreen> {
                         onSaved: (value) {
                           _data.desc = value!;
                         }),
-                    /* ListView.builder(
-                        itemCount: _itemList.length,
-                        itemBuilder: (context, index) {
-                          return _itemList[index];
-                        }),*/
+                    Container(
+                      color: Colors.amber,
+                      child: Column(
+                        //mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          const Text(
+                            'اقلام درخواستی',
+                          ),
+                          ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: _itemList.length,
+                              itemBuilder: (context, index) {
+                                return _itemList[index];
+                              }),
+                          FloatingActionButton(
+                            onPressed: _addItemWidget,
+                            tooltip: 'Add',
+                            child: const Icon(Icons.add),
+                          ),
+                        ],
+                      ),
+                    ),
                     Container(
                       width: screenSize.width,
                       child: ElevatedButton(
@@ -175,11 +195,6 @@ class _BuyRequestScreenState extends State<BuyRequestScreen> {
                   ],
                 ),
               ))),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _addItemWidget,
-        tooltip: 'Add',
-        child: Icon(Icons.add),
-      ),
     );
   }
 }

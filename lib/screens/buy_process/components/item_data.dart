@@ -20,7 +20,7 @@ class ItemWidget extends StatelessWidget {
                 child: TextFormField(
                   controller: product,
                   decoration: const InputDecoration(
-                      labelText: 'Product Name', border: OutlineInputBorder()),
+                      labelText: 'نام کالا', border: OutlineInputBorder()),
                 ),
               ),
               Container(
@@ -29,7 +29,7 @@ class ItemWidget extends StatelessWidget {
                 child: TextFormField(
                   controller: price,
                   decoration: const InputDecoration(
-                      labelText: 'Price', border: OutlineInputBorder()),
+                      labelText: 'قیمت', border: OutlineInputBorder()),
                   keyboardType: TextInputType.number,
                 ),
               )
