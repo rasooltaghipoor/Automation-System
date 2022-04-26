@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:automation_system/models/BuyModel.dart';
 import 'package:automation_system/models/User.dart';
 import 'package:automation_system/providers/auth.dart';
 import 'package:automation_system/providers/cartable_provider.dart';
@@ -5,6 +8,7 @@ import 'package:automation_system/providers/menu_provider.dart';
 import 'package:automation_system/providers/user_provider.dart';
 import 'package:automation_system/screens/buy_process/buy_request_screen.dart';
 import 'package:automation_system/screens/daily_reuest_screen.dart';
+import 'package:automation_system/screens/dynamic_form_screen.dart';
 import 'package:automation_system/screens/login_screen.dart';
 import 'package:automation_system/screens/main/main_screen.dart';
 import 'package:automation_system/screens/role_screen.dart';
@@ -28,6 +32,18 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    List<ItemData> tags = [
+      ItemData('قند', 20, 'کیلوگرم', 1000, 'ندارد'),
+      ItemData('میز', 12, 'عدد', 500000, 'تجهیز کارگاه کامپیوتر'),
+      ItemData('دستمال', 50, 'عدد', 100, 'ندارد')
+    ];
+    String jsonTags = jsonEncode(tags);
+    //print(jsonTags);
+    BuyItemModel tutorial =
+        BuyItemModel('مصرفی', 'خرید دانشکده مهندسی', 'image.png', tags);
+    String jsonTutorial = jsonEncode(tutorial);
+    print(jsonTutorial);
+
     if (kIsWeb) {
       // This is the web app!
       SharedVars.isWebApp = true;
@@ -68,7 +84,7 @@ class MyApp extends StatelessWidget {
               primarySwatch: Colors.blue,
               visualDensity: VisualDensity.adaptivePlatformDensity,
             ),
-            home: BuyRequestScreen(), //Login('309'),
+            home: View2(), //Login('309'),
             debugShowCheckedModeBanner: false,
             routes: {
               '/main_screen': (context) => MainScreen(),

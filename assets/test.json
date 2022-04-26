@@ -1,0 +1,6 @@
+{"formid":"1","formName_E":"ConsumBuy","formName_F":" خرید مصرفی","items":[{"Control":"textbox","ControlName":"title","title":"عنوان","datatype":"text"},
+ {"Control":"textbox","ControlName":"quantity","title":"مقدار","datatype":"digit"},
+{"Control":"listbox","ControlName":"quantitytpe","title":"نوع","datatype":"urlapi"},
+{"Control":"textbox","ControlName":"estimatedprice","title":"برآورد قیمت","datatype":"digit"},
+{"Control":"textbox","ControlName":"description","title":"شرح","datatype":"text"}
+]}
