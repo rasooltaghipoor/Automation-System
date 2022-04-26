@@ -52,6 +52,7 @@ dependencies:
   provider: ^6.0.2
   shared_preferences: ^2.0.13
   responsive_framework: ^0.1.7
+  persian_datetime_picker: ^2.4.0
 
 dev_dependencies:
   flutter_test:
@@ -82,6 +83,7 @@ flutter:
   assets:
     - assets/Icons/
     - assets/images/
+    - assets/test.json
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
