@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:automation_system/models/DynamicForm.dart';
+import 'package:automation_system/utils/communication/web_request.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -26,7 +27,7 @@ class _View2State extends State<View2> {
 
   // Fetch content from the json file
   Future<DynamicFormModel> readJson() async {
-    final String response = await rootBundle.loadString('assets/sample.json');
+    final String response = await rootBundle.loadString('assets/test.json');
     // final responseBody = utf8.decode(response.bodyBytes);
     final parsed = json.decode(response);
     return DynamicFormModel.fromMap(parsed);
@@ -34,34 +35,38 @@ class _View2State extends State<View2> {
 
   Widget _futureBuilder() {
     return FutureBuilder(
-      future: _retrieveData(),
-      builder: (BuildContext context, AsyncSnapshot<List<String>?> snapshot) {
+      future: getFormDetails('ConsumBuy'),
+      builder:
+          (BuildContext context, AsyncSnapshot<DynamicFormModel?> snapshot) {
         if (!snapshot.hasData) {
-          return const Align(
-            alignment: Alignment.topCenter,
-            child: Text("No item"),
-          );
+          return const Center(child: CircularProgressIndicator());
         }
 
         final data = snapshot.data!;
-        return ListView.builder(
-          itemCount: data.length,
-          padding: const EdgeInsets.all(5),
-          itemBuilder: (BuildContext context, int index) {
-            final controller = _getControllerOf(data[index]);
+        return Column(
+          children: [
+            Text(data.formName_F),
+            ListView.builder(
+              shrinkWrap: true,
+              itemCount: data.items.length,
+              padding: const EdgeInsets.all(5),
+              itemBuilder: (BuildContext context, int index) {
+                //***** final controller = _getControllerOf(data.items[index]);
 
-            final textField = TextField(
-              controller: controller,
-              decoration: InputDecoration(
-                border: const OutlineInputBorder(),
-                labelText: "name${index + 1}",
-              ),
-            );
-            return Container(
-              child: textField,
-              padding: const EdgeInsets.only(bottom: 10),
-            );
-          },
+                final textField = TextField(
+                  //*****  controller: controller,
+                  decoration: InputDecoration(
+                    border: const OutlineInputBorder(),
+                    labelText: data.items[index].title,
+                  ),
+                );
+                return Container(
+                  child: textField,
+                  padding: const EdgeInsets.only(bottom: 10),
+                );
+              },
+            ),
+          ],
         );
       },
     );

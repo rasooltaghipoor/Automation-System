@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:automation_system/constants.dart';
+import 'package:automation_system/models/BuyModel.dart';
 import 'package:automation_system/models/Cartable.dart';
+import 'package:automation_system/models/DynamicForm.dart';
 import 'package:automation_system/models/MenuDetails.dart';
 import 'package:automation_system/models/User.dart';
 import 'package:automation_system/providers/cartable_provider.dart';
@@ -36,6 +38,43 @@ Future<dynamic> fetchTimeProgram(String cid, String mDate, String sTime) async {
     final responseBody = utf8.decode(response.bodyBytes);
     final parsed = json.decode(responseBody);
     return null; //**************************TimeProgram.fromMap(parsed);
+  } else {
+    throw Exception('Unable to fetch info from the REST API');
+  }
+}
+
+/// Reads requested form data from the server
+Future<DynamicFormModel> getFormDetails(String? formID) async {
+  final response =
+      await http.get(Uri.parse(mainUrl + 'api/info/Form/$formID/'));
+  print(mainUrl + 'api/info/Form/$formID/');
+  if (response.statusCode == 200) {
+    print(utf8.decode(response.bodyBytes));
+    final responseBody = utf8.decode(response.bodyBytes);
+    final responseData = json.decode(responseBody);
+    if (responseData['formid'] != null) {
+      DynamicFormModel data = DynamicFormModel.fromMap(responseData);
+      print('form id: ' + data.formID);
+
+      // Check for listboxes
+      for (FormItem formItem in data.items) {
+        if (formItem.control == 'listbox') {
+          final response2 = await http.get(
+              Uri.parse(mainUrl + 'api/info/listbox/${formItem.dataType}/'));
+          if (response2.statusCode == 200) {
+            print(utf8.decode(response2.bodyBytes));
+            final responseBody2 = utf8.decode(response2.bodyBytes);
+            final responseData2 = json.decode(responseBody2);
+            ListBoxItems listBoxItems = ListBoxItems.fromMap(responseData2);
+            SharedVars.listBoxItems = listBoxItems;
+          }
+        }
+      }
+
+      return data;
+    } else {
+      throw Exception('Unable to fetch info from the REST API');
+    }
   } else {
     throw Exception('Unable to fetch info from the REST API');
   }

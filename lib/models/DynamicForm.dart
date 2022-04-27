@@ -2,10 +2,12 @@ class DynamicFormModel {
   String formID;
   String formName_E;
   String formName_F;
+  String itemsType;
 
   List<FormItem> items;
 
-  DynamicFormModel(this.formID, this.formName_E, this.formName_F, this.items);
+  DynamicFormModel(this.formID, this.formName_E, this.formName_F,
+      this.itemsType, this.items);
 
   factory DynamicFormModel.fromMap(Map<String, dynamic> parsedJson) {
     var list = parsedJson['items'] as List;
@@ -14,6 +16,7 @@ class DynamicFormModel {
       parsedJson['formid'],
       parsedJson['formName_E'],
       parsedJson['formName_F'],
+      parsedJson['itemsType'],
       itemList,
     );
   }
@@ -32,6 +35,34 @@ class FormItem {
       parsedJson['ControlName'],
       parsedJson['title'],
       parsedJson['datatype'],
+    );
+  }
+}
+
+class ListBoxItems {
+  List<ListItem> items;
+
+  ListBoxItems(this.items);
+
+  factory ListBoxItems.fromMap(Map<String, dynamic> parsedJson) {
+    var list = parsedJson['items'] as List;
+    List<ListItem> itemList = list.map((i) => ListItem.fromMap(i)).toList();
+    return ListBoxItems(
+      itemList,
+    );
+  }
+}
+
+class ListItem {
+  String id;
+  String title;
+
+  ListItem(this.id, this.title);
+
+  factory ListItem.fromMap(Map<String, dynamic> parsedJson) {
+    return ListItem(
+      parsedJson['id'],
+      parsedJson['title'],
     );
   }
 }

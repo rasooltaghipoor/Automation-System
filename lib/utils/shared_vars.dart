@@ -23,6 +23,8 @@ class SharedVars {
   static var privateUrl = "http://teacher.iau-neyshabur.ac.ir";
   static var publicUrl = "http://teacher.iau-neyshabur.ac.ir";
 
+  static var listBoxItems;
+
   static var universities = {
     'فنی مهندسی': '1',
     'علوم پایه': '2',
