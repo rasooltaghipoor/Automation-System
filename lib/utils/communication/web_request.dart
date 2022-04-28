@@ -56,6 +56,7 @@ Future<DynamicFormModel> getFormDetails(String? formID) async {
       DynamicFormModel data = DynamicFormModel.fromMap(responseData);
       print('form id: ' + data.formID);
 
+      SharedVars.listBoxItemsMap.clear();
       // Check for listboxes
       for (FormItem formItem in data.items) {
         if (formItem.control == 'listbox') {
@@ -66,7 +67,7 @@ Future<DynamicFormModel> getFormDetails(String? formID) async {
             final responseBody2 = utf8.decode(response2.bodyBytes);
             final responseData2 = json.decode(responseBody2);
             ListBoxItems listBoxItems = ListBoxItems.fromMap(responseData2);
-            SharedVars.listBoxItems = listBoxItems;
+            SharedVars.listBoxItemsMap[formItem.dataType] = listBoxItems;
           }
         }
       }
@@ -211,4 +212,41 @@ Future<void> testToken() async {
     final responseBody = utf8.decode(response.bodyBytes);
     final Map<String, dynamic> responseData = json.decode(responseBody);
   }
+}
+
+Future<Map<String, dynamic>> sendFormData(String jsonData, String token) async {
+  var result;
+
+  Map<String, dynamic> queryParameters = {
+    'userid': '401',
+    'roleid': '10', // EncryptionUtil().encryptContent(oldPassword),
+    'items': jsonData // EncryptionUtil().encryptContent(newPassword)
+  };
+
+  final response = await http.post(
+    Uri.parse(mainUrl + 'api/Request/add/ConsumBuy'),
+    headers: <String, String>{
+      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+    },
+    body: queryParameters,
+  );
+
+  final responseBody = utf8.decode(response.bodyBytes);
+  final Map<String, dynamic> responseData = json.decode(responseBody);
+
+  print(responseData);
+
+  if (response.statusCode == 200) {
+    if (responseData['Requestid'] == '3') {
+      result = {'status': true, 'message': responseData['Message']};
+    } else {
+      result = {
+        'status': false,
+        'message': SharedVars.error + responseData['Message']
+      };
+    }
+  } else {
+    result = {'status': false, 'message': responseData['Message']};
+  }
+  return result;
 }
