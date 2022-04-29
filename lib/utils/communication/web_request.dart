@@ -1,6 +1,9 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:automation_system/constants.dart';
+import 'package:automation_system/models/BuyModel.dart';
 import 'package:automation_system/models/Cartable.dart';
+import 'package:automation_system/models/DynamicForm.dart';
 import 'package:automation_system/models/MenuDetails.dart';
 import 'package:automation_system/models/User.dart';
 import 'package:automation_system/providers/cartable_provider.dart';
@@ -36,6 +39,65 @@ Future<dynamic> fetchTimeProgram(String cid, String mDate, String sTime) async {
     final responseBody = utf8.decode(response.bodyBytes);
     final parsed = json.decode(responseBody);
     return null; //**************************TimeProgram.fromMap(parsed);
+  } else {
+    throw Exception('Unable to fetch info from the REST API');
+  }
+}
+
+/// Reads requested form data from the server
+Future<DynamicFormModel> getFormDetails(String? formID) async {
+  final response =
+      await http.get(Uri.parse(mainUrl + 'api/info/Form/$formID/'));
+  print(mainUrl + 'api/info/Form/$formID/');
+  if (response.statusCode == 200) {
+    print(utf8.decode(response.bodyBytes));
+    final responseBody = utf8.decode(response.bodyBytes);
+    final responseData = json.decode(responseBody);
+    if (responseData['formid'] != null) {
+      DynamicFormModel data = DynamicFormModel.fromMap(responseData);
+      print('form id: ' + data.formID);
+
+      SharedVars.listBoxItemsMap.clear();
+      // Check for listboxes
+      for (FormItem formItem in data.items) {
+        if (formItem.control == 'listbox') {
+          final response2 = await http.get(
+              Uri.parse(mainUrl + 'api/info/listbox/${formItem.dataType}/'));
+          if (response2.statusCode == 200) {
+            print(utf8.decode(response2.bodyBytes));
+            final responseBody2 = utf8.decode(response2.bodyBytes);
+            final responseData2 = json.decode(responseBody2);
+            ListBoxItems listBoxItems = ListBoxItems.fromMap(responseData2);
+            SharedVars.listBoxItemsMap[formItem.dataType] = listBoxItems;
+          }
+        }
+      }
+      return data;
+    } else {
+      throw Exception('Unable to fetch info from the REST API');
+    }
+  } else {
+    throw Exception('Unable to fetch info from the REST API');
+  }
+}
+
+/// Reads requested form data from the server
+Future<FullDynamicForm> getFullFormDetails(String? formID) async {
+  final response =
+      await http.get(Uri.parse(mainUrl + 'api/info/FormFull/$formID/'));
+  print(mainUrl + 'api/info/Form/$formID/');
+  if (response.statusCode == 200) {
+    print(utf8.decode(response.bodyBytes));
+    final responseBody = utf8.decode(response.bodyBytes);
+    final responseData = json.decode(responseBody);
+    if (responseData['form'] != null) {
+      FullDynamicForm data = FullDynamicForm.fromMap(responseData);
+      print('form id: ' + data.forms[0].formID);
+
+      return data;
+    } else {
+      throw Exception('Unable to fetch info from the REST API');
+    }
   } else {
     throw Exception('Unable to fetch info from the REST API');
   }
@@ -172,4 +234,72 @@ Future<void> testToken() async {
     final responseBody = utf8.decode(response.bodyBytes);
     final Map<String, dynamic> responseData = json.decode(responseBody);
   }
+}
+
+Future<Map<String, dynamic>> sendFormData(String jsonData, String token) async {
+  var result;
+
+  Map<String, dynamic> queryParameters = {
+    'userid': '401',
+    'roleid': '10', // EncryptionUtil().encryptContent(oldPassword),
+    'items': jsonData // EncryptionUtil().encryptContent(newPassword)
+  };
+
+  final response = await http.post(
+    Uri.parse(mainUrl + 'api/Request/add/ConsumBuy'),
+    headers: <String, String>{
+      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+    },
+    body: queryParameters,
+  );
+
+  final responseBody = utf8.decode(response.bodyBytes);
+  final Map<String, dynamic> responseData = json.decode(responseBody);
+
+  print(responseData);
+
+  if (response.statusCode == 200) {
+    if (responseData['Requestid'] != '-1') {
+      result = {'status': true, 'message': responseData['Message']};
+    } else {
+      result = {
+        'status': false,
+        'message': SharedVars.error + responseData['Message']
+      };
+    }
+  } else {
+    result = {'status': false, 'message': responseData['Message']};
+  }
+  return result;
+}
+
+void send1(String filename) async {
+  print('sending...');
+  String filename2 = 'assets/images/Img_2.png';
+  var request = http.MultipartRequest(
+      'POST', Uri.parse(mainUrl + 'api/info/UploadTest/0'));
+  request.files.add(http.MultipartFile('picture',
+      File(filename).readAsBytes().asStream(), File(filename).lengthSync(),
+      filename: filename.split("/").last));
+  request.files.add(http.MultipartFile('pictu2',
+      File(filename2).readAsBytes().asStream(), File(filename2).lengthSync(),
+      filename: filename2.split("/").last));
+  var res = await request.send();
+  print(res);
+}
+
+void send2(String filename) async {
+  var request = http.MultipartRequest(
+      'POST', Uri.parse(mainUrl + 'api/info/UploadTest/0'));
+  request.files.add(http.MultipartFile.fromBytes(
+      'picture', File(filename).readAsBytesSync(),
+      filename: filename.split("/").last));
+  var res = await request.send();
+}
+
+void send3(String filename) async {
+  var request = http.MultipartRequest(
+      'POST', Uri.parse(mainUrl + 'api/info/UploadTest/0'));
+  request.files.add(await http.MultipartFile.fromPath('picture', filename));
+  var res = await request.send();
 }

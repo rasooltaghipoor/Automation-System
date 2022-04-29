@@ -1,3 +1,4 @@
+import 'package:automation_system/models/DynamicForm.dart';
 import 'package:flutter/material.dart';
 
 class SharedVars {
@@ -22,6 +23,8 @@ class SharedVars {
   static bool isWebApp = false;
   static var privateUrl = "http://teacher.iau-neyshabur.ac.ir";
   static var publicUrl = "http://teacher.iau-neyshabur.ac.ir";
+
+  static Map<String, ListBoxItems> listBoxItemsMap = <String, ListBoxItems>{};
 
   static var universities = {
     'فنی مهندسی': '1',

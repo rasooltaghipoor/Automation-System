@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    List<ItemData> tags = [
+    /*List<ItemData> tags = [
       ItemData('قند', 20, 'کیلوگرم', 1000, 'ندارد'),
       ItemData('میز', 12, 'عدد', 500000, 'تجهیز کارگاه کامپیوتر'),
       ItemData('دستمال', 50, 'عدد', 100, 'ندارد')
@@ -42,7 +42,7 @@ class MyApp extends StatelessWidget {
     BuyItemModel tutorial =
         BuyItemModel('مصرفی', 'خرید دانشکده مهندسی', 'image.png', tags);
     String jsonTutorial = jsonEncode(tutorial);
-    print(jsonTutorial);
+    print(jsonTutorial);*/
 
     if (kIsWeb) {
       // This is the web app!
