@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:automation_system/constants.dart';
 import 'package:automation_system/models/BuyModel.dart';
 import 'package:automation_system/models/Cartable.dart';
@@ -71,6 +72,27 @@ Future<DynamicFormModel> getFormDetails(String? formID) async {
           }
         }
       }
+      return data;
+    } else {
+      throw Exception('Unable to fetch info from the REST API');
+    }
+  } else {
+    throw Exception('Unable to fetch info from the REST API');
+  }
+}
+
+/// Reads requested form data from the server
+Future<FullDynamicForm> getFullFormDetails(String? formID) async {
+  final response =
+      await http.get(Uri.parse(mainUrl + 'api/info/FormFull/$formID/'));
+  print(mainUrl + 'api/info/Form/$formID/');
+  if (response.statusCode == 200) {
+    print(utf8.decode(response.bodyBytes));
+    final responseBody = utf8.decode(response.bodyBytes);
+    final responseData = json.decode(responseBody);
+    if (responseData['form'] != null) {
+      FullDynamicForm data = FullDynamicForm.fromMap(responseData);
+      print('form id: ' + data.forms[0].formID);
 
       return data;
     } else {
@@ -237,7 +259,7 @@ Future<Map<String, dynamic>> sendFormData(String jsonData, String token) async {
   print(responseData);
 
   if (response.statusCode == 200) {
-    if (responseData['Requestid'] == '3') {
+    if (responseData['Requestid'] != '-1') {
       result = {'status': true, 'message': responseData['Message']};
     } else {
       result = {
@@ -249,4 +271,35 @@ Future<Map<String, dynamic>> sendFormData(String jsonData, String token) async {
     result = {'status': false, 'message': responseData['Message']};
   }
   return result;
+}
+
+void send1(String filename) async {
+  print('sending...');
+  String filename2 = 'assets/images/Img_2.png';
+  var request = http.MultipartRequest(
+      'POST', Uri.parse(mainUrl + 'api/info/UploadTest/0'));
+  request.files.add(http.MultipartFile('picture',
+      File(filename).readAsBytes().asStream(), File(filename).lengthSync(),
+      filename: filename.split("/").last));
+  request.files.add(http.MultipartFile('pictu2',
+      File(filename2).readAsBytes().asStream(), File(filename2).lengthSync(),
+      filename: filename2.split("/").last));
+  var res = await request.send();
+  print(res);
+}
+
+void send2(String filename) async {
+  var request = http.MultipartRequest(
+      'POST', Uri.parse(mainUrl + 'api/info/UploadTest/0'));
+  request.files.add(http.MultipartFile.fromBytes(
+      'picture', File(filename).readAsBytesSync(),
+      filename: filename.split("/").last));
+  var res = await request.send();
+}
+
+void send3(String filename) async {
+  var request = http.MultipartRequest(
+      'POST', Uri.parse(mainUrl + 'api/info/UploadTest/0'));
+  request.files.add(await http.MultipartFile.fromPath('picture', filename));
+  var res = await request.send();
 }

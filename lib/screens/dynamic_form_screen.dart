@@ -18,7 +18,8 @@ class View2 extends StatefulWidget {
 class _View2State extends State<View2> {
   Map<String, TextEditingController> _controllerMap = Map();
   Map<String, String> _dropDownMap = Map();
-  DynamicFormModel? _formData;
+  Map<String, int> _listboxIndices = Map();
+  FullDynamicForm? _formData;
 
   List<String> _data = [
     "one",
@@ -31,65 +32,81 @@ class _View2State extends State<View2> {
   }
 
   // Fetch content from the json file
-  Future<DynamicFormModel> readJson() async {
+  Future<FullDynamicForm> readJson() async {
     final String response = await rootBundle.loadString('assets/test.json');
     // final responseBody = utf8.decode(response.bodyBytes);
     final parsed = json.decode(response);
-    return DynamicFormModel.fromMap(parsed);
+    return FullDynamicForm.fromMap(parsed);
   }
 
   Widget _futureBuilder() {
     return FutureBuilder(
-      future: getFormDetails('ConsumBuy'),
+      future: getFullFormDetails('ConsumBuy'),
       builder:
-          (BuildContext context, AsyncSnapshot<DynamicFormModel?> snapshot) {
+          (BuildContext context, AsyncSnapshot<FullDynamicForm?> snapshot) {
         if (!snapshot.hasData) {
           return const Center(child: CircularProgressIndicator());
         }
 
         final data = snapshot.data!;
         _formData = data;
+
+        // Save listbox data indices to use in future (This eliminates the future search for such indices)
+        int i = 0;
+        _listboxIndices.clear();
+        for (ListBoxItems item in data.listBoxItems) {
+          _listboxIndices[item.listboxType] = i++;
+        }
+
         return Column(
           children: [
-            Text(data.formName_F),
+            Text(data.forms[0].formName_F),
             ListView.builder(
               shrinkWrap: true,
-              itemCount: data.items.length,
+              itemCount: data.forms[0].items.length,
               padding: const EdgeInsets.all(5),
               itemBuilder: (BuildContext context, int index) {
-                if (data.items[index].control == 'textbox') {
+                if (data.forms[0].items[index].control == 'textbox') {
                   final controller =
-                      _getControllerOf(data.items[index].controlName);
+                      _getControllerOf(data.forms[0].items[index].controlName);
 
                   final textField = TextField(
                     controller: controller,
                     decoration: InputDecoration(
                       border: const OutlineInputBorder(),
-                      labelText: data.items[index].title,
+                      labelText: data.forms[0].items[index].title,
                     ),
                   );
                   return Container(
                     child: textField,
                     padding: const EdgeInsets.only(bottom: 10),
                   );
-                } else if (data.items[index].control == 'listbox') {
+                } else if (data.forms[0].items[index].control == 'listbox') {
                   // var dropDownValue = _getDropDownValue(
                   //     data.items[index].controlName,
                   //     SharedVars.listBoxItemsMap[data.items[index].dataType]!
                   //         .items[0].title);
-                  if (_dropDownMap[data.items[index].controlName] == null) {
-                    _dropDownMap[data.items[index].controlName] = SharedVars
-                        .listBoxItemsMap[data.items[index].dataType]!
+                  if (_dropDownMap[data.forms[0].items[index].controlName] ==
+                      null) {
+                    _dropDownMap[data.forms[0].items[index].controlName] = data
+                        .listBoxItems[_listboxIndices[
+                            data.forms[0].items[index].dataType]!]
                         .items[0]
                         .title;
+                    // SharedVars
+                    //     .listBoxItemsMap[
+                    //         data.forms[0].items[index].dataType]!
+                    //     .items[0]
+                    //     .title;
                   }
                   return Row(children: <Widget>[
-                    Text(data.items[index].title),
+                    Text(data.forms[0].items[index].title),
                     Container(
                         padding:
                             EdgeInsets.all(SizeConfig.safeBlockHorizontal! * 3),
                         child: DropdownButton<String>(
-                          value: _dropDownMap[data.items[index].controlName],
+                          value: _dropDownMap[
+                              data.forms[0].items[index].controlName],
                           icon: const Icon(Icons.arrow_downward),
                           iconSize: 24,
                           elevation: 16,
@@ -100,14 +117,20 @@ class _View2State extends State<View2> {
                           ),
                           onChanged: (String? newValue) {
                             setState(() {
-                              _dropDownMap[data.items[index].controlName] =
-                                  newValue!;
+                              _dropDownMap[data.forms[0].items[index]
+                                  .controlName] = newValue!;
                             });
                           },
-                          items: SharedVars
-                              .listBoxItemsMap[data.items[index].dataType]!
-                              .items
-                              .map<DropdownMenuItem<String>>((ListItem value) {
+                          items:
+                              // SharedVars
+                              //     .listBoxItemsMap[
+                              //         data.forms[0].items[index].dataType]!
+                              data
+                                  .listBoxItems[_listboxIndices[
+                                      data.forms[0].items[index].dataType]!]
+                                  .items
+                                  .map<DropdownMenuItem<String>>(
+                                      (ListItem value) {
                             return DropdownMenuItem<String>(
                               value: value.title,
                               child: Text(value.title),
@@ -188,7 +211,7 @@ class _View2State extends State<View2> {
         //   });
         // });
         Map<String, String> items = <String, String>{};
-        for (FormItem listItem in _formData!.items) {
+        for (FormItem listItem in _formData!.forms[0].items) {
           if (listItem.control == 'textbox') {
             items[listItem.controlName] =
                 _getControllerOf(listItem.controlName).text;
