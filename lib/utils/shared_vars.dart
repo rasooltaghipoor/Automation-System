@@ -24,6 +24,9 @@ class SharedVars {
   static var privateUrl = "http://teacher.iau-neyshabur.ac.ir";
   static var publicUrl = "http://teacher.iau-neyshabur.ac.ir";
 
+  static var userID = "401";
+  static var roleID = "10";
+
   static Map<String, ListBoxItems> listBoxItemsMap = <String, ListBoxItems>{};
 
   static var universities = {

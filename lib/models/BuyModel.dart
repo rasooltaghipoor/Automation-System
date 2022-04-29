@@ -36,8 +36,8 @@ class ItemData {
     return ItemData(
       parsedJson['title'],
       parsedJson['quantity'],
-      parsedJson['quantityType'],
-      parsedJson['estimatedPrice'],
+      parsedJson['quantitytype'],
+      parsedJson['estimatedprice'],
       parsedJson['description'],
     );
   }

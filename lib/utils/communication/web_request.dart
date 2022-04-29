@@ -5,6 +5,7 @@ import 'package:automation_system/models/BuyModel.dart';
 import 'package:automation_system/models/Cartable.dart';
 import 'package:automation_system/models/DynamicForm.dart';
 import 'package:automation_system/models/MenuDetails.dart';
+import 'package:automation_system/models/RequestList.dart';
 import 'package:automation_system/models/User.dart';
 import 'package:automation_system/providers/cartable_provider.dart';
 import 'package:automation_system/providers/menu_provider.dart';
@@ -93,6 +94,28 @@ Future<FullDynamicForm> getFullFormDetails(String? formID) async {
     if (responseData['form'] != null) {
       FullDynamicForm data = FullDynamicForm.fromMap(responseData);
       print('form id: ' + data.forms[0].formID);
+
+      return data;
+    } else {
+      throw Exception('Unable to fetch info from the REST API');
+    }
+  } else {
+    throw Exception('Unable to fetch info from the REST API');
+  }
+}
+
+/// Reads requested form data from the server
+Future<RequestList> getRequestList() async {
+  final response = await http
+      .get(Uri.parse(mainUrl + 'api/Request/list/${SharedVars.userID}/'));
+  print(mainUrl + 'api/Request/list/${SharedVars.userID}/');
+  if (response.statusCode == 200) {
+    print(utf8.decode(response.bodyBytes));
+    final responseBody = utf8.decode(response.bodyBytes);
+    final responseData = json.decode(responseBody);
+    if (responseData['form'] != null) {
+      RequestList data = RequestList.fromMap(responseData);
+      print('form id: ' + data.items[0].formName_F);
 
       return data;
     } else {
