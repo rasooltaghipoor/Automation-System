@@ -5,10 +5,12 @@ import 'package:automation_system/models/User.dart';
 import 'package:automation_system/providers/auth.dart';
 import 'package:automation_system/providers/cartable_provider.dart';
 import 'package:automation_system/providers/menu_provider.dart';
+import 'package:automation_system/providers/request_list_provider.dart';
 import 'package:automation_system/providers/user_provider.dart';
 import 'package:automation_system/screens/buy_process/buy_request_screen.dart';
-import 'package:automation_system/screens/daily_reuest_screen.dart';
-import 'package:automation_system/screens/dynamic_form_screen.dart';
+import 'package:automation_system/screens/erp/daily_reuest_screen.dart';
+import 'package:automation_system/screens/erp/dynamic_form_screen.dart';
+import 'package:automation_system/screens/erp/list_of_requests.dart';
 import 'package:automation_system/screens/login_screen.dart';
 import 'package:automation_system/screens/main/main_screen.dart';
 import 'package:automation_system/screens/role_screen.dart';
@@ -67,6 +69,7 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider(create: (_) => UserProvider()),
           ChangeNotifierProvider(create: (_) => MenuProvider()),
           ChangeNotifierProvider(create: (_) => CartableProvider()),
+          ChangeNotifierProvider(create: (_) => RequestListProvider()),
         ],
         child: MaterialApp(
             builder: (context, widget) => ResponsiveWrapper.builder(
@@ -84,7 +87,7 @@ class MyApp extends StatelessWidget {
               primarySwatch: Colors.blue,
               visualDensity: VisualDensity.adaptivePlatformDensity,
             ),
-            home: View2(), //Login('309'),
+            home: ListOfRequests(), //Login('309'),
             debugShowCheckedModeBanner: false,
             routes: {
               '/main_screen': (context) => MainScreen(),
