@@ -9,6 +9,7 @@ import 'package:automation_system/models/RequestList.dart';
 import 'package:automation_system/models/User.dart';
 import 'package:automation_system/providers/cartable_provider.dart';
 import 'package:automation_system/providers/menu_provider.dart';
+import 'package:automation_system/providers/request_list_provider.dart';
 import 'package:automation_system/providers/user_provider.dart';
 import 'package:automation_system/utils/shared_vars.dart';
 import 'package:flutter/cupertino.dart';
@@ -105,7 +106,7 @@ Future<FullDynamicForm> getFullFormDetails(String? formID) async {
 }
 
 /// Reads requested form data from the server
-Future<RequestList> getRequestList() async {
+Future<void> getRequestList(BuildContext context) async {
   final response = await http
       .get(Uri.parse(mainUrl + 'api/Request/list/${SharedVars.userID}/'));
   print(mainUrl + 'api/Request/list/${SharedVars.userID}/');
@@ -113,11 +114,12 @@ Future<RequestList> getRequestList() async {
     print(utf8.decode(response.bodyBytes));
     final responseBody = utf8.decode(response.bodyBytes);
     final responseData = json.decode(responseBody);
-    if (responseData['form'] != null) {
-      RequestList data = RequestList.fromMap(responseData);
+    if (responseData['items'] != null) {
+      RequestListModel data = RequestListModel.fromMap(responseData);
       print('form id: ' + data.items[0].formName_F);
-
-      return data;
+      Provider.of<RequestListProvider>(context, listen: false)
+          .setRequestList(data, 'لیست درخواست ها');
+      //return data;
     } else {
       throw Exception('Unable to fetch info from the REST API');
     }

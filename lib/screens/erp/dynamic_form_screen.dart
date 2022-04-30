@@ -41,6 +41,7 @@ class _View2State extends State<View2> {
 
   Widget _futureBuilder() {
     return FutureBuilder(
+      //TODO: This fucntion must be called only when no data is available!!
       future: getFullFormDetails('ConsumBuy'),
       builder:
           (BuildContext context, AsyncSnapshot<FullDynamicForm?> snapshot) {
@@ -51,7 +52,7 @@ class _View2State extends State<View2> {
         final data = snapshot.data!;
         _formData = data;
 
-        // Save listbox data indices to use in future (This eliminates the future search for such indices)
+        // Save listbox data indices to use in future (This eliminates the future searchs for such indices)
         int i = 0;
         _listboxIndices.clear();
         for (ListBoxItems item in data.listBoxItems) {

@@ -1,12 +1,12 @@
-class RequestList {
+class RequestListModel {
   List<Request> items;
 
-  RequestList(this.items);
+  RequestListModel(this.items);
 
-  factory RequestList.fromMap(Map<String, dynamic> parsedJson) {
+  factory RequestListModel.fromMap(Map<String, dynamic> parsedJson) {
     var list = parsedJson['items'] as List;
     List<Request> itemList = list.map((i) => Request.fromMap(i)).toList();
-    return RequestList(
+    return RequestListModel(
       itemList,
     );
   }
