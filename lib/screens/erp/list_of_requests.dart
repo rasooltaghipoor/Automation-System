@@ -1,5 +1,6 @@
 import 'package:automation_system/components/side_menu.dart';
 import 'package:automation_system/models/Email.dart';
+import 'package:automation_system/providers/change_provider.dart';
 import 'package:automation_system/providers/request_list_provider.dart';
 import 'package:automation_system/responsive.dart';
 import 'package:automation_system/screens/email/email_screen.dart';
@@ -142,13 +143,21 @@ class _ListOfEmailsState extends State<ListOfRequests> {
                                       request: requestListModel
                                           .requestList!.items[index],
                                       press: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => EmailScreen(
-                                                email: emails[index]),
-                                          ),
-                                        );
+                                        Map<String, dynamic> params =
+                                            <String, dynamic>{
+                                          "param": emails[index]
+                                        };
+                                        Provider.of<ChangeProvider>(context,
+                                                listen: false)
+                                            .setMidScreen(
+                                                ScreenName.viewRequest, params);
+                                        // Navigator.push(
+                                        //   context,
+                                        //   MaterialPageRoute(
+                                        //     builder: (context) => EmailScreen(
+                                        //         email: emails[index]),
+                                        //   ),
+                                        // );
                                       },
                                     ));
                       },

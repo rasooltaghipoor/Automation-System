@@ -1,17 +1,12 @@
-import 'package:automation_system/components/side_drawer_menu.dart';
 import 'package:automation_system/components/side_menu.dart';
 import 'package:automation_system/models/MenuDetails.dart';
-import 'package:automation_system/providers/auth.dart';
-import 'package:automation_system/responsive.dart';
-import 'package:automation_system/screens/email/email_screen.dart';
-import 'package:automation_system/screens/main/components/email_gridview.dart';
+import 'package:automation_system/screens/main/components/middle_screem_selector.dart';
 import 'package:automation_system/screens/main/components/navigation_bar.dart';
 import 'package:automation_system/screens/main/components/main_header.dart';
 import 'package:automation_system/screens/main/components/screen_header.dart';
 import 'package:automation_system/utils/SizeConfiguration.dart';
 import 'package:automation_system/utils/communication/web_request.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'components/list_of_emails.dart';
 
@@ -21,9 +16,9 @@ class MainScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //Provider.of<AuthProvider>(context).login('309', '309');
-    getUserDetails2(context, '309');
-    getSideMenuData(context, '309');
-    getCartableData(context, MenuItemsData('همه نامه ها', '0', 'All'));
+    //getUserDetails2(context, '309');
+    //getSideMenuData(context, '309');
+    //getCartableData(context, MenuItemsData('همه نامه ها', '0', 'All'));
     SizeConfig().init(context);
     // It provide us the width and height
     Size _size = MediaQuery.of(context).size;
@@ -58,7 +53,7 @@ class MainScreen extends StatelessWidget {
                       // ),
                       Expanded(
                         flex: 10,
-                        child: ListOfEmails(),
+                        child: MiddleScreenSelector(),
                       )
                     ],
                   ),

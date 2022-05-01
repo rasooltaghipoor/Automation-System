@@ -4,6 +4,7 @@ import 'package:automation_system/models/BuyModel.dart';
 import 'package:automation_system/models/User.dart';
 import 'package:automation_system/providers/auth.dart';
 import 'package:automation_system/providers/cartable_provider.dart';
+import 'package:automation_system/providers/change_provider.dart';
 import 'package:automation_system/providers/menu_provider.dart';
 import 'package:automation_system/providers/request_list_provider.dart';
 import 'package:automation_system/providers/user_provider.dart';
@@ -70,6 +71,7 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider(create: (_) => MenuProvider()),
           ChangeNotifierProvider(create: (_) => CartableProvider()),
           ChangeNotifierProvider(create: (_) => RequestListProvider()),
+          ChangeNotifierProvider(create: (_) => ChangeProvider()),
         ],
         child: MaterialApp(
             builder: (context, widget) => ResponsiveWrapper.builder(
@@ -87,7 +89,7 @@ class MyApp extends StatelessWidget {
               primarySwatch: Colors.blue,
               visualDensity: VisualDensity.adaptivePlatformDensity,
             ),
-            home: ListOfRequests(), //Login('309'),
+            home: MainScreen(), //Login('309'),
             debugShowCheckedModeBanner: false,
             routes: {
               '/main_screen': (context) => MainScreen(),
