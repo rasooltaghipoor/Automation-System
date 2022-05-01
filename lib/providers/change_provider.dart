@@ -6,14 +6,14 @@ enum ScreenName { requestList, addRequest, editRequest, viewRequest }
 class ChangeProvider extends ChangeNotifier {
   ScreenName _screenName = ScreenName.requestList;
 
-  Map<String, String> _params = <String, String>{};
+  Map<String, dynamic> _params = <String, dynamic>{};
 
   ScreenName? get screenName => _screenName;
-  Map<String, String>? get params => _params;
+  Map<String, dynamic>? get params => _params;
 
-  void setMenu(ScreenName name, Map<String, String> params) {
+  void setMidScreen(ScreenName name, Map<String, dynamic>? params) {
     _screenName = name;
-    _params = params;
+    _params = params!;
     notifyListeners();
   }
 }

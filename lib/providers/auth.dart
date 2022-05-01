@@ -52,7 +52,7 @@ class AuthProvider with ChangeNotifier {
     );*/
     /*final response = await get(
         Uri.parse(mainUrl + 'api/Account/login/$username?pass=$password'));*/
-    final uri = Uri.http('cms.iau-neyshabur.ac.ir',
+    final uri = Uri.http('cms2.iau-neyshabur.ac.ir',
         '/api/Account/login/$username', queryParameters);
     final response = await get(uri, headers: {
       //HttpHeaders.contentTypeHeader: 'application/form',

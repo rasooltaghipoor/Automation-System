@@ -27,8 +27,8 @@ class ItemData {
   Map toJson() => {
         'title': title,
         'quantity': quantity,
-        'quantityType': quantityType,
-        'estimatedPrice': estimatedPrice,
+        'quantitytype': quantityType,
+        'estimatedprice': estimatedPrice,
         'description': description,
       };
 
