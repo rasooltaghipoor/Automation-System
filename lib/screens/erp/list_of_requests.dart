@@ -8,6 +8,7 @@ import 'package:automation_system/screens/erp/request_card.dart';
 import 'package:automation_system/screens/main/components/letter_card.dart';
 import 'package:automation_system/utils/SizeConfiguration.dart';
 import 'package:automation_system/utils/communication/web_request.dart';
+import 'package:automation_system/utils/shared_vars.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:websafe_svg/websafe_svg.dart';
@@ -143,10 +144,23 @@ class _ListOfEmailsState extends State<ListOfRequests> {
                                       request: requestListModel
                                           .requestList!.items[index],
                                       press: () {
+                                        //FIXME: This map is not necessary for now, but I keep it temporarily
                                         Map<String, dynamic> params =
                                             <String, dynamic>{
                                           "param": emails[index]
                                         };
+                                        SharedVars.requestID = requestListModel
+                                            .requestList!
+                                            .items[index]
+                                            .requestID;
+                                        SharedVars.formNameF = requestListModel
+                                            .requestList!
+                                            .items[index]
+                                            .formName_F;
+                                        SharedVars.formNameE = requestListModel
+                                            .requestList!
+                                            .items[index]
+                                            .formName_E;
                                         Provider.of<ChangeProvider>(context,
                                                 listen: false)
                                             .setMidScreen(

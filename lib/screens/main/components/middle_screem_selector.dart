@@ -2,6 +2,8 @@ import 'package:automation_system/providers/change_provider.dart';
 import 'package:automation_system/screens/email/email_screen.dart';
 import 'package:automation_system/screens/email/request_screen.dart';
 import 'package:automation_system/screens/erp/list_of_requests.dart';
+import 'package:automation_system/screens/erp/view_request.dart';
+import 'package:automation_system/utils/communication/web_request.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 
@@ -21,7 +23,9 @@ class MiddleScreenSelector extends StatelessWidget {
         case ScreenName.editRequest:
           return ListOfRequests();
         case ScreenName.viewRequest:
-          return EmailScreen(email: requestListModel.params!['param']);
+          return ViewRequestScreen(
+            itemData: getRequestDetails(context),
+          );
         default:
           return ListOfRequests();
       }

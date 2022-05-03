@@ -26,6 +26,9 @@ class SharedVars {
 
   static var userID = "401";
   static var roleID = "10";
+  static var requestID = "";
+  static var formNameF = "";
+  static var formNameE = "";
 
   static Map<String, ListBoxItems> listBoxItemsMap = <String, ListBoxItems>{};
 

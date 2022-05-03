@@ -128,6 +128,31 @@ Future<void> getRequestList(BuildContext context) async {
   }
 }
 
+/// Reads requested form data from the server
+Future<Map<String, dynamic>> getRequestDetails(BuildContext context) async {
+  final response = await http
+      .get(Uri.parse(mainUrl + 'api/Request/view/${SharedVars.requestID}/'));
+  print(mainUrl + 'api/Request/view/${SharedVars.requestID}/');
+  if (response.statusCode == 200) {
+    print(utf8.decode(response.bodyBytes));
+    final responseBody = utf8.decode(response.bodyBytes);
+    final responseData = json.decode(responseBody);
+    final Map<String, dynamic> data = responseData;
+    // if (responseData['items'] != null) {
+    // RequestListModel data = RequestListModel.fromMap(responseData);
+    // print('form id: ' + data.items[0].formName_F);
+
+    // ignore: unnecessary_null_comparison
+    if (data != null) {
+      return data;
+    } else {
+      throw Exception('Unable to fetch info from the REST API');
+    }
+  } else {
+    throw Exception('Unable to fetch info from the REST API');
+  }
+}
+
 /// Reads some data about current date from the server
 Future<void> getUserDetails(String? userID) async {
   final response =
