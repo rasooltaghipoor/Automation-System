@@ -53,7 +53,7 @@ dependencies:
   shared_preferences: ^2.0.13
   responsive_framework: ^0.1.7
   persian_datetime_picker: ^2.4.0
-
+  timelines: ^0.1.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

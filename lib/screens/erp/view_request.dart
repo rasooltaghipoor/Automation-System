@@ -1,3 +1,5 @@
+import 'package:automation_system/screens/erp/timeline.dart';
+import 'package:automation_system/screens/erp/timeline_widget.dart';
 import 'package:automation_system/utils/SizeConfiguration.dart';
 import 'package:automation_system/utils/shared_vars.dart';
 import 'package:flutter/material.dart';
@@ -34,9 +36,18 @@ class ViewRequestScreen extends StatelessWidget {
 }
 
 class ItemList extends StatelessWidget {
+  final _processes = [
+    'Prospect',
+    'Tour',
+    'Offer',
+    'Contract',
+    'Settled',
+    'test',
+    'mall'
+  ];
   final Map<String, dynamic>? itemData;
 
-  const ItemList({Key? key, this.itemData}) : super(key: key);
+  ItemList({Key? key, this.itemData}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -82,6 +93,7 @@ class ItemList extends StatelessWidget {
                   },
                 ),
               ),
+              ProcessTimeline(2, _processes),
             ],
           );
   }
