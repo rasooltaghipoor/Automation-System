@@ -1,6 +1,7 @@
 import 'package:automation_system/providers/change_provider.dart';
 import 'package:automation_system/screens/email/email_screen.dart';
 import 'package:automation_system/screens/email/request_screen.dart';
+import 'package:automation_system/screens/erp/dynamic_edit_form.dart';
 import 'package:automation_system/screens/erp/list_of_requests.dart';
 import 'package:automation_system/screens/erp/view_request.dart';
 import 'package:automation_system/utils/communication/web_request.dart';
@@ -21,7 +22,10 @@ class MiddleScreenSelector extends StatelessWidget {
         case ScreenName.addRequest:
           return ListOfRequests();
         case ScreenName.editRequest:
-          return ListOfRequests();
+          return DynamicEditForm(
+            isEdit: requestListModel.params!['edit'],
+            itemsData: requestListModel.params!['itemData'],
+          );
         case ScreenName.viewRequest:
           return ViewRequestScreen(
             itemData: getRequestDetails(context),

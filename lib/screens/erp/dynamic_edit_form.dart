@@ -9,7 +9,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class DynamicEditForm extends StatefulWidget {
-  const DynamicEditForm({Key? key}) : super(key: key);
+  Map<String, dynamic>? itemsData;
+  bool? isEdit;
+  DynamicEditForm({this.isEdit, this.itemsData, Key? key}) : super(key: key);
 
   @override
   _View2State createState() => _View2State();
@@ -42,7 +44,7 @@ class _View2State extends State<DynamicEditForm> {
   Widget _futureBuilder() {
     return FutureBuilder(
       //TODO: This fucntion must be called only when no data is available!!
-      future: getFullFormDetails('ConsumBuy'),
+      future: getFullFormDetails(SharedVars.formNameE),
       builder:
           (BuildContext context, AsyncSnapshot<FullDynamicForm?> snapshot) {
         if (!snapshot.hasData) {
@@ -89,11 +91,19 @@ class _View2State extends State<DynamicEditForm> {
                   //         .items[0].title);
                   if (_dropDownMap[data.forms[0].items[index].controlName] ==
                       null) {
-                    _dropDownMap[data.forms[0].items[index].controlName] = data
-                        .listBoxItems[_listboxIndices[
-                            data.forms[0].items[index].dataType]!]
-                        .items[0]
-                        .title;
+                    if (widget.isEdit!) {
+                      _dropDownMap[data.forms[0].items[index].controlName] =
+                          widget.itemsData![
+                              data.forms[0].items[index].controlName];
+                    } else {
+                      _dropDownMap[data.forms[0].items[index].controlName] =
+                          data
+                              .listBoxItems[_listboxIndices[
+                                  data.forms[0].items[index].dataType]!]
+                              .items[0]
+                              .title;
+                    }
+
                     // SharedVars
                     //     .listBoxItemsMap[
                     //         data.forms[0].items[index].dataType]!
@@ -157,6 +167,10 @@ class _View2State extends State<DynamicEditForm> {
     var controller = _controllerMap[name];
     if (controller == null) {
       controller = TextEditingController();
+      if (widget.isEdit!) {
+        print("_getControllerOf. is editting");
+        controller.text = widget.itemsData![name];
+      }
       _controllerMap[name] = controller;
     }
     return controller;
@@ -225,7 +239,7 @@ class _View2State extends State<DynamicEditForm> {
         print(jsonEncode(items));
         sendFormData(jsonEncode(items), '');
       },
-      child: const Text("OK"),
+      child: widget.isEdit! ? const Text('ارسال') : const Text('ویرایش'),
     );
   }
 

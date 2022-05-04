@@ -230,13 +230,3 @@ class _BezierPainter extends CustomPainter {
         oldDelegate.drawEnd != drawEnd;
   }
 }
-
-final _processes = [
-  'Prospect',
-  'Tour',
-  'Offer',
-  'Contract',
-  'Settled',
-  'test',
-  'mall'
-];
