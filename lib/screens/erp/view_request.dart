@@ -1,6 +1,10 @@
+import 'package:automation_system/providers/change_provider.dart';
+import 'package:automation_system/screens/erp/timeline.dart';
+import 'package:automation_system/screens/erp/timeline_widget.dart';
 import 'package:automation_system/utils/SizeConfiguration.dart';
 import 'package:automation_system/utils/shared_vars.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ViewRequestScreen extends StatelessWidget {
   // final String title;
@@ -34,9 +38,18 @@ class ViewRequestScreen extends StatelessWidget {
 }
 
 class ItemList extends StatelessWidget {
+  final _processes = [
+    'مدیر بخش',
+    'مدیر کل',
+    'معاون',
+    'رییس',
+    'آقای سهرابی',
+    'علی',
+    'نقی'
+  ];
   final Map<String, dynamic>? itemData;
 
-  const ItemList({Key? key, this.itemData}) : super(key: key);
+  ItemList({Key? key, this.itemData}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -65,6 +78,16 @@ class ItemList extends StatelessWidget {
                   ),
                 ),
               ),
+              ElevatedButton(
+                  onPressed: () {
+                    Map<String, dynamic> params = <String, dynamic>{
+                      'edit': true,
+                      'itemData': itemData,
+                    };
+                    Provider.of<ChangeProvider>(context, listen: false)
+                        .setMidScreen(ScreenName.editRequest, params);
+                  },
+                  child: const Text('ویرایش درخواست')),
               Expanded(
                 // The ListView
                 child: ListView.builder(
@@ -82,6 +105,7 @@ class ItemList extends StatelessWidget {
                   },
                 ),
               ),
+              ProcessTimeline(2, _processes),
             ],
           );
   }

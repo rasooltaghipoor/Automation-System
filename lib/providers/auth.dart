@@ -43,21 +43,21 @@ class AuthProvider with ChangeNotifier {
     print(queryParameters.values);
 
     print('login...');
-    /*final response = await post(
+    final response = await post(
       Uri.parse(mainUrl + 'api/Account/login/$username'),
       headers: <String, String>{
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
       },
       body: queryParameters,
-    );*/
+    );
     /*final response = await get(
         Uri.parse(mainUrl + 'api/Account/login/$username?pass=$password'));*/
-    final uri = Uri.http('cms2.iau-neyshabur.ac.ir',
-        '/api/Account/login/$username', queryParameters);
-    final response = await get(uri, headers: {
-      //HttpHeaders.contentTypeHeader: 'application/form',
-      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-    });
+    // final uri = Uri.http('cms2.iau-neyshabur.ac.ir',
+    //     '/api/Account/login/$username', queryParameters);
+    // final response = await get(uri, headers: {
+    //   //HttpHeaders.contentTypeHeader: 'application/form',
+    //   'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+    // });
     // final response = await get(SharedVars.mainURL + '/LoginJSON.aspx?user=$email&pass=$password');
     print(response.body);
     if (response.statusCode == 200) {
@@ -65,15 +65,17 @@ class AuthProvider with ChangeNotifier {
       final Map<String, dynamic> responseData = json.decode(responseBody);
 
       print(responseData);
-      if (responseData['Result'] == 'OK') {
-        User authUser = User(
-            userId: 0,
-            name: '', //responseData['ProfName'],
-            username: username,
-            phone: '',
-            type: 'teacher',
-            token: responseData['Token'],
-            renewalToken: '');
+      if (responseData['UserID'] != null) {
+        // User authUser = User(
+        //     userId: responseData['UserID'],
+        //     name: responseData['username'],
+        //     username: username,
+        //     phone: '',
+        //     type: 'teacher',
+        //     token: responseData['token'],
+        //     renewalToken: '');
+
+        User authUser = User.fromJson(responseData);
         _loggedInStatus = Status.LoggedIn;
         notifyListeners();
         result = {
@@ -85,6 +87,9 @@ class AuthProvider with ChangeNotifier {
 
         SharedVars.username = username;
         SharedVars.password = password;
+        SharedVars.userID = authUser.userId!;
+        SharedVars.roleID = authUser.roleID!;
+
         UserPreferences().saveUser(authUser);
 
         /*print('Testing the token....');

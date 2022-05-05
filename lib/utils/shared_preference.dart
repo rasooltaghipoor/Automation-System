@@ -7,11 +7,11 @@ class UserPreferences {
   Future<bool> saveUser(User user) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    prefs.setInt("userId", user.userId!);
+    prefs.setString("userId", user.userId!);
     prefs.setString("name", user.name!);
-    prefs.setString("email", user.username!);
-    prefs.setString("phone", user.phone!);
-    prefs.setString("type", user.type!);
+    prefs.setString("roleID", user.roleID!);
+    prefs.setString("defaultRole", user.defaultRole!);
+    prefs.setString("profilePic", user.profilePic!);
     prefs.setString("token", "token");
     prefs.setString("renewalToken", user.renewalToken!);
 
@@ -24,20 +24,20 @@ class UserPreferences {
   Future<User> getUser() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    int? userId = prefs.getInt("userId");
+    String? userId = prefs.getString("userId");
     String? name = prefs.getString("name");
-    String? email = prefs.getString("email");
-    String? phone = prefs.getString("phone");
-    String? type = prefs.getString("type");
+    String? roleID = prefs.getString("roleID");
+    String? defaultRole = prefs.getString("defaultRole");
+    String? profilePic = prefs.getString("profilePic");
     String? token = prefs.getString("token");
     String? renewalToken = prefs.getString("renewalToken");
 
     return User(
         userId: userId,
         name: name,
-        username: email,
-        phone: phone,
-        type: type,
+        roleID: roleID,
+        defaultRole: defaultRole,
+        profilePic: profilePic,
         token: token,
         renewalToken: renewalToken);
   }

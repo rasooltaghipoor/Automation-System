@@ -2,32 +2,35 @@ import 'package:automation_system/utils/communication/web_request.dart';
 import 'package:flutter/cupertino.dart';
 
 class User {
-  int? userId;
+  String? userId;
   String? name;
-  String? username;
-  String? phone;
-  String? type;
+  //String? user44name;
+  String? roleID;
+  String? defaultRole;
+  String? profilePic;
   String? token;
   String? renewalToken;
 
   User(
       {this.userId,
       this.name,
-      this.username,
-      this.phone,
-      this.type,
+      //this.username,
+      this.roleID,
+      this.defaultRole,
+      this.profilePic,
       this.token,
       this.renewalToken});
 
   factory User.fromJson(Map<String, dynamic> responseData) {
     return User(
-        userId: responseData['id'],
-        name: responseData['name'],
-        username: responseData['email'],
-        phone: responseData['phone'],
-        type: responseData['type'],
-        token: responseData['access_token'],
-        renewalToken: responseData['renewal_token']);
+        userId: responseData['UserID'],
+        name: responseData['username'],
+        //username: responseData['UserID'],
+        roleID: responseData['DefaultRoleid'],
+        defaultRole: responseData['DefaultRole'],
+        profilePic: responseData['profile'],
+        token: responseData['token'],
+        renewalToken: ''); //responseData['renewal_token']);
   }
 }
 
