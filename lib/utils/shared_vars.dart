@@ -24,8 +24,8 @@ class SharedVars {
   static var privateUrl = "http://teacher.iau-neyshabur.ac.ir";
   static var publicUrl = "http://teacher.iau-neyshabur.ac.ir";
 
-  static var userID = "401";
-  static var roleID = "10";
+  static var userID = "";
+  static var roleID = "";
   static var requestID = "";
   static var formNameF = "";
   static var formNameE = "";
