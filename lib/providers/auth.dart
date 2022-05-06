@@ -25,10 +25,12 @@ class AuthProvider with ChangeNotifier {
   Status _loggedInStatus = Status.NotLoggedIn;
   Status _registeredInStatus = Status.NotRegistered;
   PassStatus _passStatus = PassStatus.Unchanged;
+  User? _authUser;
 
   Status get loggedInStatus => _loggedInStatus;
   Status get registeredInStatus => _registeredInStatus;
   PassStatus get passStatus => _passStatus;
+  User get authUser => _authUser!;
 
   Future<Map<String, dynamic>> login(String username, String password) async {
     var result;
@@ -75,22 +77,22 @@ class AuthProvider with ChangeNotifier {
         //     token: responseData['token'],
         //     renewalToken: '');
 
-        User authUser = User.fromJson(responseData);
+        _authUser = User.fromJson(responseData);
         _loggedInStatus = Status.LoggedIn;
         notifyListeners();
         result = {
           'status': true,
           'message': 'Successful',
-          'user': authUser,
+          'user': _authUser,
           //'date': responseData['Time']
         };
 
         SharedVars.username = username;
         SharedVars.password = password;
-        SharedVars.userID = authUser.userId!;
-        SharedVars.roleID = authUser.roleID!;
+        SharedVars.userID = _authUser!.userId!;
+        SharedVars.roleID = _authUser!.roleID!;
 
-        UserPreferences().saveUser(authUser);
+        UserPreferences().saveUser(_authUser!);
 
         /*print('Testing the token....');
         String ff = authUser.token!;

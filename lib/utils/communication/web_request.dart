@@ -7,6 +7,7 @@ import 'package:automation_system/models/DynamicForm.dart';
 import 'package:automation_system/models/MenuDetails.dart';
 import 'package:automation_system/models/RequestList.dart';
 import 'package:automation_system/models/User.dart';
+import 'package:automation_system/providers/auth.dart';
 import 'package:automation_system/providers/cartable_provider.dart';
 import 'package:automation_system/providers/menu_provider.dart';
 import 'package:automation_system/providers/request_list_provider.dart';
@@ -188,6 +189,41 @@ Future<void> getUserDetails2(BuildContext context, String? userID) async {
       UserModel data = UserModel.fromMap(responseData);
       print('name: ' + data.userData[0].name!);
       Provider.of<UserProvider>(context, listen: false).setUser(data);
+    } else {
+      throw Exception('Unable to fetch info from the REST API');
+    }
+  } else {
+    throw Exception('Unable to fetch info from the REST API');
+  }
+}
+
+/// Reads some data about current date from the server
+Future<void> getErpSideMenuData(BuildContext context) async {
+  Map<String, dynamic> queryParameters = {
+    'token': Provider.of<AuthProvider>(context, listen: false).authUser.token,
+    'roleid': Provider.of<AuthProvider>(context, listen: false)
+        .authUser
+        .roleID, // EncryptionUtil().encryptContent(oldPassword),
+  };
+
+  final response = await http.post(
+    Uri.parse(mainUrl + 'api/info/menu/main'),
+    headers: <String, String>{
+      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+    },
+    body: queryParameters,
+  );
+
+  print(mainUrl + 'api/info/menu/main');
+  if (response.statusCode == 200) {
+    print(utf8.decode(response.bodyBytes));
+    final responseBody = utf8.decode(response.bodyBytes);
+    final responseData = json.decode(responseBody);
+    if (responseData['Result'] != null) {
+      // We deserialize read data but only use Date field for now
+      /*SideMenuModel data = SideMenuModel.fromMap(responseData);
+      print('name: ' + data.menuData[0].title!);
+      Provider.of<MenuProvider>(context, listen: false).setMenu(data);*/
     } else {
       throw Exception('Unable to fetch info from the REST API');
     }
