@@ -85,8 +85,8 @@ class _SideMenuState extends State<ErpSideMenu> {
                     leading: CircleAvatar(
                       child: user.profilePic != null
                           //FIXME: network image not loaded!
-                          // ? Image.network(mainUrl + user.profilePic!)
-                          ? Image.asset("assets/images/user_3.png")
+                          ? Image.network(mainUrl + user.profilePic!)
+                          // ? Image.asset("assets/images/user_3.png")
                           : Image.asset("assets/images/user_3.png"),
                       //backgroundColor: Colors.purple,
                     ),

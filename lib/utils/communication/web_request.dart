@@ -58,23 +58,22 @@ Future<DynamicFormModel> getFormDetails(String? formID) async {
     final responseData = json.decode(responseBody);
     if (responseData['formid'] != null) {
       DynamicFormModel data = DynamicFormModel.fromMap(responseData);
-      print('form id: ' + data.formID);
 
-      SharedVars.listBoxItemsMap.clear();
-      // Check for listboxes
-      for (FormItem formItem in data.items) {
-        if (formItem.control == 'listbox') {
-          final response2 = await http.get(
-              Uri.parse(mainUrl + 'api/info/listbox/${formItem.dataType}/'));
-          if (response2.statusCode == 200) {
-            print(utf8.decode(response2.bodyBytes));
-            final responseBody2 = utf8.decode(response2.bodyBytes);
-            final responseData2 = json.decode(responseBody2);
-            ListBoxItems listBoxItems = ListBoxItems.fromMap(responseData2);
-            SharedVars.listBoxItemsMap[formItem.dataType] = listBoxItems;
-          }
-        }
-      }
+      // SharedVars.listBoxItemsMap.clear();
+      // // Check for listboxes
+      // for (FormItem formItem in data.items) {
+      //   if (formItem.control == 'listbox') {
+      //     final response2 = await http.get(
+      //         Uri.parse(mainUrl + 'api/info/listbox/${formItem.dataType}/'));
+      //     if (response2.statusCode == 200) {
+      //       print(utf8.decode(response2.bodyBytes));
+      //       final responseBody2 = utf8.decode(response2.bodyBytes);
+      //       final responseData2 = json.decode(responseBody2);
+      //       ListBoxItems listBoxItems = ListBoxItems.fromMap(responseData2);
+      //       SharedVars.listBoxItemsMap[formItem.dataType] = listBoxItems;
+      //     }
+      //   }
+      // }
       return data;
     } else {
       throw Exception('Unable to fetch info from the REST API');
@@ -219,11 +218,12 @@ Future<void> getErpSideMenuData(BuildContext context) async {
     print(utf8.decode(response.bodyBytes));
     final responseBody = utf8.decode(response.bodyBytes);
     final responseData = json.decode(responseBody);
-    if (responseData['Result'] != null) {
+    //FIXME: This kind of 'if' doesn't work if 'menu' not present
+    if (responseData['menu'] != null) {
       // We deserialize read data but only use Date field for now
-      /*SideMenuModel data = SideMenuModel.fromMap(responseData);
+      ErpSideMenuModel data = ErpSideMenuModel.fromMap(responseData);
       print('name: ' + data.menuData[0].title!);
-      Provider.of<MenuProvider>(context, listen: false).setMenu(data);*/
+      // Provider.of<MenuProvider>(context, listen: false).setMenu(data);
     } else {
       throw Exception('Unable to fetch info from the REST API');
     }
@@ -322,13 +322,16 @@ Future<void> testToken() async {
   }
 }
 
-Future<Map<String, dynamic>> sendFormData(String jsonData, String token) async {
+Future<Map<String, dynamic>> sendFormData(
+    BuildContext context, String jsonData) async {
   var result;
 
   Map<String, dynamic> queryParameters = {
-    'userid': '401',
-    'roleid': '10', // EncryptionUtil().encryptContent(oldPassword),
-    'items': jsonData // EncryptionUtil().encryptContent(newPassword)
+    'token': Provider.of<AuthProvider>(context, listen: false).authUser.token,
+    'userid': Provider.of<AuthProvider>(context, listen: false).authUser.userId,
+    'roleid': Provider.of<AuthProvider>(context, listen: false).authUser.roleID,
+    'items': jsonData,
+    'Priority': '1',
   };
 
   final response = await http.post(
@@ -358,6 +361,41 @@ Future<Map<String, dynamic>> sendFormData(String jsonData, String token) async {
   }
   return result;
 }
+
+// Future<void> getReplyButton(BuildContext context) async {
+//   var result;
+
+//   Map<String, dynamic> queryParameters = {
+//     'roleid': Provider.of<AuthProvider>(context, listen: false).authUser.roleID,
+//   };
+
+//   final response = await http.post(
+//     Uri.parse(mainUrl + 'api/info/ReplyButton/ConsumBuy'),
+//     headers: <String, String>{
+//       'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+//     },
+//     body: queryParameters,
+//   );
+
+//   final responseBody = utf8.decode(response.bodyBytes);
+//   final Map<String, dynamic> responseData = json.decode(responseBody);
+
+//   print(responseData);
+
+//   if (response.statusCode == 200) {
+//     if (responseData['Result'] != null && responseData['Result'] != '-1') {
+//       // We deserialize read data but only use Date field for now
+//       CartableModel data = CartableModel.fromMap(responseData);
+//       print('name: ' + data.catableData[0].fromTitle!);
+//       Provider.of<CartableProvider>(context, listen: false)
+//           .setCartable(data, itemData.title!);
+//     } else {
+//       throw Exception('Unable to fetch info from the REST API');
+//     }
+//   } else {
+//     throw Exception('Unable to fetch info from the REST API');
+//   }
+// }
 
 void send1(String filename) async {
   print('sending...');
