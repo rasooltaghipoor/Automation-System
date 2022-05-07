@@ -69,6 +69,7 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider(create: (_) => AuthProvider()),
           ChangeNotifierProvider(create: (_) => UserProvider()),
           ChangeNotifierProvider(create: (_) => MenuProvider()),
+          ChangeNotifierProvider(create: (_) => ErpMenuProvider()),
           ChangeNotifierProvider(create: (_) => CartableProvider()),
           ChangeNotifierProvider(create: (_) => RequestListProvider()),
           ChangeNotifierProvider(create: (_) => ChangeProvider()),

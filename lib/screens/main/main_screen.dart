@@ -19,6 +19,7 @@ class MainScreen extends StatelessWidget {
     //Provider.of<AuthProvider>(context).login('309', '309');
     //getUserDetails2(context, '309');
     //getSideMenuData(context, '309');
+
     getErpSideMenuData(context);
     //getCartableData(context, MenuItemsData('همه نامه ها', '0', 'All'));
     SizeConfig().init(context);

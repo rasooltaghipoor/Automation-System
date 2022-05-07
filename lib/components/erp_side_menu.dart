@@ -101,7 +101,7 @@ class _SideMenuState extends State<ErpSideMenu> {
 
                   const SizedBox(height: kDefaultPadding * 2),
                   // Menu Items
-                  Consumer<MenuProvider>(
+                  Consumer<ErpMenuProvider>(
                     builder: (context, menuModel, child) {
                       return Column(
                         children: [
@@ -119,7 +119,7 @@ class _SideMenuState extends State<ErpSideMenu> {
                                   setState(() {
                                     _activeIndex = 0;
                                   });
-                                  getCartableData(
+                                  getErpCartableData(
                                       context, menuModel.sideMenu!.menuData[0]);
                                 },
                                 title: menuModel.sideMenu != null
@@ -137,7 +137,7 @@ class _SideMenuState extends State<ErpSideMenu> {
                                   setState(() {
                                     _activeIndex = 1;
                                   });
-                                  getCartableData(
+                                  getErpCartableData(
                                       context, menuModel.sideMenu!.menuData[1]);
                                 },
                                 title: menuModel.sideMenu != null
@@ -155,7 +155,7 @@ class _SideMenuState extends State<ErpSideMenu> {
                                   setState(() {
                                     _activeIndex = 2;
                                   });
-                                  getCartableData(
+                                  getErpCartableData(
                                       context, menuModel.sideMenu!.menuData[2]);
                                 },
                                 title: menuModel.sideMenu != null
@@ -168,111 +168,26 @@ class _SideMenuState extends State<ErpSideMenu> {
                                         menuModel.sideMenu!.menuData[2].count!)
                                     : 0,
                               ),
-                              SideMenuItem(
-                                press: () {
-                                  setState(() {
-                                    _activeIndex = 3;
-                                  });
-                                  getCartableData(
-                                      context, menuModel.sideMenu!.menuData[3]);
-                                },
-                                title: menuModel.sideMenu != null
-                                    ? menuModel.sideMenu!.menuData[3].title
-                                    : "...",
-                                iconSrc: "assets/Icons/File.svg",
-                                isActive: _activeIndex == 3 ? true : false,
-                                itemCount: menuModel.sideMenu != null
-                                    ? int.parse(
-                                        menuModel.sideMenu!.menuData[3].count!)
-                                    : 0,
-                              ),
-                              SideMenuItem(
-                                press: () {
-                                  setState(() {
-                                    _activeIndex = 4;
-                                  });
-                                  getCartableData(
-                                      context, menuModel.sideMenu!.menuData[4]);
-                                },
-                                title: menuModel.sideMenu != null
-                                    ? menuModel.sideMenu!.menuData[4].title
-                                    : "...",
-                                iconSrc: "assets/Icons/File.svg",
-                                isActive: _activeIndex == 4 ? true : false,
-                                itemCount: menuModel.sideMenu != null
-                                    ? int.parse(
-                                        menuModel.sideMenu!.menuData[4].count!)
-                                    : 0,
-                              ),
-                              SideMenuItem(
-                                  press: () {
-                                    setState(() {
-                                      _activeIndex = 5;
-                                    });
-                                    getCartableData(context,
-                                        menuModel.sideMenu!.menuData[5]);
-                                  },
-                                  title: menuModel.sideMenu != null
-                                      ? menuModel.sideMenu!.menuData[5].title
-                                      : "...",
-                                  iconSrc: "assets/Icons/File.svg",
-                                  isActive: _activeIndex == 5 ? true : false,
-                                  itemCount: menuModel.sideMenu != null
-                                      ? int.parse(menuModel
-                                          .sideMenu!.menuData[5].count!)
-                                      : 0),
-                              SideMenuItem(
-                                press: () {
-                                  setState(() {
-                                    _activeIndex = 6;
-                                  });
-                                  getCartableData(
-                                      context, menuModel.sideMenu!.menuData[6]);
-                                },
-                                title: menuModel.sideMenu != null
-                                    ? menuModel.sideMenu!.menuData[6].title
-                                    : "...",
-                                iconSrc: "assets/Icons/File.svg",
-                                isActive: _activeIndex == 6 ? true : false,
-                                itemCount: menuModel.sideMenu != null
-                                    ? int.parse(
-                                        menuModel.sideMenu!.menuData[6].count!)
-                                    : 0,
-                              ),
                             ],
                           ),
                           const SizedBox(height: kDefaultPadding * 2),
                           SideMenuItem(
                             press: () {
                               setState(() {
-                                _activeIndex = 7;
+                                _activeIndex = 3;
                               });
-                              getCartableData(
-                                  context, menuModel.sideMenu!.menuData[7]);
+                              getErpCartableData(
+                                  context, menuModel.sideMenu!.menuData[3]);
                             },
                             title: menuModel.sideMenu != null
-                                ? menuModel.sideMenu!.menuData[7].title
+                                ? menuModel.sideMenu!.menuData[3].title
                                 : "...",
                             iconSrc: "assets/Icons/File.svg",
-                            isActive: _activeIndex == 7 ? true : false,
+                            isActive: _activeIndex == 3 ? true : false,
                             itemCount: menuModel.sideMenu != null
                                 ? int.parse(
-                                    menuModel.sideMenu!.menuData[7].count!)
+                                    menuModel.sideMenu!.menuData[3].count!)
                                 : 0,
-                          ),
-                          SideMenuItem(
-                            press: () {
-                              setState(() {
-                                _activeIndex = 8;
-                              });
-                              getCartableData(
-                                  context, menuModel.sideMenu!.menuData[8]);
-                            },
-                            title: menuModel.sideMenu != null
-                                ? menuModel.sideMenu!.menuData[8].title
-                                : "...",
-                            iconSrc: "assets/Icons/File.svg",
-                            isActive: _activeIndex == 8 ? true : false,
                           ),
                           /*SideMenuItem(
                             press: () {

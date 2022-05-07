@@ -223,7 +223,7 @@ Future<void> getErpSideMenuData(BuildContext context) async {
       // We deserialize read data but only use Date field for now
       ErpSideMenuModel data = ErpSideMenuModel.fromMap(responseData);
       print('name: ' + data.menuData[0].title!);
-      // Provider.of<MenuProvider>(context, listen: false).setMenu(data);
+      Provider.of<ErpMenuProvider>(context, listen: false).setMenu(data);
     } else {
       throw Exception('Unable to fetch info from the REST API');
     }
@@ -268,6 +268,44 @@ Future<List<MenuItemsData>> getSideMenuData2(String userID) async {
       SideMenuModel data = SideMenuModel.fromMap(responseData);
       print('name: ' + data.menuData[0].title!);
       return data.menuData;
+    } else {
+      throw Exception('Unable to fetch info from the REST API');
+    }
+  } else {
+    throw Exception('Unable to fetch info from the REST API');
+  }
+}
+
+/// Reads some data about current date from the server
+Future<void> getErpCartableData(
+    BuildContext context, ErpMenuItemsData itemData) async {
+  Map<String, dynamic> queryParameters = {
+    'token': Provider.of<AuthProvider>(context, listen: false).authUser.token,
+    'roleid': Provider.of<AuthProvider>(context, listen: false)
+        .authUser
+        .roleID, // EncryptionUtil().encryptContent(oldPassword),
+  };
+
+  final response = await http.post(
+    Uri.parse(mainUrl + 'api/Request/Messagelist/${itemData.id}'),
+    headers: <String, String>{
+      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+    },
+    body: queryParameters,
+  );
+
+  print(mainUrl + 'api/Request/Messagelist/${itemData.id}');
+  if (response.statusCode == 200) {
+    print(utf8.decode(response.bodyBytes));
+    final responseBody = utf8.decode(response.bodyBytes);
+    final responseData = json.decode(responseBody);
+    //FIXME: This kind of 'if' doesn't work if 'menu' not present
+    if (responseData['Result'] != null) {
+      // We deserialize read data but only use Date field for now
+      ErpCartableModel data = ErpCartableModel.fromMap(responseData);
+      print('name: ' + data.catableData[0].formName_F!);
+      Provider.of<ErpCartableProvider>(context, listen: false)
+          .setCartable(data, itemData.title!);
     } else {
       throw Exception('Unable to fetch info from the REST API');
     }
