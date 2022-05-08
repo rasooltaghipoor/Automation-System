@@ -1,6 +1,7 @@
 import 'package:automation_system/components/side_drawer_menu.dart';
 import 'package:automation_system/models/User.dart';
 import 'package:automation_system/providers/auth.dart';
+import 'package:automation_system/providers/change_provider.dart';
 import 'package:automation_system/providers/menu_provider.dart';
 import 'package:automation_system/providers/user_provider.dart';
 import 'package:automation_system/responsive.dart';
@@ -176,8 +177,14 @@ class _SideMenuState extends State<ErpSideMenu> {
                               setState(() {
                                 _activeIndex = 3;
                               });
-                              getErpCartableData(
-                                  context, menuModel.sideMenu!.menuData[3]);
+                              // getErpCartableData(
+                              //     context, menuModel.sideMenu!.menuData[3]);
+                              Map<String, dynamic> params = <String, dynamic>{
+                                "param": ''
+                              };
+                              Provider.of<ChangeProvider>(context,
+                                      listen: false)
+                                  .setMidScreen(ScreenName.requestList, params);
                             },
                             title: menuModel.sideMenu != null
                                 ? menuModel.sideMenu!.menuData[3].title

@@ -107,18 +107,31 @@ Future<FullDynamicForm> getFullFormDetails(String? formID) async {
 
 /// Reads requested form data from the server
 Future<void> getRequestList(BuildContext context) async {
-  final response = await http
-      .get(Uri.parse(mainUrl + 'api/Request/list/${SharedVars.userID}/'));
-  print(mainUrl + 'api/Request/list/${SharedVars.userID}/');
+  Map<String, dynamic> queryParameters = {
+    'token': Provider.of<AuthProvider>(context, listen: false).authUser.token,
+    'roleid': Provider.of<AuthProvider>(context, listen: false)
+        .authUser
+        .roleID, // EncryptionUtil().encryptContent(oldPassword),
+  };
+
+  final response = await http.post(
+    Uri.parse(mainUrl + 'api/Request/list/all'),
+    headers: <String, String>{
+      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+    },
+    body: queryParameters,
+  );
+
+  print(mainUrl + 'api/Request/list/all');
   if (response.statusCode == 200) {
     print(utf8.decode(response.bodyBytes));
     final responseBody = utf8.decode(response.bodyBytes);
     final responseData = json.decode(responseBody);
-    if (responseData['items'] != null) {
+    if (responseData['Result'] != null) {
       RequestListModel data = RequestListModel.fromMap(responseData);
       print('form id: ' + data.items[0].formName_F);
       Provider.of<RequestListProvider>(context, listen: false)
-          .setRequestList(data, 'لیست درخواست ها');
+          .setRequestList(data, 'درخواست های من');
       //return data;
     } else {
       throw Exception('Unable to fetch info from the REST API');

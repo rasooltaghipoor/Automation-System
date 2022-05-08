@@ -14,18 +14,23 @@ class RequestListModel {
 
 class Request {
   String requestID;
-  String requestDate;
-  String formName_E;
   String formName_F;
+  String priority;
+  String state;
+  String date;
+  String icon;
 
-  Request(this.requestID, this.requestDate, this.formName_E, this.formName_F);
+  Request(this.requestID, this.formName_F, this.priority, this.state, this.date,
+      this.icon);
 
   factory Request.fromMap(Map<String, dynamic> parsedJson) {
     return Request(
       parsedJson['Requestid'],
-      parsedJson['Column1'],
-      parsedJson['formname_E'],
       parsedJson['formname_F'],
+      parsedJson['priority'],
+      parsedJson['Column1'],
+      parsedJson['Column2'],
+      parsedJson['icon'],
     );
   }
 }

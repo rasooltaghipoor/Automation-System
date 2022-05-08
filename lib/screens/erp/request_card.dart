@@ -65,6 +65,11 @@ class _RequestCardState extends State<RequestCard> {
                       : SizeConfig.safeBlockHorizontal! * 90,
                   child: Row(
                     children: [
+                      Image.network(
+                        mainUrl + widget.request!.icon,
+                        width: 35,
+                        height: 35,
+                      ),
                       SizedBox(
                         width: SizeConfig.safeBlockHorizontal! * 2 * zarib1,
                         child: RotatedBox(
@@ -72,96 +77,13 @@ class _RequestCardState extends State<RequestCard> {
                           child: Text(widget.request!.formName_F),
                         ),
                       ),
-                      /*const SizedBox(
-                      width: kDefaultPaddingMedium,
-                    ),*/
-                      /* SizedBox(
-                        width: SizeConfig.safeBlockHorizontal! * 2 * zarib1,
-                        child: RotatedBox(
-                          quarterTurns: 3,
-                          child: Text(widget.email!.actionTypeTitle!),
-                        ),
-                      ),
-                      //],
-                      //),
                       const SizedBox(
-                        width: kDefaultPaddingMedium,
+                        width: 50,
                       ),
-                      SizedBox(
-                        width: SizeConfig.safeBlockHorizontal! * 4 * zarib1,
-                        child: Column(
-                          children: [
-                            Checkbox(
-                              value: widget.value,
-                              onChanged: (bool? value) {
-                                setState(() {
-                                  widget.value = value;
-                                });
-                              },
-                            ),
-                            const SizedBox(
-                              height: kDefaultPaddingSmall,
-                            ),
-                            Text(widget.email!.hDate!),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(
-                        width: kDefaultPaddingMedium,
-                      ),
-                      SizedBox(
-                        width: Responsive.isDesktop(context)
-                            ? SizeConfig.safeBlockHorizontal! * 60 * zarib1
-                            : SizeConfig.safeBlockHorizontal! * 30 * zarib1,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.max,
-                          // Subject, Sender, Source
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            SizedBox(
-                              width: double.infinity,
-                              child: Text(
-                                widget.email!.header!,
-                                //overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
-                                    color: Colors.blue,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                            SizedBox(
-                              width: double.infinity,
-                              child: Row(
-                                children: [
-                                  SizedBox(
-                                    // User Image
-                                    width: 32,
-                                    child: CircleAvatar(
-                                      backgroundColor: Colors.transparent,
-                                      child: Image.network(
-                                          mainUrl + widget.email!.profilePic!),
-                                    ),
-                                  ),
-                                  const SizedBox(width: kDefaultPadding / 2),
-                                  Text(widget.email!.fromTitle!),
-                                ],
-                              ),
-                            ),
-                            SizedBox(
-                              width: double.infinity,
-                              child: Text(
-                                'فرستنده اصلی: ' + widget.email!.sourceTitle!,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),*/
+                      Text('تاریخ: ' + widget.request!.date),
                     ],
                   ),
                 ),
-                /* const SizedBox(
-                width: kDefaultPaddingMedium,
-              ),*/
                 Container(
                   color: Colors.white70,
                   width: Responsive.isDesktop(context)
@@ -171,115 +93,15 @@ class _RequestCardState extends State<RequestCard> {
                     children: [
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
+                          Text('اولویت: ' + widget.request!.priority),
                           SizedBox(
-                              width: SizeConfig.safeBlockHorizontal! * 10,
-                              child: Row(
-                                children: [
-                                  const Icon(
-                                    Icons.confirmation_number_outlined,
-                                    size: 20,
-                                  ),
-                                  Text(widget.request!.requestID),
-                                ],
-                              )),
-                          const SizedBox(
-                            height: kDefaultPaddingSmaller,
+                            width: 50,
                           ),
-                          SizedBox(
-                              width: SizeConfig.safeBlockHorizontal! * 10,
-                              child: Row(
-                                children: [
-                                  const Icon(
-                                    Icons.date_range,
-                                    size: 20,
-                                  ),
-                                  Text(widget.request!.requestDate),
-                                ],
-                              )),
-                          /*const SizedBox(height: kDefaultPaddingSmaller),
-                          SizedBox(
-                              width: SizeConfig.safeBlockHorizontal! * 10,
-                              child: Row(
-                                children: [
-                                  const Icon(
-                                    Icons.attach_file,
-                                    size: 20,
-                                  ),
-                                  Text(widget.email!.attachCount!),
-                                ],
-                              )),
-                          const SizedBox(height: kDefaultPaddingSmaller),
-                          SizedBox(
-                              width: SizeConfig.safeBlockHorizontal! * 10,
-                              child: Row(
-                                children: [
-                                  const Icon(
-                                    Icons.timer,
-                                    size: 20,
-                                  ),
-                                  Text(widget.email!.deadLine!),
-                                ],
-                              )),*/
+                          Text('وضعیت: ' + widget.request!.state)
                         ],
                       ),
-                      /*const SizedBox(
-                      width: kDefaultPaddingMedium,
-                    ),*/
-                      /*Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          SizedBox(
-                              width: SizeConfig.safeBlockHorizontal! * 10,
-                              child: Row(
-                                children: [
-                                  const Icon(
-                                    Icons.important_devices,
-                                    size: 20,
-                                  ),
-                                  Text(widget.email!.priorityTypeTitle!),
-                                ],
-                              )),
-                          const SizedBox(height: kDefaultPaddingSmaller),
-                          SizedBox(
-                              width: SizeConfig.safeBlockHorizontal! * 10,
-                              child: Row(
-                                children: [
-                                  const Icon(
-                                    Icons.link,
-                                    size: 20,
-                                  ),
-                                  Text(widget.email!.refTitle!),
-                                ],
-                              )),
-                          const SizedBox(height: kDefaultPaddingSmaller),
-                          SizedBox(
-                              width: SizeConfig.safeBlockHorizontal! * 10,
-                              child: Row(
-                                children: [
-                                  const Icon(
-                                    Icons.security,
-                                    size: 20,
-                                  ),
-                                  Text(widget.email!.securityTypeTitle!),
-                                ],
-                              )),
-                          const SizedBox(height: kDefaultPaddingSmaller),
-                          SizedBox(
-                              width: SizeConfig.safeBlockHorizontal! * 10,
-                              child: Row(
-                                children: [
-                                  const Icon(
-                                    Icons.remove_red_eye,
-                                    size: 20,
-                                  ),
-                                  Text(widget.email!.lStateTitle!),
-                                ],
-                              )),
-                        ],
-                      ),*/
                     ],
                   ),
                 ),

@@ -34,7 +34,7 @@ class _ListOfEmailsState extends State<ListOfRequests> {
   @override
   Widget build(BuildContext context) {
     //TODO: These two lines should be removed in the future
-    // getRequestList(context);
+    getRequestList(context);
     SizeConfig().init(context);
 
     return Scaffold(
@@ -157,10 +157,10 @@ class _ListOfEmailsState extends State<ListOfRequests> {
                                             .requestList!
                                             .items[index]
                                             .formName_F;
-                                        SharedVars.formNameE = requestListModel
-                                            .requestList!
-                                            .items[index]
-                                            .formName_E;
+                                        // SharedVars.formNameE = requestListModel
+                                        //     .requestList!
+                                        //     .items[index]
+                                        //     .formName_E;
                                         Provider.of<ChangeProvider>(context,
                                                 listen: false)
                                             .setMidScreen(
