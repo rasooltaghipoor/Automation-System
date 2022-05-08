@@ -327,6 +327,40 @@ Future<void> getErpCartableData(
   }
 }
 
+/// Reads some data about current date from the server
+Future<void> getErpCartableData22(BuildContext context) async {
+  Map<String, dynamic> queryParameters = {
+    'token': Provider.of<AuthProvider>(context, listen: false).authUser.token,
+    'roleid': Provider.of<AuthProvider>(context, listen: false)
+        .authUser
+        .roleID, // EncryptionUtil().encryptContent(oldPassword),
+  };
+
+  final response = await http.post(
+    Uri.parse(mainUrl + 'api/Request/Messagelist/all'),
+    headers: <String, String>{
+      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+    },
+    body: queryParameters,
+  );
+
+  if (response.statusCode == 200) {
+    print(utf8.decode(response.bodyBytes));
+    final responseBody = utf8.decode(response.bodyBytes);
+    final responseData = json.decode(responseBody);
+    //FIXME: This kind of 'if' doesn't work if 'menu' not present
+    if (responseData['Result'] != null) {
+      // We deserialize read data but only use Date field for now
+      ErpCartableModel data = ErpCartableModel.fromMap(responseData);
+      print('name: ' + data.catableData[0].formName_F!);
+    } else {
+      throw Exception('Unable to fetch info from the REST API');
+    }
+  } else {
+    throw Exception('Unable to fetch info from the REST API');
+  }
+}
+
 Future<void> getCartableData(
     BuildContext context, MenuItemsData itemData) async {
   final response = await http.get(Uri.parse(mainUrl +
