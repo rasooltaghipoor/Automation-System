@@ -223,7 +223,7 @@ class _View2State extends State<View2> {
 
         // String jsonTutorial = jsonEncode(items);
         print(jsonEncode(items));
-        sendFormData(jsonEncode(items), '');
+        sendFormData(context, jsonEncode(items));
       },
       child: const Text("OK"),
     );

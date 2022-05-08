@@ -1,3 +1,4 @@
+import 'package:automation_system/components/erp_side_menu.dart';
 import 'package:automation_system/components/side_menu.dart';
 import 'package:automation_system/models/MenuDetails.dart';
 import 'package:automation_system/screens/main/components/middle_screem_selector.dart';
@@ -18,6 +19,8 @@ class MainScreen extends StatelessWidget {
     //Provider.of<AuthProvider>(context).login('309', '309');
     //getUserDetails2(context, '309');
     //getSideMenuData(context, '309');
+
+    getErpSideMenuData(context);
     //getCartableData(context, MenuItemsData('همه نامه ها', '0', 'All'));
     SizeConfig().init(context);
     // It provide us the width and height
@@ -62,7 +65,7 @@ class MainScreen extends StatelessWidget {
                   hiddenWhen: const [Condition.smallerThan(name: DESKTOP)],
                   child: Expanded(
                     flex: _size.width > 1340 ? 3 : 4,
-                    child: const SideMenu(),
+                    child: const ErpSideMenu(),
                   ),
                 ),
               ],

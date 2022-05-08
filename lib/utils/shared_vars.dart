@@ -31,6 +31,7 @@ class SharedVars {
   static var formNameE = "";
 
   static Map<String, ListBoxItems> listBoxItemsMap = <String, ListBoxItems>{};
+  static Map<String, dynamic> replyButtons = <String, dynamic>{};
 
   static var universities = {
     'فنی مهندسی': '1',

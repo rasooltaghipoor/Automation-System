@@ -7,6 +7,7 @@ import 'package:automation_system/utils/communication/web_request.dart';
 import 'package:automation_system/utils/shared_vars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:persian_datetime_picker/persian_datetime_picker.dart';
 
 class DynamicEditForm extends StatefulWidget {
   Map<String, dynamic>? itemsData;
@@ -21,7 +22,7 @@ class _View2State extends State<DynamicEditForm> {
   Map<String, TextEditingController> _controllerMap = Map();
   Map<String, String> _dropDownMap = Map();
   Map<String, int> _listboxIndices = Map();
-  FullDynamicForm? _formData;
+  DynamicFormModel? _formData;
 
   List<String> _data = [
     "one",
@@ -42,11 +43,12 @@ class _View2State extends State<DynamicEditForm> {
   }
 
   Widget _futureBuilder() {
+    SharedVars.formNameE = 'ConsumBuy';
     return FutureBuilder(
       //TODO: This fucntion must be called only when no data is available!!
-      future: getFullFormDetails(SharedVars.formNameE),
+      future: getFormDetails(SharedVars.formNameE),
       builder:
-          (BuildContext context, AsyncSnapshot<FullDynamicForm?> snapshot) {
+          (BuildContext context, AsyncSnapshot<DynamicFormModel?> snapshot) {
         if (!snapshot.hasData) {
           return const Center(child: CircularProgressIndicator());
         }
@@ -55,53 +57,47 @@ class _View2State extends State<DynamicEditForm> {
         _formData = data;
 
         // Save listbox data indices to use in future (This eliminates the future searchs for such indices)
-        int i = 0;
-        _listboxIndices.clear();
-        for (ListBoxItems item in data.listBoxItems) {
-          _listboxIndices[item.listboxType] = i++;
-        }
+        // int i = 0;
+        // _listboxIndices.clear();
+        // for (ListBoxItems item in data.listBoxItems) {
+        //   _listboxIndices[item.listboxType] = i++;
+        // }
 
         return Column(
           children: [
-            Text(data.forms[0].formName_F),
+            Text(data.formName_F),
             ListView.builder(
               shrinkWrap: true,
-              itemCount: data.forms[0].items.length,
+              itemCount: data.items.length,
               padding: const EdgeInsets.all(5),
               itemBuilder: (BuildContext context, int index) {
-                if (data.forms[0].items[index].control == 'textbox') {
+                if (data.items[index].control == 'textbox') {
                   final controller =
-                      _getControllerOf(data.forms[0].items[index].controlName);
+                      _getControllerOf(data.items[index].controlName);
 
                   final textField = TextField(
                     controller: controller,
                     decoration: InputDecoration(
                       border: const OutlineInputBorder(),
-                      labelText: data.forms[0].items[index].title,
+                      labelText: data.items[index].title,
                     ),
                   );
                   return Container(
                     child: textField,
                     padding: const EdgeInsets.only(bottom: 10),
                   );
-                } else if (data.forms[0].items[index].control == 'listbox') {
+                } else if (data.items[index].control == 'listbox') {
                   // var dropDownValue = _getDropDownValue(
                   //     data.items[index].controlName,
                   //     SharedVars.listBoxItemsMap[data.items[index].dataType]!
                   //         .items[0].title);
-                  if (_dropDownMap[data.forms[0].items[index].controlName] ==
-                      null) {
+                  if (_dropDownMap[data.items[index].controlName] == null) {
                     if (widget.isEdit!) {
-                      _dropDownMap[data.forms[0].items[index].controlName] =
-                          widget.itemsData![
-                              data.forms[0].items[index].controlName];
+                      _dropDownMap[data.items[index].controlName] =
+                          widget.itemsData![data.items[index].controlName];
                     } else {
-                      _dropDownMap[data.forms[0].items[index].controlName] =
-                          data
-                              .listBoxItems[_listboxIndices[
-                                  data.forms[0].items[index].dataType]!]
-                              .items[0]
-                              .title;
+                      _dropDownMap[data.items[index].controlName] =
+                          data.items[index].dataType[0].title;
                     }
 
                     // SharedVars
@@ -111,13 +107,12 @@ class _View2State extends State<DynamicEditForm> {
                     //     .title;
                   }
                   return Row(children: <Widget>[
-                    Text(data.forms[0].items[index].title),
+                    Text(data.items[index].title),
                     Container(
                         padding:
                             EdgeInsets.all(SizeConfig.safeBlockHorizontal! * 3),
                         child: DropdownButton<String>(
-                          value: _dropDownMap[
-                              data.forms[0].items[index].controlName],
+                          value: _dropDownMap[data.items[index].controlName],
                           icon: const Icon(Icons.arrow_downward),
                           iconSize: 24,
                           elevation: 16,
@@ -128,18 +123,15 @@ class _View2State extends State<DynamicEditForm> {
                           ),
                           onChanged: (String? newValue) {
                             setState(() {
-                              _dropDownMap[data.forms[0].items[index]
-                                  .controlName] = newValue!;
+                              _dropDownMap[data.items[index].controlName] =
+                                  newValue!;
                             });
                           },
                           items:
                               // SharedVars
                               //     .listBoxItemsMap[
                               //         data.forms[0].items[index].dataType]!
-                              data
-                                  .listBoxItems[_listboxIndices[
-                                      data.forms[0].items[index].dataType]!]
-                                  .items
+                              data.items[index].dataType
                                   .map<DropdownMenuItem<String>>(
                                       (ListItem value) {
                             return DropdownMenuItem<String>(
@@ -226,7 +218,7 @@ class _View2State extends State<DynamicEditForm> {
         //   });
         // });
         Map<String, String> items = <String, String>{};
-        for (FormItem listItem in _formData!.forms[0].items) {
+        for (FormItem listItem in _formData!.items) {
           if (listItem.control == 'textbox') {
             items[listItem.controlName] =
                 _getControllerOf(listItem.controlName).text;
@@ -237,9 +229,9 @@ class _View2State extends State<DynamicEditForm> {
 
         // String jsonTutorial = jsonEncode(items);
         print(jsonEncode(items));
-        sendFormData(jsonEncode(items), '');
+        sendFormData(context, jsonEncode(items));
       },
-      child: widget.isEdit! ? const Text('ارسال') : const Text('ویرایش'),
+      child: widget.isEdit! ? const Text('ویرایش') : const Text('ارسال'),
     );
   }
 

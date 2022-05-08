@@ -73,3 +73,50 @@ class CartableData {
     );
   }
 }
+
+class ErpCartableModel {
+  final List<ErpCartableData> catableData;
+
+  ErpCartableModel(this.catableData);
+  factory ErpCartableModel.fromMap(Map<String, dynamic> parsedJson) {
+    var list = parsedJson['items'] as List;
+    //print(list.runtimeType);
+    List<ErpCartableData> msgList =
+        list.map((i) => ErpCartableData.fromMap(i)).toList();
+    return ErpCartableModel(msgList);
+  }
+}
+
+class ErpCartableData {
+  String? history;
+  String? requestID;
+  String? formName_F;
+  String? requester;
+  String? profile;
+  String? priority;
+  String? date;
+  String? icon;
+
+  ErpCartableData(
+    this.history,
+    this.requestID,
+    this.formName_F,
+    this.requester,
+    this.profile,
+    this.priority,
+    this.date,
+    this.icon,
+  );
+  factory ErpCartableData.fromMap(Map<String, dynamic> parsedJson) {
+    return ErpCartableData(
+      parsedJson['History'],
+      parsedJson['Requestid'],
+      parsedJson['formName_F'],
+      parsedJson['Requester'],
+      parsedJson['profile'],
+      parsedJson['priority'],
+      parsedJson['date'],
+      parsedJson['icon'],
+    );
+  }
+}

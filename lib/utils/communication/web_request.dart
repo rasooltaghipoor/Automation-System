@@ -7,6 +7,7 @@ import 'package:automation_system/models/DynamicForm.dart';
 import 'package:automation_system/models/MenuDetails.dart';
 import 'package:automation_system/models/RequestList.dart';
 import 'package:automation_system/models/User.dart';
+import 'package:automation_system/providers/auth.dart';
 import 'package:automation_system/providers/cartable_provider.dart';
 import 'package:automation_system/providers/menu_provider.dart';
 import 'package:automation_system/providers/request_list_provider.dart';
@@ -57,23 +58,22 @@ Future<DynamicFormModel> getFormDetails(String? formID) async {
     final responseData = json.decode(responseBody);
     if (responseData['formid'] != null) {
       DynamicFormModel data = DynamicFormModel.fromMap(responseData);
-      print('form id: ' + data.formID);
 
-      SharedVars.listBoxItemsMap.clear();
-      // Check for listboxes
-      for (FormItem formItem in data.items) {
-        if (formItem.control == 'listbox') {
-          final response2 = await http.get(
-              Uri.parse(mainUrl + 'api/info/listbox/${formItem.dataType}/'));
-          if (response2.statusCode == 200) {
-            print(utf8.decode(response2.bodyBytes));
-            final responseBody2 = utf8.decode(response2.bodyBytes);
-            final responseData2 = json.decode(responseBody2);
-            ListBoxItems listBoxItems = ListBoxItems.fromMap(responseData2);
-            SharedVars.listBoxItemsMap[formItem.dataType] = listBoxItems;
-          }
-        }
-      }
+      // SharedVars.listBoxItemsMap.clear();
+      // // Check for listboxes
+      // for (FormItem formItem in data.items) {
+      //   if (formItem.control == 'listbox') {
+      //     final response2 = await http.get(
+      //         Uri.parse(mainUrl + 'api/info/listbox/${formItem.dataType}/'));
+      //     if (response2.statusCode == 200) {
+      //       print(utf8.decode(response2.bodyBytes));
+      //       final responseBody2 = utf8.decode(response2.bodyBytes);
+      //       final responseData2 = json.decode(responseBody2);
+      //       ListBoxItems listBoxItems = ListBoxItems.fromMap(responseData2);
+      //       SharedVars.listBoxItemsMap[formItem.dataType] = listBoxItems;
+      //     }
+      //   }
+      // }
       return data;
     } else {
       throw Exception('Unable to fetch info from the REST API');
@@ -197,6 +197,42 @@ Future<void> getUserDetails2(BuildContext context, String? userID) async {
 }
 
 /// Reads some data about current date from the server
+Future<void> getErpSideMenuData(BuildContext context) async {
+  Map<String, dynamic> queryParameters = {
+    'token': Provider.of<AuthProvider>(context, listen: false).authUser.token,
+    'roleid': Provider.of<AuthProvider>(context, listen: false)
+        .authUser
+        .roleID, // EncryptionUtil().encryptContent(oldPassword),
+  };
+
+  final response = await http.post(
+    Uri.parse(mainUrl + 'api/info/menu/main'),
+    headers: <String, String>{
+      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+    },
+    body: queryParameters,
+  );
+
+  print(mainUrl + 'api/info/menu/main');
+  if (response.statusCode == 200) {
+    print(utf8.decode(response.bodyBytes));
+    final responseBody = utf8.decode(response.bodyBytes);
+    final responseData = json.decode(responseBody);
+    //FIXME: This kind of 'if' doesn't work if 'menu' not present
+    if (responseData['menu'] != null) {
+      // We deserialize read data but only use Date field for now
+      ErpSideMenuModel data = ErpSideMenuModel.fromMap(responseData);
+      print('name: ' + data.menuData[0].title!);
+      Provider.of<ErpMenuProvider>(context, listen: false).setMenu(data);
+    } else {
+      throw Exception('Unable to fetch info from the REST API');
+    }
+  } else {
+    throw Exception('Unable to fetch info from the REST API');
+  }
+}
+
+/// Reads some data about current date from the server
 Future<void> getSideMenuData(BuildContext context, String userID) async {
   final response =
       await http.get(Uri.parse(mainUrl + 'api/Cartable/Count/$userID/'));
@@ -232,6 +268,44 @@ Future<List<MenuItemsData>> getSideMenuData2(String userID) async {
       SideMenuModel data = SideMenuModel.fromMap(responseData);
       print('name: ' + data.menuData[0].title!);
       return data.menuData;
+    } else {
+      throw Exception('Unable to fetch info from the REST API');
+    }
+  } else {
+    throw Exception('Unable to fetch info from the REST API');
+  }
+}
+
+/// Reads some data about current date from the server
+Future<void> getErpCartableData(
+    BuildContext context, ErpMenuItemsData itemData) async {
+  Map<String, dynamic> queryParameters = {
+    'token': Provider.of<AuthProvider>(context, listen: false).authUser.token,
+    'roleid': Provider.of<AuthProvider>(context, listen: false)
+        .authUser
+        .roleID, // EncryptionUtil().encryptContent(oldPassword),
+  };
+
+  final response = await http.post(
+    Uri.parse(mainUrl + 'api/Request/Messagelist/${itemData.id}'),
+    headers: <String, String>{
+      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+    },
+    body: queryParameters,
+  );
+
+  print(mainUrl + 'api/Request/Messagelist/${itemData.id}');
+  if (response.statusCode == 200) {
+    print(utf8.decode(response.bodyBytes));
+    final responseBody = utf8.decode(response.bodyBytes);
+    final responseData = json.decode(responseBody);
+    //FIXME: This kind of 'if' doesn't work if 'menu' not present
+    if (responseData['Result'] != null) {
+      // We deserialize read data but only use Date field for now
+      ErpCartableModel data = ErpCartableModel.fromMap(responseData);
+      print('name: ' + data.catableData[0].formName_F!);
+      Provider.of<ErpCartableProvider>(context, listen: false)
+          .setCartable(data, itemData.title!);
     } else {
       throw Exception('Unable to fetch info from the REST API');
     }
@@ -286,13 +360,16 @@ Future<void> testToken() async {
   }
 }
 
-Future<Map<String, dynamic>> sendFormData(String jsonData, String token) async {
+Future<Map<String, dynamic>> sendFormData(
+    BuildContext context, String jsonData) async {
   var result;
 
   Map<String, dynamic> queryParameters = {
-    'userid': '401',
-    'roleid': '10', // EncryptionUtil().encryptContent(oldPassword),
-    'items': jsonData // EncryptionUtil().encryptContent(newPassword)
+    'token': Provider.of<AuthProvider>(context, listen: false).authUser.token,
+    'userid': Provider.of<AuthProvider>(context, listen: false).authUser.userId,
+    'roleid': Provider.of<AuthProvider>(context, listen: false).authUser.roleID,
+    'items': jsonData,
+    'Priority': '1',
   };
 
   final response = await http.post(
@@ -322,6 +399,41 @@ Future<Map<String, dynamic>> sendFormData(String jsonData, String token) async {
   }
   return result;
 }
+
+// Future<void> getReplyButton(BuildContext context) async {
+//   var result;
+
+//   Map<String, dynamic> queryParameters = {
+//     'roleid': Provider.of<AuthProvider>(context, listen: false).authUser.roleID,
+//   };
+
+//   final response = await http.post(
+//     Uri.parse(mainUrl + 'api/info/ReplyButton/ConsumBuy'),
+//     headers: <String, String>{
+//       'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+//     },
+//     body: queryParameters,
+//   );
+
+//   final responseBody = utf8.decode(response.bodyBytes);
+//   final Map<String, dynamic> responseData = json.decode(responseBody);
+
+//   print(responseData);
+
+//   if (response.statusCode == 200) {
+//     if (responseData['Result'] != null && responseData['Result'] != '-1') {
+//       // We deserialize read data but only use Date field for now
+//       CartableModel data = CartableModel.fromMap(responseData);
+//       print('name: ' + data.catableData[0].fromTitle!);
+//       Provider.of<CartableProvider>(context, listen: false)
+//           .setCartable(data, itemData.title!);
+//     } else {
+//       throw Exception('Unable to fetch info from the REST API');
+//     }
+//   } else {
+//     throw Exception('Unable to fetch info from the REST API');
+//   }
+// }
 
 void send1(String filename) async {
   print('sending...');

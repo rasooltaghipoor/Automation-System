@@ -25,3 +25,31 @@ class MenuItemsData {
     );
   }
 }
+
+class ErpSideMenuModel {
+  final List<ErpMenuItemsData> menuData;
+
+  ErpSideMenuModel(this.menuData);
+  factory ErpSideMenuModel.fromMap(Map<String, dynamic> parsedJson) {
+    var list = parsedJson['menu'] as List;
+    //print(list.runtimeType);
+    List<ErpMenuItemsData> msgList =
+        list.map((i) => ErpMenuItemsData.fromMap(i)).toList();
+    return ErpSideMenuModel(msgList);
+  }
+}
+
+class ErpMenuItemsData {
+  String? id;
+  String? title;
+  String? count;
+
+  ErpMenuItemsData(this.id, this.title, this.count);
+  factory ErpMenuItemsData.fromMap(Map<String, dynamic> parsedJson) {
+    return ErpMenuItemsData(
+      parsedJson['id'],
+      parsedJson['title'],
+      parsedJson['Count'],
+    );
+  }
+}

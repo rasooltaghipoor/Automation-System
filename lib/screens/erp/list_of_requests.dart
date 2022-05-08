@@ -34,7 +34,7 @@ class _ListOfEmailsState extends State<ListOfRequests> {
   @override
   Widget build(BuildContext context) {
     //TODO: These two lines should be removed in the future
-    getRequestList(context);
+    // getRequestList(context);
     SizeConfig().init(context);
 
     return Scaffold(
