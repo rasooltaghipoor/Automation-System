@@ -5,6 +5,7 @@ import 'package:automation_system/models/BuyModel.dart';
 import 'package:automation_system/models/Cartable.dart';
 import 'package:automation_system/models/DynamicForm.dart';
 import 'package:automation_system/models/MenuDetails.dart';
+import 'package:automation_system/models/RequestData.dart';
 import 'package:automation_system/models/RequestList.dart';
 import 'package:automation_system/models/User.dart';
 import 'package:automation_system/providers/auth.dart';
@@ -129,7 +130,7 @@ Future<void> getRequestList(BuildContext context) async {
     final responseData = json.decode(responseBody);
     if (responseData['Result'] != null) {
       RequestListModel data = RequestListModel.fromMap(responseData);
-      print('form id: ' + data.items[0].formName_F);
+      // print('form id: ' + data.items[0].formName_F);
       Provider.of<RequestListProvider>(context, listen: false)
           .setRequestList(data, 'درخواست های من');
       //return data;
@@ -143,21 +144,33 @@ Future<void> getRequestList(BuildContext context) async {
 
 /// Reads requested form data from the server
 Future<Map<String, dynamic>> getRequestDetails(BuildContext context) async {
-  final response = await http
-      .get(Uri.parse(mainUrl + 'api/Request/view/${SharedVars.requestID}/'));
-  print(mainUrl + 'api/Request/view/${SharedVars.requestID}/');
+  Map<String, dynamic> queryParameters = {
+    'token': Provider.of<AuthProvider>(context, listen: false).authUser.token,
+  };
+
+  final response = await http.post(
+    Uri.parse(mainUrl + 'api/Request/ViewDetail/5'),
+    headers: <String, String>{
+      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+    },
+    body: queryParameters,
+  );
+
+  print(mainUrl + 'api/Request/ViewDetail/${SharedVars.requestID}');
   if (response.statusCode == 200) {
     print(utf8.decode(response.bodyBytes));
     final responseBody = utf8.decode(response.bodyBytes);
     final responseData = json.decode(responseBody);
-    final Map<String, dynamic> data = responseData;
+    RequestData data = RequestData.fromMap(responseData);
+    print('name: ' + data.history.items[0].roleTitle);
+    print('chart: ' + data.historyChart.items[0].roleTitle);
     // if (responseData['items'] != null) {
     // RequestListModel data = RequestListModel.fromMap(responseData);
     // print('form id: ' + data.items[0].formName_F);
 
     // ignore: unnecessary_null_comparison
     if (data != null) {
-      return data;
+      return Map();
     } else {
       throw Exception('Unable to fetch info from the REST API');
     }

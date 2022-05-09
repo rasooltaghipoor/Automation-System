@@ -84,11 +84,10 @@ class _SideMenuState extends State<ErpSideMenu> {
 
                   ListTile(
                     leading: CircleAvatar(
-                      child: user.profilePic != null
-                          //FIXME: network image not loaded!
-                          ? Image.network(mainUrl + user.profilePic!)
+                      backgroundImage: user.profilePic != null
+                          ? NetworkImage(mainUrl + user.profilePic!)
                           // ? Image.asset("assets/images/user_3.png")
-                          : Image.asset("assets/images/user_3.png"),
+                          : NetworkImage("assets/images/user_3.png"),
                       //backgroundColor: Colors.purple,
                     ),
                     title: user.name != null

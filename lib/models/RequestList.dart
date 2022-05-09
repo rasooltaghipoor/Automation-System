@@ -4,6 +4,13 @@ class RequestListModel {
   RequestListModel(this.items);
 
   factory RequestListModel.fromMap(Map<String, dynamic> parsedJson) {
+    //TODO: What to to do when the items are empty?
+    if (parsedJson['items'] == '') {
+      List<Request> itemList = [];
+      return RequestListModel(
+        itemList,
+      );
+    }
     var list = parsedJson['items'] as List;
     List<Request> itemList = list.map((i) => Request.fromMap(i)).toList();
     return RequestListModel(
