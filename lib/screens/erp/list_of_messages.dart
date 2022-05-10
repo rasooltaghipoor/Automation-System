@@ -1,9 +1,12 @@
 import 'package:automation_system/components/side_menu.dart';
 import 'package:automation_system/models/Email.dart';
+import 'package:automation_system/models/MenuDetails.dart';
+import 'package:automation_system/providers/cartable_provider.dart';
 import 'package:automation_system/providers/change_provider.dart';
 import 'package:automation_system/providers/request_list_provider.dart';
 import 'package:automation_system/responsive.dart';
 import 'package:automation_system/screens/email/email_screen.dart';
+import 'package:automation_system/screens/erp/message_card.dart';
 import 'package:automation_system/screens/erp/request_card.dart';
 import 'package:automation_system/screens/main/components/letter_card.dart';
 import 'package:automation_system/utils/SizeConfiguration.dart';
@@ -17,9 +20,11 @@ import '../../../constants.dart';
 
 import 'package:flutter/foundation.dart' show kIsWeb;
 
-class ListOfRequests extends StatefulWidget {
+class ListOfMessages extends StatefulWidget {
+  ErpMenuItemsData itemsData;
   // Press "Command + ."
-  const ListOfRequests({
+  ListOfMessages(
+    this.itemsData, {
     Key? key,
   }) : super(key: key);
 
@@ -27,14 +32,14 @@ class ListOfRequests extends StatefulWidget {
   _ListOfEmailsState createState() => _ListOfEmailsState();
 }
 
-class _ListOfEmailsState extends State<ListOfRequests> {
+class _ListOfEmailsState extends State<ListOfMessages> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final ScrollController _mycontroller1 = ScrollController();
 
   @override
   Widget build(BuildContext context) {
     //TODO: These two lines should be removed in the future
-    getRequestList(context);
+    getErpCartableData(context, widget.itemsData);
     SizeConfig().init(context);
 
     return Scaffold(
@@ -103,10 +108,10 @@ class _ListOfEmailsState extends State<ListOfRequests> {
                       children: [
                         Icon(Icons.email),
                         const SizedBox(width: 5),
-                        Consumer<RequestListProvider>(
-                          builder: (context, requestListModel, child) {
+                        Consumer<ErpCartableProvider>(
+                          builder: (context, cartablrModel, child) {
                             return Text(
-                              requestListModel.listTitle,
+                              cartablrModel.letterListTitle,
                               style: TextStyle(
                                   fontSize: SizeConfig.safeBlockVertical! * 2,
                                   color: const Color.fromARGB(255, 2, 19, 94),
@@ -128,35 +133,35 @@ class _ListOfEmailsState extends State<ListOfRequests> {
                   ),
                   const SizedBox(height: kDefaultPadding),
                   Expanded(
-                    child: Consumer<RequestListProvider>(
-                      builder: (context, requestListModel, child) {
-                        return requestListModel.requestList == null
+                    child: Consumer<ErpCartableProvider>(
+                      builder: (context, cartablrModel, child) {
+                        return cartablrModel.cartable == null
                             ? const Center(child: CircularProgressIndicator())
                             : ListView.builder(
                                 controller: _mycontroller1,
                                 itemCount:
-                                    requestListModel.requestList!.items.length,
+                                    cartablrModel.cartable!.catableData.length,
                                 // On mobile this active dosen't mean anything
-                                itemBuilder: (context, index) => RequestCard(
+                                itemBuilder: (context, index) => MessageCard(
                                       isActive: Responsive.isMobile(context)
                                           ? false
                                           : index == 0,
-                                      request: requestListModel
-                                          .requestList!.items[index],
+                                      cartableData: cartablrModel
+                                          .cartable!.catableData[index],
                                       press: () {
                                         //FIXME: This map is not necessary for now, but I keep it temporarily
                                         Map<String, dynamic> params =
                                             <String, dynamic>{
-                                          "param": 'emails[index]'
+                                          "param": emails[index]
                                         };
-                                        SharedVars.requestID = requestListModel
-                                            .requestList!
-                                            .items[index]
-                                            .requestID;
-                                        SharedVars.formNameF = requestListModel
-                                            .requestList!
-                                            .items[index]
-                                            .formName_F;
+                                        SharedVars.requestID = cartablrModel
+                                            .cartable!
+                                            .catableData[index]
+                                            .requestID!;
+                                        SharedVars.formNameF = cartablrModel
+                                            .cartable!
+                                            .catableData[index]
+                                            .formName_F!;
                                         // SharedVars.formNameE = requestListModel
                                         //     .requestList!
                                         //     .items[index]

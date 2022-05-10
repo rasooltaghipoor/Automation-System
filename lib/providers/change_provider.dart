@@ -1,6 +1,12 @@
 import 'package:flutter/foundation.dart';
 
-enum ScreenName { requestList, addRequest, editRequest, viewRequest }
+enum ScreenName {
+  requestList,
+  messageList,
+  addRequest,
+  editRequest,
+  viewRequest
+}
 
 // This class is responsible for changing the widgets in main part of home screen.
 class ChangeProvider extends ChangeNotifier {

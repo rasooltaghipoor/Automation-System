@@ -5,6 +5,7 @@ import 'package:automation_system/models/BuyModel.dart';
 import 'package:automation_system/models/Cartable.dart';
 import 'package:automation_system/models/DynamicForm.dart';
 import 'package:automation_system/models/MenuDetails.dart';
+import 'package:automation_system/models/RequestData.dart';
 import 'package:automation_system/models/RequestList.dart';
 import 'package:automation_system/models/User.dart';
 import 'package:automation_system/providers/auth.dart';
@@ -107,18 +108,31 @@ Future<FullDynamicForm> getFullFormDetails(String? formID) async {
 
 /// Reads requested form data from the server
 Future<void> getRequestList(BuildContext context) async {
-  final response = await http
-      .get(Uri.parse(mainUrl + 'api/Request/list/${SharedVars.userID}/'));
-  print(mainUrl + 'api/Request/list/${SharedVars.userID}/');
+  Map<String, dynamic> queryParameters = {
+    'token': Provider.of<AuthProvider>(context, listen: false).authUser.token,
+    'roleid': Provider.of<AuthProvider>(context, listen: false)
+        .authUser
+        .roleID, // EncryptionUtil().encryptContent(oldPassword),
+  };
+
+  final response = await http.post(
+    Uri.parse(mainUrl + 'api/Request/list/all'),
+    headers: <String, String>{
+      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+    },
+    body: queryParameters,
+  );
+
+  print(mainUrl + 'api/Request/list/all');
   if (response.statusCode == 200) {
     print(utf8.decode(response.bodyBytes));
     final responseBody = utf8.decode(response.bodyBytes);
     final responseData = json.decode(responseBody);
-    if (responseData['items'] != null) {
+    if (responseData['Result'] != null) {
       RequestListModel data = RequestListModel.fromMap(responseData);
-      print('form id: ' + data.items[0].formName_F);
+      // print('form id: ' + data.items[0].formName_F);
       Provider.of<RequestListProvider>(context, listen: false)
-          .setRequestList(data, 'لیست درخواست ها');
+          .setRequestList(data, 'درخواست های من');
       //return data;
     } else {
       throw Exception('Unable to fetch info from the REST API');
@@ -129,15 +143,27 @@ Future<void> getRequestList(BuildContext context) async {
 }
 
 /// Reads requested form data from the server
-Future<Map<String, dynamic>> getRequestDetails(BuildContext context) async {
-  final response = await http
-      .get(Uri.parse(mainUrl + 'api/Request/view/${SharedVars.requestID}/'));
-  print(mainUrl + 'api/Request/view/${SharedVars.requestID}/');
+Future<RequestData> getRequestDetails(BuildContext context) async {
+  Map<String, dynamic> queryParameters = {
+    'token': Provider.of<AuthProvider>(context, listen: false).authUser.token,
+  };
+
+  final response = await http.post(
+    Uri.parse(mainUrl + 'api/Request/ViewDetail/${SharedVars.requestID}'),
+    headers: <String, String>{
+      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+    },
+    body: queryParameters,
+  );
+
+  print(mainUrl + 'api/Request/ViewDetail/10');
   if (response.statusCode == 200) {
     print(utf8.decode(response.bodyBytes));
     final responseBody = utf8.decode(response.bodyBytes);
     final responseData = json.decode(responseBody);
-    final Map<String, dynamic> data = responseData;
+    RequestData data = RequestData.fromMap(responseData);
+    print('name: ' + data.history.items[0].roleTitle);
+    print('chart: ' + data.historyChart.items[0].roleTitle);
     // if (responseData['items'] != null) {
     // RequestListModel data = RequestListModel.fromMap(responseData);
     // print('form id: ' + data.items[0].formName_F);
@@ -306,6 +332,40 @@ Future<void> getErpCartableData(
       print('name: ' + data.catableData[0].formName_F!);
       Provider.of<ErpCartableProvider>(context, listen: false)
           .setCartable(data, itemData.title!);
+    } else {
+      throw Exception('Unable to fetch info from the REST API');
+    }
+  } else {
+    throw Exception('Unable to fetch info from the REST API');
+  }
+}
+
+/// Reads some data about current date from the server
+Future<void> getErpCartableData22(BuildContext context) async {
+  Map<String, dynamic> queryParameters = {
+    'token': Provider.of<AuthProvider>(context, listen: false).authUser.token,
+    'roleid': Provider.of<AuthProvider>(context, listen: false)
+        .authUser
+        .roleID, // EncryptionUtil().encryptContent(oldPassword),
+  };
+
+  final response = await http.post(
+    Uri.parse(mainUrl + 'api/Request/Messagelist/all'),
+    headers: <String, String>{
+      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+    },
+    body: queryParameters,
+  );
+
+  if (response.statusCode == 200) {
+    print(utf8.decode(response.bodyBytes));
+    final responseBody = utf8.decode(response.bodyBytes);
+    final responseData = json.decode(responseBody);
+    //FIXME: This kind of 'if' doesn't work if 'menu' not present
+    if (responseData['Result'] != null) {
+      // We deserialize read data but only use Date field for now
+      ErpCartableModel data = ErpCartableModel.fromMap(responseData);
+      print('name: ' + data.catableData[0].formName_F!);
     } else {
       throw Exception('Unable to fetch info from the REST API');
     }

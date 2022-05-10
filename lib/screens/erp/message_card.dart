@@ -11,24 +11,24 @@ import 'package:websafe_svg/websafe_svg.dart';
 import '../../../constants.dart';
 import '../../../extensions.dart';
 
-class RequestCard extends StatefulWidget {
-  RequestCard({
+class MessageCard extends StatefulWidget {
+  MessageCard({
     Key? key,
     this.isActive = true,
-    this.request,
+    this.cartableData,
     this.press,
   }) : super(key: key);
 
   final bool? isActive;
-  final Request? request;
+  final ErpCartableData? cartableData;
   final VoidCallback? press;
   bool? value = false;
 
   @override
-  State<RequestCard> createState() => _RequestCardState();
+  State<MessageCard> createState() => _RequestCardState();
 }
 
-class _RequestCardState extends State<RequestCard> {
+class _RequestCardState extends State<MessageCard> {
   @override
   Widget build(BuildContext context) {
     //  Here the shadow is not showing properly
@@ -66,7 +66,7 @@ class _RequestCardState extends State<RequestCard> {
                   child: Row(
                     children: [
                       Image.network(
-                        mainUrl + widget.request!.icon,
+                        mainUrl + widget.cartableData!.icon!,
                         width: 35,
                         height: 35,
                       ),
@@ -74,13 +74,21 @@ class _RequestCardState extends State<RequestCard> {
                         width: SizeConfig.safeBlockHorizontal! * 2 * zarib1,
                         child: RotatedBox(
                           quarterTurns: 3,
-                          child: Text(widget.request!.formName_F),
+                          child: Text(widget.cartableData!.formName_F!),
                         ),
                       ),
                       const SizedBox(
-                        width: 50,
+                        width: 20,
                       ),
-                      Text('تاریخ: ' + widget.request!.date),
+                      CircleAvatar(
+                        radius: 20,
+                        backgroundImage:
+                            NetworkImage(widget.cartableData!.profile!),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Text(widget.cartableData!.requester!),
                     ],
                   ),
                 ),
@@ -95,11 +103,11 @@ class _RequestCardState extends State<RequestCard> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          Text('اولویت: ' + widget.request!.priority),
+                          Text('اولویت: ' + widget.cartableData!.priority!),
                           SizedBox(
-                            width: 50,
+                            width: 20,
                           ),
-                          Text('وضعیت: ' + widget.request!.state)
+                          Text('تاریخ: ' + widget.cartableData!.date!),
                         ],
                       ),
                     ],

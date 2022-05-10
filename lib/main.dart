@@ -71,6 +71,7 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider(create: (_) => MenuProvider()),
           ChangeNotifierProvider(create: (_) => ErpMenuProvider()),
           ChangeNotifierProvider(create: (_) => CartableProvider()),
+          ChangeNotifierProvider(create: (_) => ErpCartableProvider()),
           ChangeNotifierProvider(create: (_) => RequestListProvider()),
           ChangeNotifierProvider(create: (_) => ChangeProvider()),
         ],

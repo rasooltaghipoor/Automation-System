@@ -1,6 +1,7 @@
 import 'package:automation_system/components/side_drawer_menu.dart';
 import 'package:automation_system/models/User.dart';
 import 'package:automation_system/providers/auth.dart';
+import 'package:automation_system/providers/change_provider.dart';
 import 'package:automation_system/providers/menu_provider.dart';
 import 'package:automation_system/providers/user_provider.dart';
 import 'package:automation_system/responsive.dart';
@@ -80,14 +81,13 @@ class _SideMenuState extends State<ErpSideMenu> {
                   //     );
                   //   },
                   // ),
-
+                  const SizedBox(height: kDefaultPadding),
                   ListTile(
                     leading: CircleAvatar(
-                      child: user.profilePic != null
-                          //FIXME: network image not loaded!
-                          ? Image.network(mainUrl + user.profilePic!)
+                      backgroundImage: user.profilePic != null
+                          ? NetworkImage(mainUrl + user.profilePic!)
                           // ? Image.asset("assets/images/user_3.png")
-                          : Image.asset("assets/images/user_3.png"),
+                          : NetworkImage("assets/images/user_3.png"),
                       //backgroundColor: Colors.purple,
                     ),
                     title: user.name != null
@@ -99,7 +99,7 @@ class _SideMenuState extends State<ErpSideMenu> {
                     trailing: Icon(Icons.add_a_photo),
                   ),
 
-                  const SizedBox(height: kDefaultPadding * 2),
+                  const SizedBox(height: kDefaultPadding),
                   // Menu Items
                   Consumer<ErpMenuProvider>(
                     builder: (context, menuModel, child) {
@@ -119,8 +119,16 @@ class _SideMenuState extends State<ErpSideMenu> {
                                   setState(() {
                                     _activeIndex = 0;
                                   });
-                                  getErpCartableData(
-                                      context, menuModel.sideMenu!.menuData[0]);
+                                  // getErpCartableData(
+                                  //     context, menuModel.sideMenu!.menuData[0]);
+                                  Map<String, dynamic> params =
+                                      <String, dynamic>{
+                                    "itemData": menuModel.sideMenu!.menuData[0]
+                                  };
+                                  Provider.of<ChangeProvider>(context,
+                                          listen: false)
+                                      .setMidScreen(
+                                          ScreenName.messageList, params);
                                 },
                                 title: menuModel.sideMenu != null
                                     ? menuModel.sideMenu!.menuData[0].title
@@ -137,8 +145,16 @@ class _SideMenuState extends State<ErpSideMenu> {
                                   setState(() {
                                     _activeIndex = 1;
                                   });
-                                  getErpCartableData(
-                                      context, menuModel.sideMenu!.menuData[1]);
+                                  // getErpCartableData(
+                                  //     context, menuModel.sideMenu!.menuData[1]);
+                                  Map<String, dynamic> params =
+                                      <String, dynamic>{
+                                    "param": menuModel.sideMenu!.menuData[1]
+                                  };
+                                  Provider.of<ChangeProvider>(context,
+                                          listen: false)
+                                      .setMidScreen(
+                                          ScreenName.messageList, params);
                                 },
                                 title: menuModel.sideMenu != null
                                     ? menuModel.sideMenu!.menuData[1].title
@@ -155,8 +171,16 @@ class _SideMenuState extends State<ErpSideMenu> {
                                   setState(() {
                                     _activeIndex = 2;
                                   });
-                                  getErpCartableData(
-                                      context, menuModel.sideMenu!.menuData[2]);
+                                  // getErpCartableData(
+                                  //     context, menuModel.sideMenu!.menuData[2]);
+                                  Map<String, dynamic> params =
+                                      <String, dynamic>{
+                                    "param": menuModel.sideMenu!.menuData[2]
+                                  };
+                                  Provider.of<ChangeProvider>(context,
+                                          listen: false)
+                                      .setMidScreen(
+                                          ScreenName.messageList, params);
                                 },
                                 title: menuModel.sideMenu != null
                                     ? menuModel.sideMenu!.menuData[2].title
@@ -176,8 +200,14 @@ class _SideMenuState extends State<ErpSideMenu> {
                               setState(() {
                                 _activeIndex = 3;
                               });
-                              getErpCartableData(
-                                  context, menuModel.sideMenu!.menuData[3]);
+                              // getErpCartableData(
+                              //     context, menuModel.sideMenu!.menuData[3]);
+                              Map<String, dynamic> params = <String, dynamic>{
+                                "param": ''
+                              };
+                              Provider.of<ChangeProvider>(context,
+                                      listen: false)
+                                  .setMidScreen(ScreenName.requestList, params);
                             },
                             title: menuModel.sideMenu != null
                                 ? menuModel.sideMenu!.menuData[3].title
