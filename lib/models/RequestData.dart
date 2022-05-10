@@ -55,7 +55,7 @@ class RequestDetail {
     Map<String, dynamic> items = parsedJson['items'][0];
     return RequestDetail(
       parsedJson['Requestid'],
-      parsedJson['Requestid'],
+      parsedJson['formName_F'],
       parsedJson['NetworkUser'],
       parsedJson['title'],
       items,

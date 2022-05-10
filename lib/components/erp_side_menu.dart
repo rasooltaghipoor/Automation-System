@@ -81,7 +81,7 @@ class _SideMenuState extends State<ErpSideMenu> {
                   //     );
                   //   },
                   // ),
-
+                  const SizedBox(height: kDefaultPadding),
                   ListTile(
                     leading: CircleAvatar(
                       backgroundImage: user.profilePic != null
@@ -99,7 +99,7 @@ class _SideMenuState extends State<ErpSideMenu> {
                     trailing: Icon(Icons.add_a_photo),
                   ),
 
-                  const SizedBox(height: kDefaultPadding * 2),
+                  const SizedBox(height: kDefaultPadding),
                   // Menu Items
                   Consumer<ErpMenuProvider>(
                     builder: (context, menuModel, child) {

@@ -59,7 +59,7 @@ class _RequestCardState extends State<RequestCard> {
               //runSpacing: kDefaultPaddingSmall,
               children: [
                 Container(
-                  color: Colors.amber[100],
+                  // color: Colors.amber[100],
                   width: Responsive.isDesktop(context)
                       ? SizeConfig.safeBlockHorizontal! * 90
                       : SizeConfig.safeBlockHorizontal! * 90,
@@ -85,7 +85,7 @@ class _RequestCardState extends State<RequestCard> {
                   ),
                 ),
                 Container(
-                  color: Colors.white70,
+                  // color: Colors.white70,
                   width: Responsive.isDesktop(context)
                       ? SizeConfig.safeBlockHorizontal! * 90
                       : SizeConfig.safeBlockHorizontal! * 90,

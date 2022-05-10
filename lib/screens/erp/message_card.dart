@@ -59,7 +59,7 @@ class _RequestCardState extends State<MessageCard> {
               //runSpacing: kDefaultPaddingSmall,
               children: [
                 Container(
-                  color: Colors.amber[100],
+                  // color: Colors.amber[100],
                   width: Responsive.isDesktop(context)
                       ? SizeConfig.safeBlockHorizontal! * 90
                       : SizeConfig.safeBlockHorizontal! * 90,
@@ -78,14 +78,22 @@ class _RequestCardState extends State<MessageCard> {
                         ),
                       ),
                       const SizedBox(
-                        width: 50,
+                        width: 20,
                       ),
-                      Text('تاریخ: ' + widget.cartableData!.date!),
+                      CircleAvatar(
+                        radius: 20,
+                        backgroundImage:
+                            NetworkImage(widget.cartableData!.profile!),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Text(widget.cartableData!.requester!),
                     ],
                   ),
                 ),
                 Container(
-                  color: Colors.white70,
+                  // color: Colors.white70,
                   width: Responsive.isDesktop(context)
                       ? SizeConfig.safeBlockHorizontal! * 90
                       : SizeConfig.safeBlockHorizontal! * 90,
@@ -96,10 +104,10 @@ class _RequestCardState extends State<MessageCard> {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           Text('اولویت: ' + widget.cartableData!.priority!),
-                          // SizedBox(
-                          //   width: 50,
-                          // ),
-                          // Text('وضعیت: ' + widget.cartableData!.state!)
+                          SizedBox(
+                            width: 20,
+                          ),
+                          Text('تاریخ: ' + widget.cartableData!.date!),
                         ],
                       ),
                     ],

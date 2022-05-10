@@ -1,3 +1,6 @@
+import 'package:automation_system/constants.dart';
+import 'package:automation_system/models/RequestData.dart';
+import 'package:automation_system/models/RequestList.dart';
 import 'package:automation_system/providers/change_provider.dart';
 import 'package:automation_system/screens/erp/timeline.dart';
 import 'package:automation_system/screens/erp/timeline_widget.dart';
@@ -9,7 +12,7 @@ import 'package:provider/provider.dart';
 class ViewRequestScreen extends StatelessWidget {
   // final String title;
   // final String listTitle;
-  final Future<Map<String, dynamic>>? itemData;
+  final Future<RequestData>? itemData;
 
   const ViewRequestScreen({Key? key, this.itemData}) : super(key: key);
 
@@ -21,7 +24,7 @@ class ViewRequestScreen extends StatelessWidget {
         body: Center(
             child: Directionality(
       textDirection: TextDirection.rtl,
-      child: FutureBuilder<Map<String, dynamic>>(
+      child: FutureBuilder<RequestData>(
         future: itemData,
         builder: (context, snapshot) {
           if (snapshot.hasError) print(snapshot.error);
@@ -47,13 +50,14 @@ class ItemList extends StatelessWidget {
     'علی',
     'نقی'
   ];
-  final Map<String, dynamic>? itemData;
+  final RequestData? itemData;
 
   ItemList({Key? key, this.itemData}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return itemData!.isEmpty
+    // TODO Consider something to check in return statement
+    return itemData! == null
         ? Text(
             'داده ای برای نمایش وجود ندارد',
             style: TextStyle(fontSize: SizeConfig.safeBlockHorizontal! * 4),
@@ -62,20 +66,40 @@ class ItemList extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Container(
-                // The header will be here
-                padding: EdgeInsets.all(SizeConfig.safeBlockHorizontal! * 3),
-                decoration: BoxDecoration(
-                    color: SharedVars.headerColor,
-                    borderRadius: BorderRadius.all(
-                        Radius.circular(SizeConfig.safeBlockHorizontal! * 4))),
-                child: Text(
-                  SharedVars.formNameF,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontFamily: 'Koodak',
-                    fontSize: SizeConfig.safeBlockHorizontal! * 4,
-                  ),
+                // // The header will be here
+                padding: EdgeInsets.all(10),
+                // decoration: BoxDecoration(
+                //     color: SharedVars.headerColor,
+                //     borderRadius: BorderRadius.all(
+                //         Radius.circular(SizeConfig.safeBlockHorizontal! * 4))),
+                child: Row(
+                  children: [
+                    Image.network(
+                      mainUrl + itemData!.requestDetails.icon,
+                      width: 35,
+                      height: 35,
+                    ),
+                    Text(itemData!.requestDetails.formName_F),
+                    const SizedBox(
+                      width: 20,
+                    ),
+                    SizedBox(
+                      width: 200,
+                      // height: 100,
+                      child: ListTile(
+                          leading: CircleAvatar(
+                            backgroundImage: itemData!.requestDetails.profile !=
+                                    null
+                                ? NetworkImage(
+                                    mainUrl + itemData!.requestDetails.profile)
+                                // ? Image.asset("assets/images/user_3.png")
+                                : NetworkImage("assets/images/user_3.png"),
+                            //backgroundColor: Colors.purple,
+                          ),
+                          title: Text(itemData!.requestDetails.networkUser),
+                          subtitle: Text(itemData!.requestDetails.title)),
+                    ),
+                  ],
                 ),
               ),
               ElevatedButton(
@@ -91,21 +115,25 @@ class ItemList extends StatelessWidget {
               Expanded(
                 // The ListView
                 child: ListView.builder(
-                  itemCount: itemData!.length,
+                  itemCount: itemData!.requestDetails.items.length,
                   itemBuilder: (context, index) {
                     return Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Text(
-                            itemData!.keys.elementAt(index),
+                            itemData!.requestDetails.items.keys
+                                .elementAt(index),
                           ),
                           const SizedBox(width: 20),
-                          Text(itemData!.values.elementAt(index)),
+                          Text(
+                            itemData!.requestDetails.items.values
+                                .elementAt(index),
+                          ),
                         ]);
                   },
                 ),
               ),
-              ProcessTimeline(2, _processes),
+              ProcessTimeline(2, _processes, itemData!.historyChart.items),
             ],
           );
   }

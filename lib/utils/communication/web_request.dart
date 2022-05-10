@@ -143,20 +143,20 @@ Future<void> getRequestList(BuildContext context) async {
 }
 
 /// Reads requested form data from the server
-Future<Map<String, dynamic>> getRequestDetails(BuildContext context) async {
+Future<RequestData> getRequestDetails(BuildContext context) async {
   Map<String, dynamic> queryParameters = {
     'token': Provider.of<AuthProvider>(context, listen: false).authUser.token,
   };
 
   final response = await http.post(
-    Uri.parse(mainUrl + 'api/Request/ViewDetail/5'),
+    Uri.parse(mainUrl + 'api/Request/ViewDetail/${SharedVars.requestID}'),
     headers: <String, String>{
       'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
     },
     body: queryParameters,
   );
 
-  print(mainUrl + 'api/Request/ViewDetail/${SharedVars.requestID}');
+  print(mainUrl + 'api/Request/ViewDetail/10');
   if (response.statusCode == 200) {
     print(utf8.decode(response.bodyBytes));
     final responseBody = utf8.decode(response.bodyBytes);
@@ -170,7 +170,7 @@ Future<Map<String, dynamic>> getRequestDetails(BuildContext context) async {
 
     // ignore: unnecessary_null_comparison
     if (data != null) {
-      return Map();
+      return data;
     } else {
       throw Exception('Unable to fetch info from the REST API');
     }

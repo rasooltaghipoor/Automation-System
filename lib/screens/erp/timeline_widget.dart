@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import 'package:automation_system/models/RequestData.dart';
+import 'package:automation_system/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:timelines/timelines.dart';
 
@@ -10,10 +12,12 @@ const inProgressColor = Color(0xff5ec792);
 const todoColor = Color(0xffd1d2d7);
 
 class ProcessTimeline extends StatelessWidget {
-  int _processIndex = 2;
+  int _processIndex;
   List<String>? _processes;
+  List<HistoryChartItems> items;
+  final ScrollController _mycontroller = ScrollController();
 
-  ProcessTimeline(this._processIndex, this._processes, {Key? key})
+  ProcessTimeline(this._processIndex, this._processes, this.items, {Key? key})
       : super(key: key);
 
   Color getColor(int index) {
@@ -28,10 +32,17 @@ class ProcessTimeline extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    _processIndex = 0;
+    for (HistoryChartItems item in items) {
+      if (item.command == 'منتظر بررسی') break;
+      _processIndex++;
+    }
     return Expanded(
       child: Timeline.tileBuilder(
+        controller: _mycontroller,
         theme: TimelineThemeData(
-          direction: Axis.horizontal,
+          direction:
+              Responsive.isDesktop(context) ? Axis.horizontal : Axis.vertical,
           connectorTheme: const ConnectorThemeData(
             space: 30.0,
             thickness: 5.0,
@@ -40,29 +51,62 @@ class ProcessTimeline extends StatelessWidget {
         builder: TimelineTileBuilder.connected(
           connectionDirection: ConnectionDirection.before,
           itemExtentBuilder: (_, __) =>
-              MediaQuery.of(context).size.width / _processes!.length,
+              MediaQuery.of(context).size.width * 0.8 / items.length,
           oppositeContentsBuilder: (context, index) {
             return Padding(
-              padding: const EdgeInsets.only(bottom: 15.0),
-              child: Image.asset(
-                // 'assets/images/process_timeline/status${index + 1}.png',
-                'assets/images/user_1.png',
-                width: 50.0,
-                color: getColor(index),
-              ),
-            );
+                padding: const EdgeInsets.only(bottom: 15.0),
+                child: SizedBox(
+                  height: 35,
+                  // color: Colors.amber,
+                  child: Column(
+                    children: [
+                      Text(
+                        items[index].userName,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: getColor(index),
+                        ),
+                      ),
+                      Text(
+                        items[index].roleTitle,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: getColor(index),
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+
+                // Image.asset(
+                //   // 'assets/images/process_timeline/status${index + 1}.png',
+                //   'assets/images/user_1.png',
+                //   width: 50.0,
+                //   color: getColor(index),
+                // ),
+                );
           },
           contentsBuilder: (context, index) {
             return Padding(
-              padding: const EdgeInsets.only(top: 15.0),
-              child: Text(
-                _processes![index],
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: getColor(index),
-                ),
-              ),
-            );
+                padding: const EdgeInsets.only(top: 15.0),
+                child: Column(
+                  children: [
+                    Text(
+                      items[index].date,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: getColor(index),
+                      ),
+                    ),
+                    Text(
+                      items[index].command,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: getColor(index),
+                      ),
+                    ),
+                  ],
+                ));
           },
           indicatorBuilder: (_, index) {
             var color;
@@ -112,7 +156,7 @@ class ProcessTimeline extends StatelessWidget {
                     size: const Size(15.0, 15.0),
                     painter: _BezierPainter(
                       color: color,
-                      drawEnd: index < _processes!.length - 1,
+                      drawEnd: index < items.length - 1,
                     ),
                   ),
                   OutlinedDotIndicator(
@@ -153,7 +197,7 @@ class ProcessTimeline extends StatelessWidget {
               return null;
             }
           },
-          itemCount: _processes!.length,
+          itemCount: items.length,
         ),
       ),
     );
