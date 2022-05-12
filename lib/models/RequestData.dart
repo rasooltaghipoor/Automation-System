@@ -2,8 +2,10 @@ class RequestData {
   RequestDetail requestDetails;
   History history;
   HistoryChart historyChart;
+  String editable;
 
-  RequestData(this.requestDetails, this.history, this.historyChart);
+  RequestData(
+      this.requestDetails, this.history, this.historyChart, this.editable);
 
   factory RequestData.fromMap(Map<String, dynamic> parsedJson) {
     var list = parsedJson['Request'] as List;
@@ -16,10 +18,7 @@ class RequestData {
     HistoryChart historyChartData = HistoryChart.fromMap(list3[0]);
 
     return RequestData(
-      requestDtls,
-      historyData,
-      historyChartData,
-    );
+        requestDtls, historyData, historyChartData, parsedJson['editable']);
   }
 }
 

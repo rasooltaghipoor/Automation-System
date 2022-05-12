@@ -149,14 +149,14 @@ Future<RequestData> getRequestDetails(BuildContext context) async {
   };
 
   final response = await http.post(
-    Uri.parse(mainUrl + 'api/Request/ViewDetail/${SharedVars.requestID}'),
+    Uri.parse(mainUrl + 'api/Request/ViewDetail2/5'),
     headers: <String, String>{
       'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
     },
     body: queryParameters,
   );
 
-  print(mainUrl + 'api/Request/ViewDetail/10');
+  print(mainUrl + 'api/Request/ViewDetail2/5');
   if (response.statusCode == 200) {
     print(utf8.decode(response.bodyBytes));
     final responseBody = utf8.decode(response.bodyBytes);

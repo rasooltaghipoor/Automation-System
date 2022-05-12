@@ -9,16 +9,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:persian_datetime_picker/persian_datetime_picker.dart';
 
-class DynamicEditForm extends StatefulWidget {
+class DynamicEditWidget extends StatefulWidget {
   Map<String, dynamic>? itemsData;
   bool? isEdit;
-  DynamicEditForm({this.isEdit, this.itemsData, Key? key}) : super(key: key);
+  DynamicEditWidget({this.isEdit, this.itemsData, Key? key}) : super(key: key);
 
   @override
-  _View2State createState() => _View2State();
+  _State createState() => _State();
 }
 
-class _View2State extends State<DynamicEditForm> {
+class _State extends State<DynamicEditWidget> {
   Map<String, TextEditingController> _controllerMap = Map();
   Map<String, String> _dropDownMap = Map();
   // Map<String, int> _listboxIndices = Map();
