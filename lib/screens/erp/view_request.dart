@@ -1,7 +1,9 @@
 import 'package:automation_system/constants.dart';
+import 'package:automation_system/models/DynamicForm.dart';
 import 'package:automation_system/models/RequestData.dart';
 import 'package:automation_system/models/RequestList.dart';
 import 'package:automation_system/providers/change_provider.dart';
+import 'package:automation_system/screens/erp/dynamic_edit_widget.dart';
 import 'package:automation_system/screens/erp/timeline.dart';
 import 'package:automation_system/screens/erp/timeline_widget.dart';
 import 'package:automation_system/utils/SizeConfiguration.dart';
@@ -14,7 +16,7 @@ class ViewRequestScreen extends StatelessWidget {
   // final String listTitle;
   final Future<RequestData>? itemData;
 
-  const ViewRequestScreen({Key? key, this.itemData}) : super(key: key);
+  ViewRequestScreen({Key? key, this.itemData}) : super(key: key);
 
   // final items = Product.getProducts();
   @override
@@ -51,21 +53,28 @@ class ItemList extends StatelessWidget {
     'نقی'
   ];
   final RequestData? itemData;
+  DynamicEditWidget? dynamicEditWidget;
 
   ItemList({Key? key, this.itemData}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    SharedVars.formNameE = itemData!.requestDetails.formName_E;
+    dynamicEditWidget = DynamicEditWidget(
+      isEdit: false,
+      itemsData: itemData!.requestDetails.items,
+    );
     // TODO Consider something to check in return statement
     return itemData! == null
         ? Text(
             'داده ای برای نمایش وجود ندارد',
             style: TextStyle(fontSize: SizeConfig.safeBlockHorizontal! * 4),
           )
-        : Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+        : ListView(
+            // crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Container(
+                color: Colors.green[100],
                 // // The header will be here
                 padding: EdgeInsets.all(10),
                 // decoration: BoxDecoration(
@@ -102,38 +111,81 @@ class ItemList extends StatelessWidget {
                   ],
                 ),
               ),
-              ElevatedButton(
-                  onPressed: () {
-                    Map<String, dynamic> params = <String, dynamic>{
-                      'edit': true,
-                      'itemData': itemData,
-                    };
-                    Provider.of<ChangeProvider>(context, listen: false)
-                        .setMidScreen(ScreenName.editRequest, params);
-                  },
-                  child: const Text('ویرایش درخواست')),
-              Expanded(
-                // The ListView
-                child: ListView.builder(
-                  itemCount: itemData!.requestDetails.items.length,
-                  itemBuilder: (context, index) {
-                    return Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text(
-                            itemData!.requestDetails.items.keys
-                                .elementAt(index),
-                          ),
-                          const SizedBox(width: 20),
-                          Text(
-                            itemData!.requestDetails.items.values
-                                .elementAt(index),
-                          ),
-                        ]);
-                  },
-                ),
+              // ElevatedButton(
+              //     onPressed: () {
+              //       Map<String, dynamic> params = <String, dynamic>{
+              //         'edit': true,
+              //         'itemData': itemData,
+              //       };
+              //       Provider.of<ChangeProvider>(context, listen: false)
+              //           .setMidScreen(ScreenName.editRequest, params);
+              //     },
+              //     child: const Text('ویرایش درخواست')),
+              Container(
+                color: Colors.blue[100],
+                child: dynamicEditWidget!,
               ),
-              ProcessTimeline(2, _processes, itemData!.historyChart.items),
+              // Expanded(
+              //   // The ListView
+              //   child: ListView.builder(
+              //     itemCount: itemData!.requestDetails.items.length,
+              //     itemBuilder: (context, index) {
+              //       return Row(
+              //           mainAxisAlignment: MainAxisAlignment.start,
+              //           children: [
+              //             Text(
+              //               itemData!.requestDetails.items.keys
+              //                   .elementAt(index),
+              //             ),
+              //             const SizedBox(width: 20),
+              //             Text(
+              //               itemData!.requestDetails.items.values
+              //                   .elementAt(index),
+              //             ),
+              //           ]);
+              //     },
+              //   ),
+              // ),
+              Container(
+                color: Colors.yellow[100],
+                height: 200,
+                // width: 700,
+                child: ProcessTimeline(
+                    2, _processes, itemData!.historyChart.items),
+              ),
+              TextFormField(),
+              Container(
+                  child: ElevatedButton(
+                onPressed: () {
+                  bool isEdited = false;
+
+                  Map<String, String> items = <String, String>{};
+                  for (FormItem listItem in dynamicEditWidget!.formItems) {
+                    if (listItem.control == 'textbox') {
+                      items[listItem.controlName] = dynamicEditWidget!
+                          .controllerMap[listItem.controlName]!.text;
+                    } else if (listItem.control == 'listbox') {
+                      items[listItem.controlName] =
+                          dynamicEditWidget!.dropDownMap[listItem.controlName]!;
+                    }
+                  }
+
+                  for (String key in items.keys) {
+                    if (items[key] != itemData!.requestDetails.items[key]) {
+                      isEdited = true;
+                      break;
+                    }
+                  }
+
+                  print(isEdited.toString() + '   ++++++++++++');
+
+                  // // String jsonTutorial = jsonEncode(items);
+                  // print(jsonEncode(items));
+                  // sendFormData(context, jsonEncode(items));
+                },
+                child: Text('تایید'),
+              )),
+              // )
             ],
           );
   }

@@ -25,6 +25,7 @@ class RequestData {
 class RequestDetail {
   String requestID;
   String formName_F;
+  String formName_E;
   String networkUser;
   String title;
   Map<String, dynamic> items;
@@ -39,6 +40,7 @@ class RequestDetail {
   RequestDetail(
       this.requestID,
       this.formName_F,
+      this.formName_E,
       this.networkUser,
       this.title,
       this.items,
@@ -55,6 +57,7 @@ class RequestDetail {
     return RequestDetail(
       parsedJson['Requestid'],
       parsedJson['formName_F'],
+      parsedJson['formName_E'],
       parsedJson['NetworkUser'],
       parsedJson['title'],
       items,

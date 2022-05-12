@@ -70,7 +70,7 @@ class ProcessTimeline extends StatelessWidget {
                       Text(
                         items[index].roleTitle,
                         style: TextStyle(
-                          fontWeight: FontWeight.bold,
+                          // fontWeight: FontWeight.bold,
                           color: getColor(index),
                         ),
                       ),
@@ -94,7 +94,7 @@ class ProcessTimeline extends StatelessWidget {
                     Text(
                       items[index].date,
                       style: TextStyle(
-                        fontWeight: FontWeight.bold,
+                        // fontWeight: FontWeight.bold,
                         color: getColor(index),
                       ),
                     ),
