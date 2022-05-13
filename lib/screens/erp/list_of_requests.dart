@@ -138,9 +138,9 @@ class _ListOfEmailsState extends State<ListOfRequests> {
                                     requestListModel.requestList!.items.length,
                                 // On mobile this active dosen't mean anything
                                 itemBuilder: (context, index) => RequestCard(
-                                      isActive: Responsive.isMobile(context)
-                                          ? false
-                                          : index == 0,
+                                      // isActive: Responsive.isMobile(context)
+                                      //     ? false
+                                      //     : index == 0,
                                       request: requestListModel
                                           .requestList!.items[index],
                                       press: () {

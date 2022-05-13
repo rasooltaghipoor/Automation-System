@@ -5,10 +5,12 @@ class RequestMenuModel {
   RequestMenuModel(this.title, this.items);
   factory RequestMenuModel.fromMap(Map<String, dynamic> parsedJson) {
     var list = parsedJson['RequestType'] as List;
+    var listItem = list[0];
+    var items = listItem['items'] as List;
     //print(list.runtimeType);
     List<RequestItem> itemList =
-        list[0]['items'].map((i) => RequestItem.fromMap(i)).toList();
-    return RequestMenuModel(list[0]['title'], itemList);
+        items.map((i) => RequestItem.fromMap(i)).toList();
+    return RequestMenuModel(listItem['title'], itemList);
   }
 }
 

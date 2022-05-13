@@ -44,6 +44,7 @@ class _View2State extends State<DynamicEditForm> {
 
   Widget _futureBuilder() {
     // SharedVars.formNameE = 'ConsumBuy';
+    print(' ************** ' + SharedVars.formNameE);
     return FutureBuilder(
       //TODO: This fucntion must be called only when no data is available!!
       future: getFormDetails(SharedVars.formNameE),
@@ -65,7 +66,13 @@ class _View2State extends State<DynamicEditForm> {
 
         return Column(
           children: [
-            Text(data.formName_F),
+            Text(
+              data.formName_F,
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            SizedBox(
+              height: 20,
+            ),
             ListView.builder(
               shrinkWrap: true,
               itemCount: data.items.length,
@@ -202,37 +209,46 @@ class _View2State extends State<DynamicEditForm> {
   }
 
   Widget _okButton() {
-    return ElevatedButton(
-      onPressed: () async {
-        // String text = _controllerMap.values
-        //     .where((element) => element.text != "")
-        //     .fold("", (acc, element) => acc += "${element.text}\n");
-        // await _showUpdatedDialog(text);
+    return Container(
+        width: 200,
+        height: 60,
+        child: ElevatedButton(
+          onPressed: () async {
+            // String text = _controllerMap.values
+            //     .where((element) => element.text != "")
+            //     .fold("", (acc, element) => acc += "${element.text}\n");
+            // await _showUpdatedDialog(text);
 
-        // setState(() {
-        //   _controllerMap.forEach((key, controller) {
-        //     // get the index of original text
-        //     int index = _controllerMap.keys.toList().indexOf(key);
-        //     key = controller.text;
-        //     _data[index] = controller.text;
-        //   });
-        // });
-        Map<String, String> items = <String, String>{};
-        for (FormItem listItem in _formData!.items) {
-          if (listItem.control == 'textbox') {
-            items[listItem.controlName] =
-                _getControllerOf(listItem.controlName).text;
-          } else if (listItem.control == 'listbox') {
-            items[listItem.controlName] = _dropDownMap[listItem.controlName]!;
-          }
-        }
+            // setState(() {
+            //   _controllerMap.forEach((key, controller) {
+            //     // get the index of original text
+            //     int index = _controllerMap.keys.toList().indexOf(key);
+            //     key = controller.text;
+            //     _data[index] = controller.text;
+            //   });
+            // });
+            Map<String, String> items = <String, String>{};
+            for (FormItem listItem in _formData!.items) {
+              if (listItem.control == 'textbox') {
+                items[listItem.controlName] =
+                    _getControllerOf(listItem.controlName).text;
+              } else if (listItem.control == 'listbox') {
+                items[listItem.controlName] =
+                    _dropDownMap[listItem.controlName]!;
+              }
+            }
 
-        // String jsonTutorial = jsonEncode(items);
-        print(jsonEncode(items));
-        sendFormData(context, jsonEncode(items));
-      },
-      child: widget.isEdit! ? const Text('ویرایش') : const Text('ارسال'),
-    );
+            // String jsonTutorial = jsonEncode(items);
+            print(jsonEncode(items));
+            sendFormData(context, jsonEncode(items));
+          },
+          child: widget.isEdit!
+              ? const Text(
+                  'ویرایش',
+                  style: TextStyle(fontSize: 20),
+                )
+              : const Text('ارسال', style: TextStyle(fontSize: 20)),
+        ));
   }
 
   Future _showUpdatedDialog(String text) {
@@ -265,22 +281,21 @@ class _View2State extends State<DynamicEditForm> {
     //TODO: This line should be removed in the future
     SizeConfig().init(context);
 
-    return SafeArea(
-      child: Scaffold(
-          appBar: AppBar(
-            title: const Text(
-              "Dynamic Text Field with async",
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: Padding(
+        padding: EdgeInsets.all(50),
+        child: ListView(
+          children: [
+            Container(child: _futureBuilder()),
+            // _cancelOkButton(),
+            SizedBox(
+              height: 20,
             ),
-          ),
-          body: Directionality(
-              textDirection: TextDirection.rtl,
-              child: Column(
-                children: [
-                  Expanded(child: _futureBuilder()),
-                  // _cancelOkButton(),
-                  _okButton(),
-                ],
-              ))),
+            _okButton(),
+          ],
+        ),
+      ),
     );
   }
 }

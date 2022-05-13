@@ -14,7 +14,7 @@ import '../../../extensions.dart';
 class RequestCard extends StatefulWidget {
   RequestCard({
     Key? key,
-    this.isActive = true,
+    this.isActive = false,
     this.request,
     this.press,
   }) : super(key: key);

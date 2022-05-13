@@ -421,7 +421,7 @@ Future<RequestMenuModel> getErpRequestMenu(BuildContext context) async {
   //       .roleID, // EncryptionUtil().encryptContent(oldPassword),
   // };
 
-  final response = await http.post(
+  final response = await http.get(
     Uri.parse(mainUrl + 'api/info/RequestForm/Type'),
     headers: <String, String>{
       'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',

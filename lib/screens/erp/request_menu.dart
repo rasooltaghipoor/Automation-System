@@ -1,5 +1,6 @@
 import 'package:automation_system/models/RequestMenu.dart';
 import 'package:automation_system/providers/change_provider.dart';
+import 'package:automation_system/responsive.dart';
 import 'package:automation_system/utils/SizeConfiguration.dart';
 import 'package:automation_system/utils/shared_vars.dart';
 import 'package:flutter/cupertino.dart';
@@ -68,45 +69,51 @@ class RequestItemList extends StatelessWidget {
               Expanded(
                 // The ListView
                 child: ListView.builder(
-                  padding: const EdgeInsets.all(10),
+                  padding: Responsive.isDesktop(context)
+                      ? EdgeInsets.fromLTRB(
+                          SizeConfig.safeBlockHorizontal! * 20,
+                          1,
+                          SizeConfig.safeBlockHorizontal! * 20,
+                          1)
+                      : EdgeInsets.all(10),
                   itemCount: menuModel!.items.length,
                   itemBuilder: (context, index) {
                     return Container(
-                      width: SizeConfig.safeBlockHorizontal! * 35,
-                      height: SizeConfig.safeBlockHorizontal! * 35,
-                      padding:
-                          EdgeInsets.all(SizeConfig.safeBlockHorizontal! * 2),
+                      width: 200,
+                      height: 100,
+                      padding: EdgeInsets.all(5),
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(
-                                  SizeConfig.safeBlockHorizontal! * 4),
+                              borderRadius: BorderRadius.circular(10),
                             ),
-                            primary: Colors.blue,
+                            primary: Colors.grey[200],
                             padding: EdgeInsets.symmetric(
                                 horizontal: SizeConfig.safeBlockHorizontal!,
                                 vertical: SizeConfig.safeBlockHorizontal!),
                             textStyle: TextStyle(
-                                fontSize: SharedVars.buttonFontSize! * 0.8,
-                                fontWeight: FontWeight.bold)),
-                        child: Column(
+                              fontSize: 18,
+                            )),
+                        child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: <Widget>[
                             Icon(
                               Icons.library_books,
-                              color: Colors.white,
-                              size: SizeConfig.safeBlockHorizontal! * 12,
+                              color: Colors.blueGrey,
+                              size: SizeConfig.safeBlockHorizontal! * 4,
                             ),
-                            Text(
-                              menuModel!.items[index].title!,
-                              textAlign: TextAlign.center,
-                            ),
+                            Text(menuModel!.items[index].title!,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(color: Colors.blueGrey)),
                           ],
                         ),
                         onPressed: () {
+                          Map<String, dynamic> items = <String, dynamic>{
+                            'item': ''
+                          };
                           Map<String, dynamic> params = <String, dynamic>{
                             'edit': false,
-                            'itemData': '',
+                            'itemData': items,
                           };
                           SharedVars.formNameE = menuModel!.items[index].id!;
 
@@ -118,6 +125,62 @@ class RequestItemList extends StatelessWidget {
                   },
                 ),
               ),
+              // Expanded(
+              //     child: GridView.builder(
+              //   // physics: NeverScrollableScrollPhysics(),
+              //   // shrinkWrap: true,
+              //   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              //     crossAxisCount: 2,
+              //     crossAxisSpacing: 10.0,
+              //     mainAxisSpacing: 10.0,
+              //   ),
+              //   itemCount: menuModel!.items.length,
+              //   itemBuilder: (context, index) {
+              //     return Container(
+              //       padding:
+              //           EdgeInsets.all(SizeConfig.safeBlockHorizontal! * 10),
+              //       child: ElevatedButton(
+              //         style: ElevatedButton.styleFrom(
+              //             shape: RoundedRectangleBorder(
+              //               borderRadius: BorderRadius.circular(40),
+              //             ),
+              //             primary: Colors.blue,
+              //             padding: EdgeInsets.symmetric(
+              //                 horizontal: SizeConfig.safeBlockHorizontal!,
+              //                 vertical: SizeConfig.safeBlockHorizontal!),
+              //             textStyle: TextStyle(
+              //                 fontSize: 20, fontWeight: FontWeight.normal)),
+              //         child: Column(
+              //           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              //           children: <Widget>[
+              //             Icon(
+              //               Icons.library_books,
+              //               color: Colors.white,
+              //               size: SizeConfig.safeBlockHorizontal! * 4,
+              //             ),
+              //             Text(
+              //               menuModel!.items[index].title!,
+              //               textAlign: TextAlign.center,
+              //             ),
+              //           ],
+              //         ),
+              //         onPressed: () {
+              //           Map<String, dynamic> items = <String, dynamic>{
+              //             'item': ''
+              //           };
+              //           Map<String, dynamic> params = <String, dynamic>{
+              //             'edit': false,
+              //             'itemData': items,
+              //           };
+              //           SharedVars.formNameE = menuModel!.items[index].id!;
+
+              //           Provider.of<ChangeProvider>(context, listen: false)
+              //               .setMidScreen(ScreenName.editRequest, params);
+              //         },
+              //       ),
+              //     );
+              //   },
+              // ))
             ],
           );
   }

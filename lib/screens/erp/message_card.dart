@@ -14,7 +14,7 @@ import '../../../extensions.dart';
 class MessageCard extends StatefulWidget {
   MessageCard({
     Key? key,
-    this.isActive = true,
+    this.isActive = false,
     this.cartableData,
     this.press,
   }) : super(key: key);

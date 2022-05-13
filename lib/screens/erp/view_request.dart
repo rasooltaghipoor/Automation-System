@@ -84,7 +84,7 @@ class ItemList extends StatelessWidget {
             // crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Container(
-                color: Colors.green[100],
+                color: Colors.blue[100],
                 // // The header will be here
                 padding: EdgeInsets.all(10),
                 // decoration: BoxDecoration(
@@ -132,7 +132,8 @@ class ItemList extends StatelessWidget {
               //     },
               //     child: const Text('ویرایش درخواست')),
               Container(
-                color: Colors.blue[100],
+                padding: EdgeInsets.all(10),
+                color: Colors.blue[50],
                 child: dynamicEditWidget!,
               ),
               // Expanded(
@@ -157,14 +158,8 @@ class ItemList extends StatelessWidget {
               //   ),
               // ),
               Container(
-                color: Colors.yellow[100],
-                height: 200,
-                // width: 700,
-                child: ProcessTimeline(
-                    2, _processes, itemData!.historyChart.items),
-              ),
-              Container(
-                color: Colors.orange[100],
+                padding: EdgeInsets.all(10),
+                color: Colors.blue[50],
                 child: itemData!.canReply == 'true'
                     ? Column(
                         children: [
@@ -173,7 +168,7 @@ class ItemList extends StatelessWidget {
                             autovalidateMode: AutovalidateMode.always,
                             decoration: const InputDecoration(
                               icon: Icon(Icons.person),
-                              hintText: 'What do people call you?',
+                              hintText: '',
                               labelText: 'توضیحات',
                             ),
                             onSaved: (String? value) {
@@ -187,6 +182,9 @@ class ItemList extends StatelessWidget {
                             //       : null;
                             // },
                           ),
+                          SizedBox(
+                            height: 20,
+                          ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: getButtons(context),
@@ -194,6 +192,14 @@ class ItemList extends StatelessWidget {
                         ],
                       )
                     : const Text('امکان پاسخ گویی برای شما میسر نمی باشد'),
+              ),
+              Container(
+                padding: EdgeInsets.all(10),
+                // color: Colors.yellow[100],
+                height: 250,
+                // width: 700,
+                child: ProcessTimeline(
+                    2, _processes, itemData!.historyChart.items),
               ),
               // )
             ],

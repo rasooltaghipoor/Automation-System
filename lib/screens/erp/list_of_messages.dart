@@ -143,9 +143,9 @@ class _ListOfEmailsState extends State<ListOfMessages> {
                                     cartablrModel.cartable!.catableData.length,
                                 // On mobile this active dosen't mean anything
                                 itemBuilder: (context, index) => MessageCard(
-                                      isActive: Responsive.isMobile(context)
-                                          ? false
-                                          : index == 0,
+                                      // isActive: Responsive.isMobile(context)
+                                      //     ? false
+                                      //     : index == 0,
                                       cartableData: cartablrModel
                                           .cartable!.catableData[index],
                                       press: () {
