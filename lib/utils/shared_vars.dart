@@ -2,6 +2,7 @@ import 'package:automation_system/models/DynamicForm.dart';
 import 'package:flutter/material.dart';
 
 import '../models/ReplyButtons.dart';
+import '../models/UserRoles.dart';
 
 class SharedVars {
   // Some colors
@@ -34,6 +35,7 @@ class SharedVars {
 
   static Map<String, ListBoxItems> listBoxItemsMap = <String, ListBoxItems>{};
   static ErpReplyButtonsModel? replyButtons;
+  static UserRoleModel? userRoles;
 
   static var universities = {
     'فنی مهندسی': '1',

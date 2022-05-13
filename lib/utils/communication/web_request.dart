@@ -10,6 +10,7 @@ import 'package:automation_system/models/RequestData.dart';
 import 'package:automation_system/models/RequestList.dart';
 import 'package:automation_system/models/RequestMenu.dart';
 import 'package:automation_system/models/User.dart';
+import 'package:automation_system/models/UserRoles.dart';
 import 'package:automation_system/providers/auth.dart';
 import 'package:automation_system/providers/cartable_provider.dart';
 import 'package:automation_system/providers/menu_provider.dart';
@@ -404,6 +405,39 @@ Future<void> getErpReplyButtons(BuildContext context) async {
       // We deserialize read data but only use Date field for now
       SharedVars.replyButtons = ErpReplyButtonsModel.fromMap(responseData);
       print(SharedVars.replyButtons!.itemsData[0].cammandTitle);
+    } else {
+      throw Exception('Unable to fetch info from the REST API');
+    }
+  } else {
+    throw Exception('Unable to fetch info from the REST API');
+  }
+}
+
+/// Reads some data about current date from the server
+Future<void> getUserRoles(BuildContext context) async {
+  Map<String, dynamic> queryParameters = {
+    // 'token': Provider.of<AuthProvider>(context, listen: false).authUser.token,
+    'token': Provider.of<AuthProvider>(context, listen: false)
+        .authUser
+        .userId, // EncryptionUtil().encryptContent(oldPassword),
+  };
+
+  final response = await http.post(
+    Uri.parse(mainUrl + 'api/Account/role/list'),
+    headers: <String, String>{
+      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+    },
+    body: queryParameters,
+  );
+
+  if (response.statusCode == 200) {
+    print(utf8.decode(response.bodyBytes));
+    final responseBody = utf8.decode(response.bodyBytes);
+    final responseData = json.decode(responseBody);
+    //FIXME: This kind of 'if' doesn't work if 'menu' not present
+    if (responseData != null) {
+      // We deserialize read data but only use Date field for now
+      SharedVars.userRoles = UserRoleModel.fromMap(responseData);
     } else {
       throw Exception('Unable to fetch info from the REST API');
     }

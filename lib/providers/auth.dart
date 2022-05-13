@@ -32,6 +32,13 @@ class AuthProvider with ChangeNotifier {
   PassStatus get passStatus => _passStatus;
   User get authUser => _authUser!;
 
+  void setRoleID(String roleID, String roleTitle) {
+    _authUser!.roleID = roleID;
+    _authUser!.defaultRole = roleTitle;
+    SharedVars.roleID = roleID;
+    UserPreferences().saveUser(_authUser!);
+  }
+
   Future<Map<String, dynamic>> login(String username, String password) async {
     var result;
 
