@@ -78,7 +78,7 @@ class _RequestCardState extends State<MessageCard> {
                         ),
                       ),
                       const SizedBox(
-                        width: 20,
+                        width: 40,
                       ),
                       CircleAvatar(
                         radius: 20,
@@ -92,6 +92,9 @@ class _RequestCardState extends State<MessageCard> {
                     ],
                   ),
                 ),
+                SizedBox(
+                  height: 20,
+                ),
                 Container(
                   // color: Colors.white70,
                   width: Responsive.isDesktop(context)
@@ -101,11 +104,11 @@ class _RequestCardState extends State<MessageCard> {
                     children: [
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           Text('اولویت: ' + widget.cartableData!.priority!),
                           SizedBox(
-                            width: 20,
+                            width: 40,
                           ),
                           Text('تاریخ: ' + widget.cartableData!.date!),
                         ],

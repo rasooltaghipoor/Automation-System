@@ -2,22 +2,26 @@ import 'dart:convert';
 
 import 'package:automation_system/models/BuyModel.dart';
 import 'package:automation_system/models/DynamicForm.dart';
+import 'package:automation_system/models/ReplyButtons.dart';
+import 'package:automation_system/models/RequestData.dart';
+import 'package:automation_system/screens/erp/timeline_widget.dart';
 import 'package:automation_system/utils/SizeConfiguration.dart';
 import 'package:automation_system/utils/communication/web_request.dart';
 import 'package:automation_system/utils/shared_vars.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:persian_datetime_picker/persian_datetime_picker.dart';
 
 class DynamicEditWidget extends StatefulWidget {
-  Map<String, dynamic>? itemsData;
+  RequestData? itemData;
   bool? isEdit;
   bool? canEdit;
   Map<String, TextEditingController> controllerMap = Map();
   Map<String, String> dropDownMap = Map();
   List<FormItem> formItems = <FormItem>[];
 
-  DynamicEditWidget({this.isEdit, this.canEdit, this.itemsData, Key? key})
+  DynamicEditWidget({this.isEdit, this.canEdit, this.itemData, Key? key})
       : super(key: key);
 
   @override
@@ -28,6 +32,18 @@ class _State extends State<DynamicEditWidget> {
   // Map<String, int> _listboxIndices = Map();
   DynamicFormModel? _formData;
   bool isEnabled = false;
+  bool value = false;
+  String filePath = "";
+  TextEditingController descriptionController = TextEditingController();
+  final _processes = [
+    'مدیر بخش',
+    'مدیر کل',
+    'معاون',
+    'رییس',
+    'آقای سهرابی',
+    'علی',
+    'نقی'
+  ];
 
   Widget _futureBuilder() {
     // SharedVars.formNameE = 'ConsumBuy';
@@ -68,8 +84,10 @@ class _State extends State<DynamicEditWidget> {
             } else if (data.items[index].control == 'listbox') {
               if (widget.dropDownMap[data.items[index].controlName] == null) {
                 if (widget.isEdit!) {
-                  widget.dropDownMap[data.items[index].controlName] =
-                      widget.itemsData![data.items[index].controlName];
+                  widget.dropDownMap[data.items[index].controlName] = widget
+                      .itemData!
+                      .requestDetails
+                      .items[data.items[index].controlName];
                 } else {
                   widget.dropDownMap[data.items[index].controlName] =
                       data.items[index].dataType[0].title;
@@ -132,7 +150,7 @@ class _State extends State<DynamicEditWidget> {
       controller = TextEditingController();
       if (widget.isEdit!) {
         print("_getControllerOf. is editting");
-        controller.text = widget.itemsData![name];
+        controller.text = widget.itemData!.requestDetails.items[name];
       }
       widget.controllerMap[name] = controller;
     }
@@ -161,6 +179,76 @@ class _State extends State<DynamicEditWidget> {
     );
   }
 
+  void _pickFile() async {
+    filePath = '';
+    // opens storage to pick files and the picked file or files
+    // are assigned into result and if no file is chosen result is null.
+    // you can also toggle "allowMultiple" true or false depending on your need
+    final result = await FilePicker.platform.pickFiles(
+      allowMultiple: false,
+      type: FileType.custom,
+      allowedExtensions: ['jpg', 'pdf', 'png'],
+    );
+
+    // if no file is picked
+    if (result == null) return;
+
+    // we will log the name, size and path of the
+    // first picked file (if multiple are selected)
+    print(result.files.first.name);
+    print(result.files.first.size);
+    print(result.files.first.path);
+    filePath = result.files.first.path!;
+  }
+
+  List<Widget> getButtons(BuildContext context) {
+    {
+      final List<Widget> rowList = [];
+      for (ReplyButtonData buttonData in widget.itemData!.buttonsData) {
+        rowList.add(ElevatedButton(
+            onPressed: () {
+              bool isEdited = false;
+
+              Map<String, String> items = <String, String>{};
+              for (FormItem listItem in _formData!.items) {
+                if (listItem.control == 'textbox') {
+                  items[listItem.controlName] =
+                      widget.controllerMap[listItem.controlName]!.text;
+                } else if (listItem.control == 'listbox') {
+                  items[listItem.controlName] =
+                      widget.dropDownMap[listItem.controlName]!;
+                }
+              }
+
+              for (String key in items.keys) {
+                if (items[key] != widget.itemData!.requestDetails.items[key]) {
+                  isEdited = true;
+                  break;
+                }
+              }
+
+              print(isEdited.toString() + '   ++++++++++++');
+
+              Map<String, dynamic> otherItems = {
+                'description': descriptionController.text,
+                'command': buttonData.cammandTitle,
+                'commandID': buttonData.commandID,
+                'editForm': isEdited.toString(),
+                'filePath': filePath,
+                'requestID': widget.itemData!.requestDetails.requestID
+              };
+
+              sendReplyData(context, jsonEncode(items), otherItems);
+              // // String jsonTutorial = jsonEncode(items);
+              print(jsonEncode(items));
+            },
+            child: Text(buttonData.cammandTitle!)));
+      }
+      // sendFormData(context, jsonEncode(items));
+      return rowList;
+    }
+  }
+
   @override
   void dispose() {
     widget.controllerMap.forEach((_, controller) => controller.dispose());
@@ -175,15 +263,82 @@ class _State extends State<DynamicEditWidget> {
     return Column(
       children: [
         widget.canEdit!
-            ? ElevatedButton(
-                onPressed: () {
-                  setState(() {
-                    isEnabled = !isEnabled;
-                  });
-                },
-                child: Text('ویرایش'))
-            : Text('امکان ویرایش داده ها وجود ندارد'),
+            ? Row(
+                children: <Widget>[
+                  const SizedBox(
+                    width: 10,
+                  ), //SizedBox
+                  Checkbox(
+                    value: this.value,
+                    onChanged: (bool? value) {
+                      setState(() {
+                        this.value = value!;
+                        isEnabled = !isEnabled;
+                      });
+                    },
+                  ), //Text
+                  const SizedBox(width: 10), //SizedBox
+                  /** Checkbox Widget **/
+                  const Text(
+                    'ویرایش درخواست',
+                    style: TextStyle(fontSize: 17.0),
+                  ), //Checkbox
+                ], //<Widget>[]
+              )
+            : const Text('امکان ویرایش داده ها وجود ندارد'),
+        SizedBox(
+          height: 10,
+        ),
         _futureBuilder(),
+        Container(
+          padding: EdgeInsets.all(10),
+          color: Colors.blue[50],
+          child: widget.itemData!.canReply == 'true'
+              ? Column(
+                  children: [
+                    TextFormField(
+                      controller: descriptionController,
+                      autovalidateMode: AutovalidateMode.always,
+                      decoration: const InputDecoration(
+                        icon: Icon(Icons.person),
+                        hintText: '',
+                        labelText: 'توضیحات',
+                      ),
+                      onSaved: (String? value) {
+                        descriptionController.text = value!;
+                        // This optional block of code can be used to run
+                        // code when the user saves the form.
+                      },
+                      // validator: (String? value) {
+                      //   return value!.contains('@')
+                      //       ? 'Do not use the @ char.'
+                      //       : null;
+                      // },
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    ElevatedButton(
+                        onPressed: _pickFile, child: Text('آپلود فایل')),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: getButtons(context),
+                    )
+                  ],
+                )
+              : const Text('امکان پاسخ گویی برای شما میسر نمی باشد'),
+        ),
+        Container(
+          padding: EdgeInsets.all(10),
+          // color: Colors.yellow[100],
+          height: 250,
+          // width: 700,
+          child: ProcessTimeline(
+              2, _processes, widget.itemData!.historyChart.items),
+        ),
       ],
     );
   }

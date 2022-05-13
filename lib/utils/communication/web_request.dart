@@ -536,21 +536,41 @@ Future<Map<String, dynamic>> sendReplyData(BuildContext context,
     String itemsData, Map<String, dynamic> otherData) async {
   var result;
 
-  Map<String, dynamic> queryParameters = {
-    'token': Provider.of<AuthProvider>(context, listen: false).authUser.token,
-    'userid': Provider.of<AuthProvider>(context, listen: false).authUser.userId,
-    'roleid': Provider.of<AuthProvider>(context, listen: false).authUser.roleID,
+  Map<String, String> queryParameters = {
+    'token': Provider.of<AuthProvider>(context, listen: false).authUser.token!,
+    'Description': otherData['description'],
+    'Roleid':
+        Provider.of<AuthProvider>(context, listen: false).authUser.roleID!,
     'items': itemsData,
-    'Priority': '1',
+    'Command': otherData['command'],
+    'Commandid': otherData['commandID'],
+    'Editform': otherData['editForm'],
   };
 
-  final response = await http.post(
-    Uri.parse(mainUrl + 'api/Request/add/ConsumBuy'),
-    headers: <String, String>{
-      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-    },
-    body: queryParameters,
-  );
+  var request = http.MultipartRequest('POST',
+      Uri.parse(mainUrl + 'api/Request/history/${otherData['requestID']}'));
+  request.fields.addAll(queryParameters);
+  request.headers.addAll(<String, String>{
+    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+  });
+  if (otherData['filePath'] != '') {
+    request.files.add(http.MultipartFile(
+        'picture',
+        File(otherData['filePath']).readAsBytes().asStream(),
+        File(otherData['filePath']).lengthSync(),
+        filename: otherData['filePath'].split("/").last));
+  }
+
+  final firstResponse = await request.send();
+  var response = await http.Response.fromStream(firstResponse);
+
+  // final response = await http.post(
+  //   Uri.parse(mainUrl + 'api/Request/history/${otherData['requestID']}'),
+  //   headers: <String, String>{
+  //     'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+  //   },
+  //   body: queryParameters,
+  // );
 
   final responseBody = utf8.decode(response.bodyBytes);
   final Map<String, dynamic> responseData = json.decode(responseBody);

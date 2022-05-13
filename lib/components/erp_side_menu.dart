@@ -1,4 +1,5 @@
 import 'package:automation_system/components/side_drawer_menu.dart';
+import 'package:automation_system/models/MenuDetails.dart';
 import 'package:automation_system/models/User.dart';
 import 'package:automation_system/providers/auth.dart';
 import 'package:automation_system/providers/change_provider.dart';
@@ -28,6 +29,14 @@ class ErpSideMenu extends StatefulWidget {
 class _SideMenuState extends State<ErpSideMenu> {
   int _activeIndex = -1;
   final ScrollController _mycontroller2 = ScrollController();
+
+  void openMessageList(ErpMenuItemsData data) async {
+    await Future.delayed(const Duration(seconds: 2), () {
+      Map<String, dynamic> params = <String, dynamic>{"itemData": data};
+      Provider.of<ChangeProvider>(context, listen: false)
+          .setMidScreen(ScreenName.messageList, params);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,11 +77,12 @@ class _SideMenuState extends State<ErpSideMenu> {
                   // Menu Items
                   Consumer<ErpMenuProvider>(
                     builder: (context, menuModel, child) {
-                      if (menuModel.sideMenu != null) {
+                      if (menuModel.sideMenu != null && _activeIndex < 0) {
                         // If cartabe data is available
                         if (int.parse(menuModel.sideMenu!.menuData[0].count!) >
                             0) {
                           _activeIndex = 0;
+                          openMessageList(menuModel.sideMenu!.menuData[0]);
                         }
                       }
                       // else if my request data is available
@@ -217,6 +227,26 @@ class _SideMenuState extends State<ErpSideMenu> {
                             title: 'درخواست خرید',
                             iconSrc: "assets/Icons/File.svg",
                             isActive: _activeIndex == 4 ? true : false,
+                            itemCount: -1,
+                          ),
+                          SideMenuItem(
+                            press: () {
+                              setState(() {
+                                _activeIndex = 5;
+                              });
+                              // getErpCartableData(
+                              //     context, menuModel.sideMenu!.menuData[1]);
+                              Map<String, dynamic> params = <String, dynamic>{
+                                'formName': 'ChangeRole',
+                              };
+                              Provider.of<ChangeProvider>(context,
+                                      listen: false)
+                                  .setMidScreen(
+                                      ScreenName.requestMenuScreen, params);
+                            },
+                            title: 'تغییر نقش',
+                            iconSrc: "assets/Icons/File.svg",
+                            isActive: _activeIndex == 5 ? true : false,
                             itemCount: -1,
                           ),
                           /*SideMenuItem(

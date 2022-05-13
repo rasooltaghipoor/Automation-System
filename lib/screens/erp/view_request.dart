@@ -12,6 +12,7 @@ import 'package:automation_system/screens/erp/timeline_widget.dart';
 import 'package:automation_system/utils/SizeConfiguration.dart';
 import 'package:automation_system/utils/communication/web_request.dart';
 import 'package:automation_system/utils/shared_vars.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -62,6 +63,7 @@ class ItemList extends StatelessWidget {
   final RequestData? itemData;
   DynamicEditWidget? dynamicEditWidget;
   TextEditingController descriptionController = TextEditingController();
+  String filePath = "";
 
   ItemList({Key? key, this.canManage, this.itemData}) : super(key: key);
 
@@ -71,7 +73,7 @@ class ItemList extends StatelessWidget {
     dynamicEditWidget = DynamicEditWidget(
       isEdit: true,
       canEdit: itemData!.editable == 'true',
-      itemsData: itemData!.requestDetails.items,
+      itemData: itemData!,
     );
 
     // TODO Consider something to check in return statement
@@ -84,7 +86,7 @@ class ItemList extends StatelessWidget {
             // crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Container(
-                color: Colors.blue[100],
+                color: Colors.blue[50],
                 // // The header will be here
                 padding: EdgeInsets.all(10),
                 // decoration: BoxDecoration(
@@ -133,7 +135,7 @@ class ItemList extends StatelessWidget {
               //     child: const Text('ویرایش درخواست')),
               Container(
                 padding: EdgeInsets.all(10),
-                color: Colors.blue[50],
+                // color: Colors.blue[50],
                 child: dynamicEditWidget!,
               ),
               // Expanded(
@@ -157,53 +159,32 @@ class ItemList extends StatelessWidget {
               //     },
               //   ),
               // ),
-              Container(
-                padding: EdgeInsets.all(10),
-                color: Colors.blue[50],
-                child: itemData!.canReply == 'true'
-                    ? Column(
-                        children: [
-                          TextFormField(
-                            controller: descriptionController,
-                            autovalidateMode: AutovalidateMode.always,
-                            decoration: const InputDecoration(
-                              icon: Icon(Icons.person),
-                              hintText: '',
-                              labelText: 'توضیحات',
-                            ),
-                            onSaved: (String? value) {
-                              descriptionController.text = value!;
-                              // This optional block of code can be used to run
-                              // code when the user saves the form.
-                            },
-                            // validator: (String? value) {
-                            //   return value!.contains('@')
-                            //       ? 'Do not use the @ char.'
-                            //       : null;
-                            // },
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: getButtons(context),
-                          )
-                        ],
-                      )
-                    : const Text('امکان پاسخ گویی برای شما میسر نمی باشد'),
-              ),
-              Container(
-                padding: EdgeInsets.all(10),
-                // color: Colors.yellow[100],
-                height: 250,
-                // width: 700,
-                child: ProcessTimeline(
-                    2, _processes, itemData!.historyChart.items),
-              ),
+
               // )
             ],
           );
+  }
+
+  void _pickFile() async {
+    filePath = '';
+    // opens storage to pick files and the picked file or files
+    // are assigned into result and if no file is chosen result is null.
+    // you can also toggle "allowMultiple" true or false depending on your need
+    final result = await FilePicker.platform.pickFiles(
+      allowMultiple: false,
+      type: FileType.custom,
+      allowedExtensions: ['jpg', 'pdf', 'png'],
+    );
+
+    // if no file is picked
+    if (result == null) return;
+
+    // we will log the name, size and path of the
+    // first picked file (if multiple are selected)
+    print(result.files.first.name);
+    print(result.files.first.size);
+    print(result.files.first.path);
+    filePath = result.files.first.path!;
   }
 
   List<Widget> getButtons(BuildContext context) {
@@ -239,7 +220,8 @@ class ItemList extends StatelessWidget {
                 'command': buttonData.cammandTitle,
                 'commandID': buttonData.commandID,
                 'editForm': isEdited.toString(),
-                'filePath': '',
+                'filePath': filePath,
+                'requestID': itemData!.requestDetails.requestID
               };
 
               sendReplyData(context, jsonEncode(items), otherItems);

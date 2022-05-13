@@ -54,6 +54,7 @@ dependencies:
   responsive_framework: ^0.1.7
   persian_datetime_picker: ^2.4.0
   timelines: ^0.1.0
+  file_picker: ^4.5.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
