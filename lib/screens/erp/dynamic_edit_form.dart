@@ -43,7 +43,7 @@ class _View2State extends State<DynamicEditForm> {
   }
 
   Widget _futureBuilder() {
-    SharedVars.formNameE = 'ConsumBuy';
+    // SharedVars.formNameE = 'ConsumBuy';
     return FutureBuilder(
       //TODO: This fucntion must be called only when no data is available!!
       future: getFormDetails(SharedVars.formNameE),

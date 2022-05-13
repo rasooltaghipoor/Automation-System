@@ -229,7 +229,7 @@ class ItemList extends StatelessWidget {
               print(isEdited.toString() + '   ++++++++++++');
 
               Map<String, dynamic> otherItems = {
-                'description': '',
+                'description': descriptionController.text,
                 'command': buttonData.cammandTitle,
                 'commandID': buttonData.commandID,
                 'editForm': isEdited.toString(),

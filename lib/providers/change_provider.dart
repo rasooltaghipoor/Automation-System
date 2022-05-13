@@ -5,12 +5,14 @@ enum ScreenName {
   messageList,
   addRequest,
   editRequest,
-  viewRequest
+  viewRequest,
+  introScreen,
+  requestMenuScreen
 }
 
 // This class is responsible for changing the widgets in main part of home screen.
 class ChangeProvider extends ChangeNotifier {
-  ScreenName _screenName = ScreenName.requestList;
+  ScreenName _screenName = ScreenName.introScreen;
 
   Map<String, dynamic> _params = <String, dynamic>{};
 

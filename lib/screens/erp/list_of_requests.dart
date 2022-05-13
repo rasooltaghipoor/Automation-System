@@ -39,10 +39,10 @@ class _ListOfEmailsState extends State<ListOfRequests> {
 
     return Scaffold(
         key: _scaffoldKey,
-        endDrawer: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 250),
-          child: const SideMenu(),
-        ),
+        // endDrawer: ConstrainedBox(
+        //   constraints: const BoxConstraints(maxWidth: 250),
+        //   child: const SideMenu(),
+        // ),
         body: Container(
           padding: EdgeInsets.only(top: kIsWeb ? kDefaultPadding : 0),
           color: kBgDarkColor,

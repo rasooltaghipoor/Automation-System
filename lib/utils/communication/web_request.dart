@@ -8,6 +8,7 @@ import 'package:automation_system/models/MenuDetails.dart';
 import 'package:automation_system/models/ReplyButtons.dart';
 import 'package:automation_system/models/RequestData.dart';
 import 'package:automation_system/models/RequestList.dart';
+import 'package:automation_system/models/RequestMenu.dart';
 import 'package:automation_system/models/User.dart';
 import 'package:automation_system/providers/auth.dart';
 import 'package:automation_system/providers/cartable_provider.dart';
@@ -147,10 +148,12 @@ Future<void> getRequestList(BuildContext context) async {
 Future<RequestData> getRequestDetails(BuildContext context) async {
   Map<String, dynamic> queryParameters = {
     'token': Provider.of<AuthProvider>(context, listen: false).authUser.token,
+    'roleid': '9'
+    //Provider.of<AuthProvider>(context, listen: false).authUser.roleID,
   };
 
   final response = await http.post(
-    Uri.parse(mainUrl + 'api/Request/ViewDetail2/5'),
+    Uri.parse(mainUrl + 'api/Request/ViewDetail2/16'),
     headers: <String, String>{
       'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
     },
@@ -401,6 +404,40 @@ Future<void> getErpReplyButtons(BuildContext context) async {
       // We deserialize read data but only use Date field for now
       SharedVars.replyButtons = ErpReplyButtonsModel.fromMap(responseData);
       print(SharedVars.replyButtons!.itemsData[0].cammandTitle);
+    } else {
+      throw Exception('Unable to fetch info from the REST API');
+    }
+  } else {
+    throw Exception('Unable to fetch info from the REST API');
+  }
+}
+
+/// Reads some data about current date from the server
+Future<RequestMenuModel> getErpRequestMenu(BuildContext context) async {
+  // Map<String, dynamic> queryParameters = {
+  //   'token': Provider.of<AuthProvider>(context, listen: false).authUser.token,
+  //   'roleid': Provider.of<AuthProvider>(context, listen: false)
+  //       .authUser
+  //       .roleID, // EncryptionUtil().encryptContent(oldPassword),
+  // };
+
+  final response = await http.post(
+    Uri.parse(mainUrl + 'api/info/RequestForm/Type'),
+    headers: <String, String>{
+      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+    },
+    // body: queryParameters,
+  );
+
+  if (response.statusCode == 200) {
+    print(utf8.decode(response.bodyBytes));
+    final responseBody = utf8.decode(response.bodyBytes);
+    final responseData = json.decode(responseBody);
+    //FIXME: This kind of 'if' doesn't work if 'menu' not present
+    if (responseData['RequestType'] != null) {
+      // We deserialize read data but only use Date field for now
+      RequestMenuModel data = RequestMenuModel.fromMap(responseData);
+      return data;
     } else {
       throw Exception('Unable to fetch info from the REST API');
     }
