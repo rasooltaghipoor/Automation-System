@@ -12,11 +12,13 @@ import 'package:persian_datetime_picker/persian_datetime_picker.dart';
 class DynamicEditWidget extends StatefulWidget {
   Map<String, dynamic>? itemsData;
   bool? isEdit;
+  bool? canEdit;
   Map<String, TextEditingController> controllerMap = Map();
   Map<String, String> dropDownMap = Map();
   List<FormItem> formItems = <FormItem>[];
 
-  DynamicEditWidget({this.isEdit, this.itemsData, Key? key}) : super(key: key);
+  DynamicEditWidget({this.isEdit, this.canEdit, this.itemsData, Key? key})
+      : super(key: key);
 
   @override
   _State createState() => _State();
@@ -172,13 +174,15 @@ class _State extends State<DynamicEditWidget> {
 
     return Column(
       children: [
-        ElevatedButton(
-            onPressed: () {
-              setState(() {
-                isEnabled = !isEnabled;
-              });
-            },
-            child: Text('ویرایش')),
+        widget.canEdit!
+            ? ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    isEnabled = !isEnabled;
+                  });
+                },
+                child: Text('ویرایش'))
+            : Text('امکان ویرایش داده ها وجود ندارد'),
         _futureBuilder(),
       ],
     );

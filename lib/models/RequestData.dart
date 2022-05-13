@@ -1,11 +1,15 @@
+import 'package:automation_system/models/ReplyButtons.dart';
+
 class RequestData {
   RequestDetail requestDetails;
   History history;
   HistoryChart historyChart;
   String editable;
+  String canReply;
+  final List<ReplyButtonData> buttonsData;
 
-  RequestData(
-      this.requestDetails, this.history, this.historyChart, this.editable);
+  RequestData(this.requestDetails, this.history, this.historyChart,
+      this.editable, this.canReply, this.buttonsData);
 
   factory RequestData.fromMap(Map<String, dynamic> parsedJson) {
     var list = parsedJson['Request'] as List;
@@ -17,8 +21,15 @@ class RequestData {
     var list3 = parsedJson['HistoryChart'] as List;
     HistoryChart historyChartData = HistoryChart.fromMap(list3[0]);
 
-    return RequestData(
-        requestDtls, historyData, historyChartData, parsedJson['editable']);
+    var list4 = parsedJson['button'] as List;
+    //print(list.runtimeType);
+    List<ReplyButtonData> btnList = [];
+    if (list4.isNotEmpty) {
+      btnList = list4.map((i) => ReplyButtonData.fromMap(i)).toList();
+    }
+
+    return RequestData(requestDtls, historyData, historyChartData,
+        parsedJson['editable'], parsedJson['reply'], btnList);
   }
 }
 

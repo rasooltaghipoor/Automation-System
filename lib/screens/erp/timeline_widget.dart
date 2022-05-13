@@ -56,7 +56,7 @@ class ProcessTimeline extends StatelessWidget {
             return Padding(
                 padding: const EdgeInsets.only(bottom: 15.0),
                 child: SizedBox(
-                  height: 35,
+                  height: 50,
                   // color: Colors.amber,
                   child: Column(
                     children: [

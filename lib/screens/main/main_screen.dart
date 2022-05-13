@@ -21,6 +21,7 @@ class MainScreen extends StatelessWidget {
     //getSideMenuData(context, '309');
 
     getErpSideMenuData(context);
+    // getErpReplyButtons(context);
     //getCartableData(context, MenuItemsData('همه نامه ها', '0', 'All'));
     SizeConfig().init(context);
     // It provide us the width and height

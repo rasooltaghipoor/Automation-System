@@ -82,8 +82,8 @@ class _RequestCardState extends State<MessageCard> {
                       ),
                       CircleAvatar(
                         radius: 20,
-                        backgroundImage:
-                            NetworkImage(widget.cartableData!.profile!),
+                        backgroundImage: NetworkImage(
+                            mainUrl + widget.cartableData!.profile!),
                       ),
                       const SizedBox(
                         width: 10,

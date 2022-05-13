@@ -5,6 +5,7 @@ import 'package:automation_system/models/BuyModel.dart';
 import 'package:automation_system/models/Cartable.dart';
 import 'package:automation_system/models/DynamicForm.dart';
 import 'package:automation_system/models/MenuDetails.dart';
+import 'package:automation_system/models/ReplyButtons.dart';
 import 'package:automation_system/models/RequestData.dart';
 import 'package:automation_system/models/RequestList.dart';
 import 'package:automation_system/models/User.dart';
@@ -374,6 +375,40 @@ Future<void> getErpCartableData22(BuildContext context) async {
   }
 }
 
+/// Reads some data about current date from the server
+Future<void> getErpReplyButtons(BuildContext context) async {
+  Map<String, dynamic> queryParameters = {
+    // 'token': Provider.of<AuthProvider>(context, listen: false).authUser.token,
+    'roleid': Provider.of<AuthProvider>(context, listen: false)
+        .authUser
+        .roleID, // EncryptionUtil().encryptContent(oldPassword),
+  };
+
+  final response = await http.post(
+    Uri.parse(mainUrl + 'api/info/ReplyButton/ConsumBuy'),
+    headers: <String, String>{
+      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+    },
+    body: queryParameters,
+  );
+
+  if (response.statusCode == 200) {
+    print(utf8.decode(response.bodyBytes));
+    final responseBody = utf8.decode(response.bodyBytes);
+    final responseData = json.decode(responseBody);
+    //FIXME: This kind of 'if' doesn't work if 'menu' not present
+    if (responseData['Result'] != null) {
+      // We deserialize read data but only use Date field for now
+      SharedVars.replyButtons = ErpReplyButtonsModel.fromMap(responseData);
+      print(SharedVars.replyButtons!.itemsData[0].cammandTitle);
+    } else {
+      throw Exception('Unable to fetch info from the REST API');
+    }
+  } else {
+    throw Exception('Unable to fetch info from the REST API');
+  }
+}
+
 Future<void> getCartableData(
     BuildContext context, MenuItemsData itemData) async {
   final response = await http.get(Uri.parse(mainUrl +
@@ -429,6 +464,46 @@ Future<Map<String, dynamic>> sendFormData(
     'userid': Provider.of<AuthProvider>(context, listen: false).authUser.userId,
     'roleid': Provider.of<AuthProvider>(context, listen: false).authUser.roleID,
     'items': jsonData,
+    'Priority': '1',
+  };
+
+  final response = await http.post(
+    Uri.parse(mainUrl + 'api/Request/add/ConsumBuy'),
+    headers: <String, String>{
+      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+    },
+    body: queryParameters,
+  );
+
+  final responseBody = utf8.decode(response.bodyBytes);
+  final Map<String, dynamic> responseData = json.decode(responseBody);
+
+  print(responseData);
+
+  if (response.statusCode == 200) {
+    if (responseData['Requestid'] != '-1') {
+      result = {'status': true, 'message': responseData['Message']};
+    } else {
+      result = {
+        'status': false,
+        'message': SharedVars.error + responseData['Message']
+      };
+    }
+  } else {
+    result = {'status': false, 'message': responseData['Message']};
+  }
+  return result;
+}
+
+Future<Map<String, dynamic>> sendReplyData(BuildContext context,
+    String itemsData, Map<String, dynamic> otherData) async {
+  var result;
+
+  Map<String, dynamic> queryParameters = {
+    'token': Provider.of<AuthProvider>(context, listen: false).authUser.token,
+    'userid': Provider.of<AuthProvider>(context, listen: false).authUser.userId,
+    'roleid': Provider.of<AuthProvider>(context, listen: false).authUser.roleID,
+    'items': itemsData,
     'Priority': '1',
   };
 

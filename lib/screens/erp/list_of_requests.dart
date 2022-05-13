@@ -147,7 +147,7 @@ class _ListOfEmailsState extends State<ListOfRequests> {
                                         //FIXME: This map is not necessary for now, but I keep it temporarily
                                         Map<String, dynamic> params =
                                             <String, dynamic>{
-                                          "param": 'emails[index]'
+                                          'canManage': false
                                         };
                                         SharedVars.requestID = requestListModel
                                             .requestList!

@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:automation_system/constants.dart';
 import 'package:automation_system/models/DynamicForm.dart';
+import 'package:automation_system/models/ReplyButtons.dart';
 import 'package:automation_system/models/RequestData.dart';
 import 'package:automation_system/models/RequestList.dart';
 import 'package:automation_system/providers/change_provider.dart';
@@ -7,6 +10,7 @@ import 'package:automation_system/screens/erp/dynamic_edit_widget.dart';
 import 'package:automation_system/screens/erp/timeline.dart';
 import 'package:automation_system/screens/erp/timeline_widget.dart';
 import 'package:automation_system/utils/SizeConfiguration.dart';
+import 'package:automation_system/utils/communication/web_request.dart';
 import 'package:automation_system/utils/shared_vars.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -14,9 +18,11 @@ import 'package:provider/provider.dart';
 class ViewRequestScreen extends StatelessWidget {
   // final String title;
   // final String listTitle;
+  final bool? canManage;
   final Future<RequestData>? itemData;
 
-  ViewRequestScreen({Key? key, this.itemData}) : super(key: key);
+  ViewRequestScreen({Key? key, this.canManage, this.itemData})
+      : super(key: key);
 
   // final items = Product.getProducts();
   @override
@@ -31,7 +37,7 @@ class ViewRequestScreen extends StatelessWidget {
         builder: (context, snapshot) {
           if (snapshot.hasError) print(snapshot.error);
           return snapshot.hasData
-              ? ItemList(itemData: snapshot.data)
+              ? ItemList(canManage: canManage, itemData: snapshot.data)
               :
 
               // return the ListView widget :
@@ -52,18 +58,22 @@ class ItemList extends StatelessWidget {
     'علی',
     'نقی'
   ];
+  bool? canManage = false;
   final RequestData? itemData;
   DynamicEditWidget? dynamicEditWidget;
+  TextEditingController descriptionController = TextEditingController();
 
-  ItemList({Key? key, this.itemData}) : super(key: key);
+  ItemList({Key? key, this.canManage, this.itemData}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     SharedVars.formNameE = itemData!.requestDetails.formName_E;
     dynamicEditWidget = DynamicEditWidget(
-      isEdit: false,
+      isEdit: true,
+      canEdit: itemData!.editable == 'true',
       itemsData: itemData!.requestDetails.items,
     );
+
     // TODO Consider something to check in return statement
     return itemData! == null
         ? Text(
@@ -153,40 +163,87 @@ class ItemList extends StatelessWidget {
                 child: ProcessTimeline(
                     2, _processes, itemData!.historyChart.items),
               ),
-              TextFormField(),
               Container(
-                  child: ElevatedButton(
-                onPressed: () {
-                  bool isEdited = false;
-
-                  Map<String, String> items = <String, String>{};
-                  for (FormItem listItem in dynamicEditWidget!.formItems) {
-                    if (listItem.control == 'textbox') {
-                      items[listItem.controlName] = dynamicEditWidget!
-                          .controllerMap[listItem.controlName]!.text;
-                    } else if (listItem.control == 'listbox') {
-                      items[listItem.controlName] =
-                          dynamicEditWidget!.dropDownMap[listItem.controlName]!;
-                    }
-                  }
-
-                  for (String key in items.keys) {
-                    if (items[key] != itemData!.requestDetails.items[key]) {
-                      isEdited = true;
-                      break;
-                    }
-                  }
-
-                  print(isEdited.toString() + '   ++++++++++++');
-
-                  // // String jsonTutorial = jsonEncode(items);
-                  // print(jsonEncode(items));
-                  // sendFormData(context, jsonEncode(items));
-                },
-                child: Text('تایید'),
-              )),
+                color: Colors.orange[100],
+                child: itemData!.canReply == 'true'
+                    ? Column(
+                        children: [
+                          TextFormField(
+                            controller: descriptionController,
+                            autovalidateMode: AutovalidateMode.always,
+                            decoration: const InputDecoration(
+                              icon: Icon(Icons.person),
+                              hintText: 'What do people call you?',
+                              labelText: 'توضیحات',
+                            ),
+                            onSaved: (String? value) {
+                              descriptionController.text = value!;
+                              // This optional block of code can be used to run
+                              // code when the user saves the form.
+                            },
+                            // validator: (String? value) {
+                            //   return value!.contains('@')
+                            //       ? 'Do not use the @ char.'
+                            //       : null;
+                            // },
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: getButtons(context),
+                          )
+                        ],
+                      )
+                    : const Text('امکان پاسخ گویی برای شما میسر نمی باشد'),
+              ),
               // )
             ],
           );
+  }
+
+  List<Widget> getButtons(BuildContext context) {
+    {
+      final List<Widget> rowList = [];
+      for (ReplyButtonData buttonData in itemData!.buttonsData) {
+        rowList.add(ElevatedButton(
+            onPressed: () {
+              bool isEdited = false;
+
+              Map<String, String> items = <String, String>{};
+              for (FormItem listItem in dynamicEditWidget!.formItems) {
+                if (listItem.control == 'textbox') {
+                  items[listItem.controlName] = dynamicEditWidget!
+                      .controllerMap[listItem.controlName]!.text;
+                } else if (listItem.control == 'listbox') {
+                  items[listItem.controlName] =
+                      dynamicEditWidget!.dropDownMap[listItem.controlName]!;
+                }
+              }
+
+              for (String key in items.keys) {
+                if (items[key] != itemData!.requestDetails.items[key]) {
+                  isEdited = true;
+                  break;
+                }
+              }
+
+              print(isEdited.toString() + '   ++++++++++++');
+
+              Map<String, dynamic> otherItems = {
+                'description': '',
+                'command': buttonData.cammandTitle,
+                'commandID': buttonData.commandID,
+                'editForm': isEdited.toString(),
+                'filePath': '',
+              };
+
+              sendReplyData(context, jsonEncode(items), otherItems);
+              // // String jsonTutorial = jsonEncode(items);
+              print(jsonEncode(items));
+            },
+            child: Text(buttonData.cammandTitle!)));
+      }
+      // sendFormData(context, jsonEncode(items));
+      return rowList;
+    }
   }
 }
