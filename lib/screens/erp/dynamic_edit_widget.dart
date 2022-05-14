@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:automation_system/models/BuyModel.dart';
 import 'package:automation_system/models/DynamicForm.dart';
@@ -157,27 +158,27 @@ class _State extends State<DynamicEditWidget> {
     return controller;
   }
 
-  Widget _okButton() {
-    return ElevatedButton(
-      onPressed: () async {
-        Map<String, String> items = <String, String>{};
-        for (FormItem listItem in _formData!.items) {
-          if (listItem.control == 'textbox') {
-            items[listItem.controlName] =
-                _getControllerOf(listItem.controlName).text;
-          } else if (listItem.control == 'listbox') {
-            items[listItem.controlName] =
-                widget.dropDownMap[listItem.controlName]!;
-          }
-        }
+  // Widget _okButton() {
+  //   return ElevatedButton(
+  //     onPressed: () async {
+  //       Map<String, String> items = <String, String>{};
+  //       for (FormItem listItem in _formData!.items) {
+  //         if (listItem.control == 'textbox') {
+  //           items[listItem.controlName] =
+  //               _getControllerOf(listItem.controlName).text;
+  //         } else if (listItem.control == 'listbox') {
+  //           items[listItem.controlName] =
+  //               widget.dropDownMap[listItem.controlName]!;
+  //         }
+  //       }
 
-        // String jsonTutorial = jsonEncode(items);
-        print(jsonEncode(items));
-        sendFormData(context, jsonEncode(items));
-      },
-      child: widget.isEdit! ? const Text('ویرایش') : const Text('ارسال'),
-    );
-  }
+  //       // String jsonTutorial = jsonEncode(items);
+  //       print(jsonEncode(items));
+  //       sendFormData(context, jsonEncode(items));
+  //     },
+  //     child: widget.isEdit! ? const Text('ویرایش') : const Text('ارسال'),
+  //   );
+  // }
 
   void _pickFile() async {
     filePath = '';
@@ -199,50 +200,58 @@ class _State extends State<DynamicEditWidget> {
     print(result.files.first.size);
     print(result.files.first.path);
     filePath = result.files.first.path!;
+
+    setState(() {});
   }
 
   List<Widget> getButtons(BuildContext context) {
     {
       final List<Widget> rowList = [];
       for (ReplyButtonData buttonData in widget.itemData!.buttonsData) {
-        rowList.add(ElevatedButton(
-            onPressed: () {
-              bool isEdited = false;
+        rowList.add(
+          SizedBox(
+              width: 140,
+              height: 40,
+              child: ElevatedButton(
+                  onPressed: () {
+                    bool isEdited = false;
 
-              Map<String, String> items = <String, String>{};
-              for (FormItem listItem in _formData!.items) {
-                if (listItem.control == 'textbox') {
-                  items[listItem.controlName] =
-                      widget.controllerMap[listItem.controlName]!.text;
-                } else if (listItem.control == 'listbox') {
-                  items[listItem.controlName] =
-                      widget.dropDownMap[listItem.controlName]!;
-                }
-              }
+                    Map<String, String> items = <String, String>{};
+                    for (FormItem listItem in _formData!.items) {
+                      if (listItem.control == 'textbox') {
+                        items[listItem.controlName] =
+                            widget.controllerMap[listItem.controlName]!.text;
+                      } else if (listItem.control == 'listbox') {
+                        items[listItem.controlName] =
+                            widget.dropDownMap[listItem.controlName]!;
+                      }
+                    }
 
-              for (String key in items.keys) {
-                if (items[key] != widget.itemData!.requestDetails.items[key]) {
-                  isEdited = true;
-                  break;
-                }
-              }
+                    for (String key in items.keys) {
+                      if (items[key] !=
+                          widget.itemData!.requestDetails.items[key]) {
+                        isEdited = true;
+                        break;
+                      }
+                    }
 
-              print(isEdited.toString() + '   ++++++++++++');
+                    print(isEdited.toString() + '   ++++++++++++');
 
-              Map<String, dynamic> otherItems = {
-                'description': descriptionController.text,
-                'command': buttonData.cammandTitle,
-                'commandID': buttonData.commandID,
-                'editForm': isEdited.toString(),
-                'filePath': filePath,
-                'requestID': widget.itemData!.requestDetails.requestID
-              };
+                    Map<String, dynamic> otherItems = {
+                      'description': descriptionController.text,
+                      'command': buttonData.cammandTitle,
+                      'commandID': buttonData.commandID,
+                      'editForm': isEdited.toString(),
+                      'filePath': filePath,
+                      'requestID': widget.itemData!.requestDetails.requestID
+                    };
 
-              sendReplyData(context, jsonEncode(items), otherItems);
-              // // String jsonTutorial = jsonEncode(items);
-              print(jsonEncode(items));
-            },
-            child: Text(buttonData.cammandTitle!)));
+                    sendReplyData(context, jsonEncode(items), otherItems);
+                    // // String jsonTutorial = jsonEncode(items);
+                    print(jsonEncode(items));
+                  },
+                  child: Text(buttonData.cammandTitle!))),
+        );
       }
       // sendFormData(context, jsonEncode(items));
       return rowList;
@@ -318,8 +327,26 @@ class _State extends State<DynamicEditWidget> {
                     const SizedBox(
                       height: 20,
                     ),
-                    ElevatedButton(
-                        onPressed: _pickFile, child: Text('آپلود فایل')),
+                    Row(
+                      children: [
+                        SizedBox(
+                          width: 120,
+                          height: 30,
+                          child: ElevatedButton(
+                              onPressed: _pickFile, child: Text('آپلود فایل')),
+                        ),
+                        const SizedBox(
+                          width: 50,
+                        ),
+                        filePath.isNotEmpty
+                            ? Image.file(
+                                File(filePath),
+                                width: 200,
+                                height: 200,
+                              )
+                            : Text('بدون فایل ضمیمه'),
+                      ],
+                    ),
                     const SizedBox(
                       height: 20,
                     ),

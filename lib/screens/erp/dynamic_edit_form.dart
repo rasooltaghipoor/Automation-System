@@ -1,10 +1,12 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:automation_system/models/BuyModel.dart';
 import 'package:automation_system/models/DynamicForm.dart';
 import 'package:automation_system/utils/SizeConfiguration.dart';
 import 'package:automation_system/utils/communication/web_request.dart';
 import 'package:automation_system/utils/shared_vars.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:persian_datetime_picker/persian_datetime_picker.dart';
@@ -21,6 +23,8 @@ class DynamicEditForm extends StatefulWidget {
 class _View2State extends State<DynamicEditForm> {
   Map<String, TextEditingController> _controllerMap = Map();
   Map<String, String> _dropDownMap = Map();
+  String filePath = '';
+  String dropPriority = '0';
   // Map<String, int> _listboxIndices = Map();
   DynamicFormModel? _formData;
 
@@ -35,12 +39,12 @@ class _View2State extends State<DynamicEditForm> {
   // }
 
   // Fetch content from the json file
-  Future<FullDynamicForm> readJson() async {
-    final String response = await rootBundle.loadString('assets/test.json');
-    // final responseBody = utf8.decode(response.bodyBytes);
-    final parsed = json.decode(response);
-    return FullDynamicForm.fromMap(parsed);
-  }
+  // Future<FullDynamicForm> readJson() async {
+  //   final String response = await rootBundle.loadString('assets/test.json');
+  //   // final responseBody = utf8.decode(response.bodyBytes);
+  //   final parsed = json.decode(response);
+  //   return FullDynamicForm.fromMap(parsed);
+  // }
 
   Widget _futureBuilder() {
     // SharedVars.formNameE = 'ConsumBuy';
@@ -116,8 +120,7 @@ class _View2State extends State<DynamicEditForm> {
                   return Row(children: <Widget>[
                     Text(data.items[index].title),
                     Container(
-                        padding:
-                            EdgeInsets.all(SizeConfig.safeBlockHorizontal! * 3),
+                        padding: EdgeInsets.all(20),
                         child: DropdownButton<String>(
                           value: _dropDownMap[data.items[index].controlName],
                           icon: const Icon(Icons.arrow_downward),
@@ -240,7 +243,8 @@ class _View2State extends State<DynamicEditForm> {
 
             // String jsonTutorial = jsonEncode(items);
             print(jsonEncode(items));
-            sendFormData(context, jsonEncode(items));
+            sendFormData(context, jsonEncode(items), dropPriority, filePath,
+                _formData!.formName_E);
           },
           child: widget.isEdit!
               ? const Text(
@@ -270,6 +274,30 @@ class _View2State extends State<DynamicEditForm> {
     );
   }
 
+  void _pickFile() async {
+    filePath = '';
+    // opens storage to pick files and the picked file or files
+    // are assigned into result and if no file is chosen result is null.
+    // you can also toggle "allowMultiple" true or false depending on your need
+    final result = await FilePicker.platform.pickFiles(
+      allowMultiple: false,
+      type: FileType.custom,
+      allowedExtensions: ['jpg', 'pdf', 'png'],
+    );
+
+    // if no file is picked
+    if (result == null) return;
+
+    // we will log the name, size and path of the
+    // first picked file (if multiple are selected)
+    print(result.files.first.name);
+    print(result.files.first.size);
+    print(result.files.first.path);
+    filePath = result.files.first.path!;
+
+    setState(() {});
+  }
+
   @override
   void dispose() {
     _controllerMap.forEach((_, controller) => controller.dispose());
@@ -289,7 +317,60 @@ class _View2State extends State<DynamicEditForm> {
           children: [
             Container(child: _futureBuilder()),
             // _cancelOkButton(),
-            SizedBox(
+            // SizedBox(
+            //   height: 20,
+            // ),
+            Row(children: <Widget>[
+              Text('اولویت: '),
+              Container(
+                  padding: EdgeInsets.all(5),
+                  child: DropdownButton<String>(
+                    value: dropPriority,
+                    icon: const Icon(Icons.arrow_downward),
+                    iconSize: 24,
+                    elevation: 16,
+                    style: const TextStyle(color: Colors.deepPurple),
+                    underline: Container(
+                      height: 2,
+                      color: Colors.deepPurpleAccent,
+                    ),
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        dropPriority = newValue!;
+                      });
+                    },
+                    items: <Priority>[
+                      Priority("0", "عادی"),
+                      Priority("1", "فوری"),
+                    ].map<DropdownMenuItem<String>>((Priority value) {
+                      return DropdownMenuItem<String>(
+                        value: value.id,
+                        child: Text(value.title!),
+                      );
+                    }).toList(),
+                  ))
+            ]),
+            Row(
+              children: [
+                SizedBox(
+                  width: 120,
+                  height: 30,
+                  child: ElevatedButton(
+                      onPressed: _pickFile, child: Text('آپلود فایل')),
+                ),
+                const SizedBox(
+                  width: 50,
+                ),
+                filePath.isNotEmpty
+                    ? Image.file(
+                        File(filePath),
+                        width: 200,
+                        height: 200,
+                      )
+                    : Text('بدون فایل ضمیمه'),
+              ],
+            ),
+            const SizedBox(
               height: 20,
             ),
             _okButton(),
@@ -298,4 +379,10 @@ class _View2State extends State<DynamicEditForm> {
       ),
     );
   }
+}
+
+class Priority {
+  String? id;
+  String? title;
+  Priority(this.id, this.title);
 }

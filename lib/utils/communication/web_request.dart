@@ -153,7 +153,7 @@ Future<RequestData> getRequestDetails(BuildContext context) async {
   };
 
   final response = await http.post(
-    Uri.parse(mainUrl + 'api/Request/ViewDetail2/16'),
+    Uri.parse(mainUrl + 'api/Request/ViewDetail2/${SharedVars.requestID}'),
     headers: <String, String>{
       'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
     },
@@ -527,25 +527,40 @@ Future<void> testToken() async {
   }
 }
 
-Future<Map<String, dynamic>> sendFormData(
-    BuildContext context, String jsonData) async {
+Future<Map<String, dynamic>> sendFormData(BuildContext context, String jsonData,
+    String priority, String filePath, String formName_E) async {
   var result;
 
-  Map<String, dynamic> queryParameters = {
-    'token': Provider.of<AuthProvider>(context, listen: false).authUser.token,
-    'userid': Provider.of<AuthProvider>(context, listen: false).authUser.userId,
-    'roleid': Provider.of<AuthProvider>(context, listen: false).authUser.roleID,
+  Map<String, String> queryParameters = {
+    'token': Provider.of<AuthProvider>(context, listen: false).authUser.token!,
+    // 'userid': Provider.of<AuthProvider>(context, listen: false).authUser.userId,
+    'roleid':
+        Provider.of<AuthProvider>(context, listen: false).authUser.roleID!,
     'items': jsonData,
-    'Priority': '1',
+    'Priority': priority,
   };
 
-  final response = await http.post(
-    Uri.parse(mainUrl + 'api/Request/add/ConsumBuy'),
-    headers: <String, String>{
-      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-    },
-    body: queryParameters,
-  );
+  // final response = await http.post(
+  //   Uri.parse(mainUrl + 'api/Request/add/ConsumBuy'),
+  //   headers: <String, String>{
+  //     'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+  //   },
+  //   body: queryParameters,
+  // );
+  var request = http.MultipartRequest(
+      'POST', Uri.parse(mainUrl + 'api/Request/add/$formName_E'));
+  request.fields.addAll(queryParameters);
+  request.headers.addAll(<String, String>{
+    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+  });
+  if (filePath != '') {
+    request.files.add(http.MultipartFile('picture',
+        File(filePath).readAsBytes().asStream(), File(filePath).lengthSync(),
+        filename: filePath.split("/").last));
+  }
+
+  final firstResponse = await request.send();
+  var response = await http.Response.fromStream(firstResponse);
 
   final responseBody = utf8.decode(response.bodyBytes);
   final Map<String, dynamic> responseData = json.decode(responseBody);
