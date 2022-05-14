@@ -7,6 +7,7 @@ import 'package:automation_system/screens/erp/list_of_messages.dart';
 import 'package:automation_system/screens/erp/list_of_requests.dart';
 import 'package:automation_system/screens/erp/request_menu.dart';
 import 'package:automation_system/screens/erp/view_request.dart';
+import 'package:automation_system/screens/role_screen.dart';
 import 'package:automation_system/utils/communication/web_request.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
@@ -44,6 +45,8 @@ class MiddleScreenSelector extends StatelessWidget {
           return RequestMenuScreen(
               title: requestListModel.params!['title'],
               menuModel: getErpRequestMenu(context));
+        case ScreenName.roleScreen:
+          return RoleScreenWidget(userRoleModel: getUserRoles(context));
         default:
           return ListOfRequests();
       }

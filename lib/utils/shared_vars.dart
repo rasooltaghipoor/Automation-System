@@ -29,7 +29,9 @@ class SharedVars {
 
   static var userID = "";
   static var roleID = "";
+  static var roleTitle = "";
   static var requestID = "";
+  static var historyID = "";
   static var formNameF = "";
   static var formNameE = "";
 

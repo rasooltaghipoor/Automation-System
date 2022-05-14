@@ -7,7 +7,8 @@ enum ScreenName {
   editRequest,
   viewRequest,
   introScreen,
-  requestMenuScreen
+  requestMenuScreen,
+  roleScreen,
 }
 
 // This class is responsible for changing the widgets in main part of home screen.

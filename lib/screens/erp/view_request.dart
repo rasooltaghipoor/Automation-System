@@ -221,7 +221,7 @@ class ItemList extends StatelessWidget {
                 'commandID': buttonData.commandID,
                 'editForm': isEdited.toString(),
                 'filePath': filePath,
-                'requestID': itemData!.requestDetails.requestID
+                // 'historyID': itemData!.requestDetails.requestID
               };
 
               sendReplyData(context, jsonEncode(items), otherItems);

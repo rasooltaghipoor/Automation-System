@@ -158,6 +158,10 @@ class _ListOfEmailsState extends State<ListOfMessages> {
                                             .cartable!
                                             .catableData[index]
                                             .requestID!;
+                                        SharedVars.historyID = cartablrModel
+                                            .cartable!
+                                            .catableData[index]
+                                            .history!;
                                         SharedVars.formNameF = cartablrModel
                                             .cartable!
                                             .catableData[index]

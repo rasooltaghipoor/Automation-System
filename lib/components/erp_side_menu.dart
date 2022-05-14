@@ -7,6 +7,7 @@ import 'package:automation_system/providers/menu_provider.dart';
 import 'package:automation_system/providers/user_provider.dart';
 import 'package:automation_system/responsive.dart';
 import 'package:automation_system/utils/communication/web_request.dart';
+import 'package:automation_system/utils/shared_vars.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:websafe_svg/websafe_svg.dart';
@@ -229,26 +230,29 @@ class _SideMenuState extends State<ErpSideMenu> {
                             isActive: _activeIndex == 4 ? true : false,
                             itemCount: -1,
                           ),
-                          SideMenuItem(
-                            press: () {
-                              setState(() {
-                                _activeIndex = 5;
-                              });
-                              // getErpCartableData(
-                              //     context, menuModel.sideMenu!.menuData[1]);
-                              Map<String, dynamic> params = <String, dynamic>{
-                                'formName': 'ChangeRole',
-                              };
-                              Provider.of<ChangeProvider>(context,
-                                      listen: false)
-                                  .setMidScreen(
-                                      ScreenName.requestMenuScreen, params);
-                            },
-                            title: 'تغییر نقش',
-                            iconSrc: "assets/Icons/File.svg",
-                            isActive: _activeIndex == 5 ? true : false,
-                            itemCount: -1,
-                          ),
+                          SharedVars.userRoles!.rolesData.length > 1
+                              ? SideMenuItem(
+                                  press: () {
+                                    setState(() {
+                                      _activeIndex = 5;
+                                    });
+                                    // getErpCartableData(
+                                    //     context, menuModel.sideMenu!.menuData[1]);
+                                    Map<String, dynamic> params =
+                                        <String, dynamic>{
+                                      'formName': 'ChangeRole',
+                                    };
+                                    Provider.of<ChangeProvider>(context,
+                                            listen: false)
+                                        .setMidScreen(
+                                            ScreenName.roleScreen, params);
+                                  },
+                                  title: 'تغییر نقش',
+                                  iconSrc: "assets/Icons/File.svg",
+                                  isActive: _activeIndex == 5 ? true : false,
+                                  itemCount: -1,
+                                )
+                              : Text(''),
                           /*SideMenuItem(
                             press: () {
                               setState(() {

@@ -95,7 +95,8 @@ class MyApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             routes: {
               '/main_screen': (context) => MainScreen(),
-              '/role_screen': (context) => DailyRequestScreen(),
+              '/role_screen': (context) =>
+                  RoleScreenWidget(userRoleModel: getUserRoles(context)),
               //'/login': (context) => Login(),
             }));
   }

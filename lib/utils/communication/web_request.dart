@@ -149,8 +149,7 @@ Future<void> getRequestList(BuildContext context) async {
 Future<RequestData> getRequestDetails(BuildContext context) async {
   Map<String, dynamic> queryParameters = {
     'token': Provider.of<AuthProvider>(context, listen: false).authUser.token,
-    'roleid': '9'
-    //Provider.of<AuthProvider>(context, listen: false).authUser.roleID,
+    'roleid': Provider.of<AuthProvider>(context, listen: false).authUser.roleID,
   };
 
   final response = await http.post(
@@ -161,7 +160,7 @@ Future<RequestData> getRequestDetails(BuildContext context) async {
     body: queryParameters,
   );
 
-  print(mainUrl + 'api/Request/ViewDetail2/5');
+  // print(mainUrl + 'api/Request/ViewDetail2/5');
   if (response.statusCode == 200) {
     print(utf8.decode(response.bodyBytes));
     final responseBody = utf8.decode(response.bodyBytes);
@@ -414,7 +413,7 @@ Future<void> getErpReplyButtons(BuildContext context) async {
 }
 
 /// Reads some data about current date from the server
-Future<void> getUserRoles(BuildContext context) async {
+Future<UserRoleModel> getUserRoles(BuildContext context) async {
   Map<String, dynamic> queryParameters = {
     // 'token': Provider.of<AuthProvider>(context, listen: false).authUser.token,
     'token': Provider.of<AuthProvider>(context, listen: false)
@@ -437,7 +436,9 @@ Future<void> getUserRoles(BuildContext context) async {
     //FIXME: This kind of 'if' doesn't work if 'menu' not present
     if (responseData != null) {
       // We deserialize read data but only use Date field for now
-      SharedVars.userRoles = UserRoleModel.fromMap(responseData);
+      UserRoleModel data = UserRoleModel.fromMap(responseData);
+      SharedVars.userRoles = data;
+      return data;
     } else {
       throw Exception('Unable to fetch info from the REST API');
     }
@@ -582,7 +583,7 @@ Future<Map<String, dynamic>> sendReplyData(BuildContext context,
   };
 
   var request = http.MultipartRequest('POST',
-      Uri.parse(mainUrl + 'api/Request/history/${otherData['requestID']}'));
+      Uri.parse(mainUrl + 'api/Request/history/${SharedVars.historyID}'));
   request.fields.addAll(queryParameters);
   request.headers.addAll(<String, String>{
     'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -599,12 +600,14 @@ Future<Map<String, dynamic>> sendReplyData(BuildContext context,
   var response = await http.Response.fromStream(firstResponse);
 
   // final response = await http.post(
-  //   Uri.parse(mainUrl + 'api/Request/history/${otherData['requestID']}'),
+  //   Uri.parse(mainUrl + 'api/Request/history/${SharedVars.historyID}'),
   //   headers: <String, String>{
   //     'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
   //   },
   //   body: queryParameters,
   // );
+
+  // print(mainUrl + 'api/Request/history/${SharedVars.historyID}}');
 
   final responseBody = utf8.decode(response.bodyBytes);
   final Map<String, dynamic> responseData = json.decode(responseBody);
