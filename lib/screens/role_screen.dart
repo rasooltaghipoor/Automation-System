@@ -110,18 +110,25 @@ class _RoleScreenState extends State<RoleScreen> {
                         },
                       ),
                       Container(
-                          height: SizeConfig.blockSizeHorizontal! * 50 * 0.25,
+                          height: Responsive.isDesktop(context)
+                              ? SizeConfig.safeBlockHorizontal! * 12
+                              : SizeConfig.safeBlockVertical! * 15,
                           width: SizeConfig.safeBlockHorizontal! * 50,
-                          padding: EdgeInsets.fromLTRB(
-                              SizeConfig.safeBlockHorizontal! * 20,
-                              SizeConfig.safeBlockHorizontal! * 5,
-                              SizeConfig.safeBlockHorizontal! * 20,
-                              SizeConfig.safeBlockHorizontal! * 3),
+                          padding: Responsive.isDesktop(context)
+                              ? EdgeInsets.fromLTRB(
+                                  SizeConfig.safeBlockHorizontal! * 30,
+                                  SizeConfig.safeBlockHorizontal! * 5,
+                                  SizeConfig.safeBlockHorizontal! * 30,
+                                  SizeConfig.safeBlockHorizontal! * 3)
+                              : EdgeInsets.all(20),
+                          // SizeConfig.safeBlockHorizontal! * 20,
+                          // SizeConfig.safeBlockHorizontal! * 5,
+                          // SizeConfig.safeBlockHorizontal! * 20,
+                          // SizeConfig.safeBlockHorizontal! * 3),
                           child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
                                   shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(
-                                        SizeConfig.safeBlockHorizontal! * 4),
+                                    borderRadius: BorderRadius.circular(10),
                                   ),
                                   primary: SharedVars.buttonColor,
                                   padding: EdgeInsets.symmetric(
@@ -130,10 +137,10 @@ class _RoleScreenState extends State<RoleScreen> {
                                       vertical:
                                           SizeConfig.safeBlockHorizontal!),
                                   textStyle: TextStyle(
-                                      color: Colors.white,
-                                      fontFamily: SharedVars.fontFamily,
-                                      fontSize: SharedVars.buttonFontSize,
-                                      fontWeight: FontWeight.bold)),
+                                    color: Colors.white,
+                                    fontFamily: SharedVars.fontFamily,
+                                    fontSize: 30,
+                                  )),
                               onPressed: () {
                                 Provider.of<AuthProvider>(context,
                                         listen: false)

@@ -132,10 +132,12 @@ Future<void> getRequestList(BuildContext context) async {
     final responseBody = utf8.decode(response.bodyBytes);
     final responseData = json.decode(responseBody);
     if (responseData['Result'] != null) {
-      RequestListModel data = RequestListModel.fromMap(responseData);
-      // print('form id: ' + data.items[0].formName_F);
-      Provider.of<RequestListProvider>(context, listen: false)
-          .setRequestList(data, 'درخواست های من');
+      if (responseData['items'] != '') {
+        RequestListModel data = RequestListModel.fromMap(responseData);
+        // print('form id: ' + data.items[0].formName_F);
+        Provider.of<RequestListProvider>(context, listen: false)
+            .setRequestList(data, 'درخواست های من');
+      }
       //return data;
     } else {
       throw Exception('Unable to fetch info from the REST API');
@@ -331,11 +333,13 @@ Future<void> getErpCartableData(
     final responseData = json.decode(responseBody);
     //FIXME: This kind of 'if' doesn't work if 'menu' not present
     if (responseData['Result'] != null) {
-      // We deserialize read data but only use Date field for now
-      ErpCartableModel data = ErpCartableModel.fromMap(responseData);
-      print('name: ' + data.catableData[0].formName_F!);
-      Provider.of<ErpCartableProvider>(context, listen: false)
-          .setCartable(data, itemData.title!);
+      if (responseData['items'] != '') {
+        // We deserialize read data but only use Date field for now
+        ErpCartableModel data = ErpCartableModel.fromMap(responseData);
+        print('name: ' + data.catableData[0].formName_F!);
+        Provider.of<ErpCartableProvider>(context, listen: false)
+            .setCartable(data, itemData.title!);
+      }
     } else {
       throw Exception('Unable to fetch info from the REST API');
     }
@@ -561,6 +565,45 @@ Future<Map<String, dynamic>> sendFormData(BuildContext context, String jsonData,
 
   final firstResponse = await request.send();
   var response = await http.Response.fromStream(firstResponse);
+
+  final responseBody = utf8.decode(response.bodyBytes);
+  final Map<String, dynamic> responseData = json.decode(responseBody);
+
+  print(responseData);
+
+  if (response.statusCode == 200) {
+    if (responseData['Requestid'] != '-1') {
+      result = {'status': true, 'message': responseData['Message']};
+    } else {
+      result = {
+        'status': false,
+        'message': SharedVars.error + responseData['Message']
+      };
+    }
+  } else {
+    result = {'status': false, 'message': responseData['Message']};
+  }
+  return result;
+}
+
+Future<Map<String, dynamic>> editFormData(
+    BuildContext context, String jsonData, String filePath) async {
+  var result;
+
+  Map<String, String> queryParameters = {
+    'token': Provider.of<AuthProvider>(context, listen: false).authUser.token!,
+    'roleid':
+        Provider.of<AuthProvider>(context, listen: false).authUser.roleID!,
+    'items': jsonData,
+  };
+
+  final response = await http.post(
+    Uri.parse(mainUrl + 'api/Request/Edit/${SharedVars.requestID}'),
+    headers: <String, String>{
+      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+    },
+    body: queryParameters,
+  );
 
   final responseBody = utf8.decode(response.bodyBytes);
   final Map<String, dynamic> responseData = json.decode(responseBody);

@@ -11,6 +11,7 @@ import 'package:automation_system/screens/erp/timeline_widget.dart';
 import 'package:automation_system/utils/SizeConfiguration.dart';
 import 'package:automation_system/utils/communication/web_request.dart';
 import 'package:automation_system/utils/shared_vars.dart';
+import 'package:automation_system/utils/useful_widgets.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -39,6 +40,14 @@ class _State extends State<DynamicEditWidget> {
   bool value = false;
   String filePath = "";
   TextEditingController descriptionController = TextEditingController();
+  RequestStatus _requestStatus = RequestStatus.NotSend;
+  var loading = Row(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: <Widget>[
+      CircularProgressIndicator(),
+      Text("لطفا منتظر بمانید...")
+    ],
+  );
   final _processes = [
     'مدیر بخش',
     'مدیر کل',
@@ -210,6 +219,7 @@ class _State extends State<DynamicEditWidget> {
   List<Widget> getButtons(BuildContext context) {
     {
       final List<Widget> rowList = [];
+
       for (ReplyButtonData buttonData in widget.itemData!.buttonsData) {
         rowList.add(
           SizedBox(
@@ -249,9 +259,33 @@ class _State extends State<DynamicEditWidget> {
                       'requestID': widget.itemData!.requestDetails.requestID
                     };
 
-                    sendReplyData(context, jsonEncode(items), otherItems);
                     // // String jsonTutorial = jsonEncode(items);
                     print(jsonEncode(items));
+
+                    setState(() {
+                      // textHolder = '';
+                      // errTextHolder = '';
+                      _requestStatus = RequestStatus.Sending;
+                    });
+                    final Future<Map<String, dynamic>> successfulMessage =
+                        sendReplyData(context, jsonEncode(items), otherItems);
+
+                    successfulMessage.then((response) {
+                      if (response['status']) {
+                        setState(() {
+                          _requestStatus = RequestStatus.Done;
+                          _showAlertDialog('عملیات با موفقیت انجام شد', true);
+                          getErpSideMenuData(context);
+                          // textHolder = response['message'];
+                        });
+                      } else {
+                        setState(() {
+                          _requestStatus = RequestStatus.Done;
+                          _showAlertDialog('عملیات نا موفق بود', false);
+                          // errTextHolder = response['message'];
+                        });
+                      }
+                    });
                   },
                   child: Text(buttonData.cammandTitle!))),
         );
@@ -259,6 +293,89 @@ class _State extends State<DynamicEditWidget> {
       // sendFormData(context, jsonEncode(items));
       return rowList;
     }
+  }
+
+  Future _showUpdatedDialog(String path) {
+    final alert = AlertDialog(
+      title: const Text("تصویر"),
+      content: Expanded(
+          child: Image.network(
+        path,
+      )),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: const Text("بستن"),
+        ),
+      ],
+    );
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) => alert,
+    );
+  }
+
+  Future _showAlertDialog(String msg, bool isOK) {
+    final alert = Directionality(
+        textDirection: TextDirection.rtl,
+        child: AlertDialog(
+          title: const Text("نتیجه"),
+          content: Text(
+            msg,
+            style: TextStyle(color: isOK ? Colors.blue : Colors.red),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text("بستن"),
+            ),
+          ],
+        ));
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) => alert,
+    );
+  }
+
+  void onEditClick() {
+    Map<String, String> items = <String, String>{};
+    for (FormItem listItem in _formData!.items) {
+      if (listItem.control == 'textbox') {
+        items[listItem.controlName] =
+            widget.controllerMap[listItem.controlName]!.text;
+      } else if (listItem.control == 'listbox') {
+        items[listItem.controlName] = widget.dropDownMap[listItem.controlName]!;
+      }
+    }
+    // String jsonTutorial = jsonEncode(items);
+    print(jsonEncode(items));
+    setState(() {
+      // textHolder = '';
+      // errTextHolder = '';
+      _requestStatus = RequestStatus.Sending;
+    });
+    final Future<Map<String, dynamic>> successfulMessage =
+        editFormData(context, jsonEncode(items), 'filePath');
+
+    successfulMessage.then((response) {
+      if (response['status']) {
+        setState(() {
+          _requestStatus = RequestStatus.Done;
+          _showAlertDialog('ویرایش با موفقیت انجام شد', true);
+          // textHolder = response['message'];
+        });
+      } else {
+        setState(() {
+          _requestStatus = RequestStatus.Done;
+          _showAlertDialog('خطا در ویرایش اطلاعات', false);
+          // errTextHolder = response['message'];
+        });
+      }
+    });
   }
 
   @override
@@ -309,15 +426,23 @@ class _State extends State<DynamicEditWidget> {
               width: 20,
             ),
             widget.itemData!.requestDetails.attachFile == 'True'
-                ? Image.network(
-                    mainUrl +
-                        widget.itemData!.requestDetails.fileUrl +
-                        Provider.of<AuthProvider>(context, listen: false)
-                            .authUser
-                            .token!,
-                    width: 200,
-                    height: 200,
-                  )
+                ? GestureDetector(
+                    onTap: () {
+                      _showUpdatedDialog(mainUrl +
+                          widget.itemData!.requestDetails.fileUrl +
+                          Provider.of<AuthProvider>(context, listen: false)
+                              .authUser
+                              .token!);
+                    },
+                    child: Image.network(
+                      mainUrl +
+                          widget.itemData!.requestDetails.fileUrl +
+                          Provider.of<AuthProvider>(context, listen: false)
+                              .authUser
+                              .token!,
+                      width: 200,
+                      height: 200,
+                    ))
                 : const Text('')
           ],
         ),
@@ -379,14 +504,16 @@ class _State extends State<DynamicEditWidget> {
                   ],
                 )
               : widget.itemData!.editable == 'true'
-                  ? SizedBox(
-                      width: 140,
-                      height: 40,
-                      child: ElevatedButton(
-                        onPressed: () {},
-                        child: Text('ویرایش درخواست'),
-                      ),
-                    )
+                  ? _requestStatus == RequestStatus.Sending
+                      ? loading
+                      : SizedBox(
+                          width: 140,
+                          height: 40,
+                          child: ElevatedButton(
+                            onPressed: onEditClick,
+                            child: Text('ویرایش درخواست'),
+                          ),
+                        )
                   : const Text(
                       'امکان پاسخ گویی یا ویرایش برای شما میسر نمی باشد'),
         ),

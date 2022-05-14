@@ -238,7 +238,7 @@ class _View2State extends State<View2> {
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: const Text("OK"),
+          child: const Text("بستن"),
         ),
       ],
     );

@@ -91,7 +91,7 @@ class MyApp extends StatelessWidget {
               primarySwatch: Colors.blue,
               visualDensity: VisualDensity.adaptivePlatformDensity,
             ),
-            home: Login('309'),
+            home: Login(),
             debugShowCheckedModeBanner: false,
             routes: {
               '/main_screen': (context) => MainScreen(),

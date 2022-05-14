@@ -2,6 +2,8 @@ import 'package:automation_system/utils/SizeConfiguration.dart';
 import 'package:automation_system/utils/shared_vars.dart';
 import 'package:flutter/material.dart';
 
+enum RequestStatus { NotSend, Sending, Done }
+
 /// Some kind og button. Currently, such buttons are just used in login screen
 MaterialButton longButtons(String title, VoidCallback fun,
     {Color color: SharedVars.appBarColor, Color textColor: Colors.white}) {

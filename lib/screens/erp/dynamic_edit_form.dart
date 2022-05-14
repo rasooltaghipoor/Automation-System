@@ -6,6 +6,7 @@ import 'package:automation_system/models/DynamicForm.dart';
 import 'package:automation_system/utils/SizeConfiguration.dart';
 import 'package:automation_system/utils/communication/web_request.dart';
 import 'package:automation_system/utils/shared_vars.dart';
+import 'package:automation_system/utils/useful_widgets.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -25,9 +26,17 @@ class _View2State extends State<DynamicEditForm> {
   Map<String, String> _dropDownMap = Map();
   String filePath = '';
   String dropPriority = '0';
+  RequestStatus _requestStatus = RequestStatus.NotSend;
   // Map<String, int> _listboxIndices = Map();
   DynamicFormModel? _formData;
 
+  var loading = Row(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: <Widget>[
+      CircularProgressIndicator(),
+      Text("لطفا منتظر بمانید...")
+    ],
+  );
   // List<String> _data = [
   //   "one",
   //   "two",
@@ -212,47 +221,72 @@ class _View2State extends State<DynamicEditForm> {
   }
 
   Widget _okButton() {
-    return Container(
-        width: 200,
-        height: 60,
-        child: ElevatedButton(
-          onPressed: () async {
-            // String text = _controllerMap.values
-            //     .where((element) => element.text != "")
-            //     .fold("", (acc, element) => acc += "${element.text}\n");
-            // await _showUpdatedDialog(text);
+    return _requestStatus == RequestStatus.Sending
+        ? loading
+        : Container(
+            width: 200,
+            height: 60,
+            child: ElevatedButton(
+              onPressed: () async {
+                // String text = _controllerMap.values
+                //     .where((element) => element.text != "")
+                //     .fold("", (acc, element) => acc += "${element.text}\n");
+                // await _showUpdatedDialog(text);
 
-            // setState(() {
-            //   _controllerMap.forEach((key, controller) {
-            //     // get the index of original text
-            //     int index = _controllerMap.keys.toList().indexOf(key);
-            //     key = controller.text;
-            //     _data[index] = controller.text;
-            //   });
-            // });
-            Map<String, String> items = <String, String>{};
-            for (FormItem listItem in _formData!.items) {
-              if (listItem.control == 'textbox') {
-                items[listItem.controlName] =
-                    _getControllerOf(listItem.controlName).text;
-              } else if (listItem.control == 'listbox') {
-                items[listItem.controlName] =
-                    _dropDownMap[listItem.controlName]!;
-              }
-            }
+                // setState(() {
+                //   _controllerMap.forEach((key, controller) {
+                //     // get the index of original text
+                //     int index = _controllerMap.keys.toList().indexOf(key);
+                //     key = controller.text;
+                //     _data[index] = controller.text;
+                //   });
+                // });
+                Map<String, String> items = <String, String>{};
+                for (FormItem listItem in _formData!.items) {
+                  if (listItem.control == 'textbox') {
+                    items[listItem.controlName] =
+                        _getControllerOf(listItem.controlName).text;
+                  } else if (listItem.control == 'listbox') {
+                    items[listItem.controlName] =
+                        _dropDownMap[listItem.controlName]!;
+                  }
+                }
 
-            // String jsonTutorial = jsonEncode(items);
-            print(jsonEncode(items));
-            sendFormData(context, jsonEncode(items), dropPriority, filePath,
-                _formData!.formName_E);
-          },
-          child: widget.isEdit!
-              ? const Text(
-                  'ویرایش',
-                  style: TextStyle(fontSize: 20),
-                )
-              : const Text('ارسال', style: TextStyle(fontSize: 20)),
-        ));
+                // String jsonTutorial = jsonEncode(items);
+                print(jsonEncode(items));
+                setState(() {
+                  // textHolder = '';
+                  // errTextHolder = '';
+                  _requestStatus = RequestStatus.Sending;
+                });
+                final Future<Map<String, dynamic>> successfulMessage =
+                    sendFormData(context, jsonEncode(items), dropPriority,
+                        filePath, _formData!.formName_E);
+
+                successfulMessage.then((response) {
+                  if (response['status']) {
+                    setState(() {
+                      _requestStatus = RequestStatus.Done;
+                      _showAlertDialog('عملیات با موفقیت انجام شد', true);
+                      getErpSideMenuData(context);
+                      // textHolder = response['message'];
+                    });
+                  } else {
+                    setState(() {
+                      _requestStatus = RequestStatus.Done;
+                      _showAlertDialog('عملیات نا موفق بود', false);
+                      // errTextHolder = response['message'];
+                    });
+                  }
+                });
+              },
+              child: widget.isEdit!
+                  ? const Text(
+                      'ویرایش',
+                      style: TextStyle(fontSize: 20),
+                    )
+                  : const Text('ارسال', style: TextStyle(fontSize: 20)),
+            ));
   }
 
   Future _showUpdatedDialog(String text) {
@@ -268,6 +302,30 @@ class _View2State extends State<DynamicEditForm> {
         ),
       ],
     );
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) => alert,
+    );
+  }
+
+  Future _showAlertDialog(String msg, bool isOK) {
+    final alert = Directionality(
+        textDirection: TextDirection.rtl,
+        child: AlertDialog(
+          title: const Text("نتیجه"),
+          content: Text(
+            msg,
+            style: TextStyle(color: isOK ? Colors.blue : Colors.red),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text("بستن"),
+            ),
+          ],
+        ));
     return showDialog(
       context: context,
       builder: (BuildContext context) => alert,

@@ -12,12 +12,10 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 class Login extends StatefulWidget {
-  final String userName;
-
   @override
-  _LoginState createState() => _LoginState(this.userName);
+  _LoginState createState() => _LoginState();
 
-  Login(this.userName);
+  Login();
 }
 
 class _LoginState extends State<Login> {
@@ -27,7 +25,7 @@ class _LoginState extends State<Login> {
 
   String? _username, _password;
 
-  _LoginState(this._username);
+  _LoginState();
 
   Timer? _timer;
 
@@ -160,7 +158,7 @@ class _LoginState extends State<Login> {
                       style: TextStyle(fontFamily: SharedVars.fontFamily),
                     ),
                     SizedBox(height: SizeConfig.safeBlockVertical! * 8),
-                    const Text("دانشگاه"),
+                    // const Text("دانشگاه"),
                     //Expanded(
                     // Container(
                     //     alignment: Alignment.center,
