@@ -151,7 +151,7 @@ class _LoginState extends State<Login> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Image.asset(
-                      "assets/images/Logo Outlook.png",
+                      "assets/icon/FaraYar.png",
                       width: 50,
                       height: 50 * 1.25,
                     ),

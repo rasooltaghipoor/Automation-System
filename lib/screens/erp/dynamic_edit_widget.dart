@@ -1,10 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:automation_system/constants.dart';
 import 'package:automation_system/models/BuyModel.dart';
 import 'package:automation_system/models/DynamicForm.dart';
 import 'package:automation_system/models/ReplyButtons.dart';
 import 'package:automation_system/models/RequestData.dart';
+import 'package:automation_system/providers/auth.dart';
 import 'package:automation_system/screens/erp/timeline_widget.dart';
 import 'package:automation_system/utils/SizeConfiguration.dart';
 import 'package:automation_system/utils/communication/web_request.dart';
@@ -13,6 +15,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:persian_datetime_picker/persian_datetime_picker.dart';
+import 'package:provider/provider.dart';
 
 class DynamicEditWidget extends StatefulWidget {
   RequestData? itemData;
@@ -299,6 +302,25 @@ class _State extends State<DynamicEditWidget> {
           height: 10,
         ),
         _futureBuilder(),
+        Row(
+          children: [
+            const Text(':فایل ضمیمه'),
+            const SizedBox(
+              width: 20,
+            ),
+            widget.itemData!.requestDetails.attachFile == 'True'
+                ? Image.network(
+                    mainUrl +
+                        widget.itemData!.requestDetails.fileUrl +
+                        Provider.of<AuthProvider>(context, listen: false)
+                            .authUser
+                            .token!,
+                    width: 200,
+                    height: 200,
+                  )
+                : const Text('')
+          ],
+        ),
         Container(
           padding: EdgeInsets.all(10),
           color: Colors.blue[50],
@@ -356,7 +378,17 @@ class _State extends State<DynamicEditWidget> {
                     )
                   ],
                 )
-              : const Text('امکان پاسخ گویی برای شما میسر نمی باشد'),
+              : widget.itemData!.editable == 'true'
+                  ? SizedBox(
+                      width: 140,
+                      height: 40,
+                      child: ElevatedButton(
+                        onPressed: () {},
+                        child: Text('ویرایش درخواست'),
+                      ),
+                    )
+                  : const Text(
+                      'امکان پاسخ گویی یا ویرایش برای شما میسر نمی باشد'),
         ),
         Container(
           padding: EdgeInsets.all(10),

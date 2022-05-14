@@ -18,7 +18,7 @@ class ScreenHeader extends StatelessWidget {
                 Expanded(
                   flex: 1,
                   child: ListTile(
-                    leading: Image.asset("assets/images/Logo Outlook.png"),
+                    leading: Image.asset("assets/icon/FaraYar.png"),
                     //backgroundColor: Colors.purple,
                     title: const Text('فرایار'),
                     subtitle: const Text('مدیریت منابع سازمانی'),
