@@ -7,6 +7,7 @@ import 'package:automation_system/models/DynamicForm.dart';
 import 'package:automation_system/models/ReplyButtons.dart';
 import 'package:automation_system/models/RequestData.dart';
 import 'package:automation_system/providers/auth.dart';
+import 'package:automation_system/screens/erp/erp_timeline.dart';
 import 'package:automation_system/screens/erp/timeline_widget.dart';
 import 'package:automation_system/utils/SizeConfiguration.dart';
 import 'package:automation_system/utils/communication/web_request.dart';
@@ -522,8 +523,10 @@ class _State extends State<DynamicEditWidget> {
           // color: Colors.yellow[100],
           height: 250,
           // width: 700,
-          child: ProcessTimeline(
-              2, _processes, widget.itemData!.historyChart.items),
+          child: ErpTimeline(widget.itemData!.historyChart.items),
+
+          // ProcessTimeline(
+          //     2, _processes, widget.itemData!.historyChart.items),
         ),
       ],
     );

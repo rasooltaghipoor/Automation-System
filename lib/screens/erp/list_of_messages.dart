@@ -58,48 +58,48 @@ class _ListOfEmailsState extends State<ListOfMessages> {
               child: Column(
                 children: [
                   // This is our Search bar
-                  Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: kDefaultPadding),
-                    child: Row(
-                      children: [
-                        // Once user click the menu icon the menu shows like drawer
-                        // Also we want to hide this menu icon on desktop
-                        if (!Responsive.isDesktop(context))
-                          IconButton(
-                            icon: const Icon(Icons.menu),
-                            onPressed: () {
-                              _scaffoldKey.currentState?.openEndDrawer();
-                            },
-                          ),
-                        if (!Responsive.isDesktop(context))
-                          const SizedBox(width: 5),
-                        /*Expanded(
-                          child: TextField(
-                            onChanged: (value) {},
-                            decoration: InputDecoration(
-                              hintText: "جستجو",
-                              fillColor: kBgLightColor,
-                              filled: true,
-                              suffixIcon: Padding(
-                                padding: const EdgeInsets.all(
-                                    kDefaultPadding * 0.75), //15
-                                child: WebsafeSvg.asset(
-                                  "assets/Icons/Search.svg",
-                                  width: 24,
-                                ),
-                              ),
-                              border: const OutlineInputBorder(
-                                borderRadius: BorderRadius.all(
-                                    Radius.circular(10)),
-                                borderSide: BorderSide.none,
-                              ),
-                            ),
-                          ),
-                        ),*/
-                      ],
-                    ),
-                  ),
+                  // Padding(
+                  //   padding:
+                  //       const EdgeInsets.symmetric(horizontal: kDefaultPadding),
+                  //   child: Row(
+                  //     children: [
+                  //       // Once user click the menu icon the menu shows like drawer
+                  //       // Also we want to hide this menu icon on desktop
+                  //       if (!Responsive.isDesktop(context))
+                  //         IconButton(
+                  //           icon: const Icon(Icons.menu),
+                  //           onPressed: () {
+                  //             _scaffoldKey.currentState?.openEndDrawer();
+                  //           },
+                  //         ),
+                  //       if (!Responsive.isDesktop(context))
+                  //         const SizedBox(width: 5),
+                  //       /*Expanded(
+                  //         child: TextField(
+                  //           onChanged: (value) {},
+                  //           decoration: InputDecoration(
+                  //             hintText: "جستجو",
+                  //             fillColor: kBgLightColor,
+                  //             filled: true,
+                  //             suffixIcon: Padding(
+                  //               padding: const EdgeInsets.all(
+                  //                   kDefaultPadding * 0.75), //15
+                  //               child: WebsafeSvg.asset(
+                  //                 "assets/Icons/Search.svg",
+                  //                 width: 24,
+                  //               ),
+                  //             ),
+                  //             border: const OutlineInputBorder(
+                  //               borderRadius: BorderRadius.all(
+                  //                   Radius.circular(10)),
+                  //               borderSide: BorderSide.none,
+                  //             ),
+                  //           ),
+                  //         ),
+                  //       ),*/
+                  //     ],
+                  //   ),
+                  // ),
                   const SizedBox(height: kDefaultPadding),
                   Padding(
                     padding:
