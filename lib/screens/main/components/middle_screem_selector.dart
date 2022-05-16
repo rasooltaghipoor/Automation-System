@@ -46,7 +46,8 @@ class MiddleScreenSelector extends StatelessWidget {
               title: requestListModel.params!['title'],
               menuModel: getErpRequestMenu(context));
         case ScreenName.roleScreen:
-          return RoleScreenWidget(userRoleModel: getUserRoles(context));
+          // return RoleScreenWidget(userRoleModel: getUserRoles(context));
+          return RoleScreen();
         default:
           return ListOfRequests();
       }

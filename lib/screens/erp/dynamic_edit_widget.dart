@@ -59,6 +59,51 @@ class _State extends State<DynamicEditWidget> {
     'نقی'
   ];
 
+  Widget _requestOverviewBuilder() {
+    // SharedVars.formNameE = 'ConsumBuy';
+    return FutureBuilder(
+      //TODO: This fucntion must be called only when no data is available!!
+      future: getFormDetails(SharedVars.formNameE),
+      builder:
+          (BuildContext context, AsyncSnapshot<DynamicFormModel?> snapshot) {
+        if (!snapshot.hasData) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        final data = snapshot.data!;
+        _formData = data;
+        widget.formItems = data.items;
+
+        return ListView.builder(
+          shrinkWrap: true,
+          itemCount: data.items.length,
+          padding: const EdgeInsets.all(20),
+          itemBuilder: (BuildContext context, int index) {
+            return Row(
+              children: [
+                Container(
+                  padding: EdgeInsets.all(8),
+                  color: index % 2 == 0 ? Colors.blue[100] : Colors.blue[50],
+                  width: 150,
+                  child: Text(data.items[index].title + ":"),
+                ),
+                SizedBox(
+                  width: 2,
+                ),
+                Container(
+                    padding: EdgeInsets.all(8),
+                    color: index % 2 == 0 ? Colors.blue[100] : Colors.blue[50],
+                    width: 150,
+                    child: Text(widget.itemData!.requestDetails
+                        .items[data.items[index].controlName])),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
   Widget _futureBuilder() {
     // SharedVars.formNameE = 'ConsumBuy';
     return FutureBuilder(
@@ -407,22 +452,24 @@ class _State extends State<DynamicEditWidget> {
                       });
                     },
                   ), //Text
-                  const SizedBox(width: 10), //SizedBox
+                  const SizedBox(width: 5), //SizedBox
                   /** Checkbox Widget **/
                   const Text(
                     'ویرایش درخواست',
-                    style: TextStyle(fontSize: 17.0),
+                    style: TextStyle(fontSize: 15.0),
                   ), //Checkbox
                 ], //<Widget>[]
               )
             : const Text('امکان ویرایش داده ها وجود ندارد'),
         SizedBox(
-          height: 10,
+          height: 5,
         ),
-        _futureBuilder(),
+        widget.canEdit! && isEnabled
+            ? _futureBuilder()
+            : _requestOverviewBuilder(),
         Row(
           children: [
-            const Text(':فایل ضمیمه'),
+            const Text('فایل ضمیمه'),
             const SizedBox(
               width: 20,
             ),
@@ -505,16 +552,18 @@ class _State extends State<DynamicEditWidget> {
                   ],
                 )
               : widget.itemData!.editable == 'true'
-                  ? _requestStatus == RequestStatus.Sending
-                      ? loading
-                      : SizedBox(
-                          width: 140,
-                          height: 40,
-                          child: ElevatedButton(
-                            onPressed: onEditClick,
-                            child: Text('ویرایش درخواست'),
-                          ),
-                        )
+                  ? isEnabled
+                      ? _requestStatus == RequestStatus.Sending
+                          ? loading
+                          : SizedBox(
+                              width: 140,
+                              height: 40,
+                              child: ElevatedButton(
+                                onPressed: onEditClick,
+                                child: Text('ویرایش درخواست'),
+                              ),
+                            )
+                      : Text('')
                   : const Text(
                       'امکان پاسخ گویی یا ویرایش برای شما میسر نمی باشد'),
         ),

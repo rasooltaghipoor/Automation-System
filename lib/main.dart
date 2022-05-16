@@ -96,7 +96,8 @@ class MyApp extends StatelessWidget {
             routes: {
               '/main_screen': (context) => MainScreen(),
               '/role_screen': (context) =>
-                  RoleScreenWidget(userRoleModel: getUserRoles(context)),
+                  // RoleScreenWidget(userRoleModel: getUserRoles(context)),
+                  RoleScreen(),
               //'/login': (context) => Login(),
             }));
   }

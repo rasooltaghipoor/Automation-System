@@ -98,10 +98,9 @@ class _LoginState extends State<Login> {
         successfulMessage.then((response) {
           if (response['status']) {
             User user = response['user'];
-
             //******Provider.of<UserProvider>(context, listen: false).setUser(user);
             //SharedVars.currentDate = response['date'];
-            Navigator.pushReplacementNamed(context, '/role_screen');
+            Navigator.pushReplacementNamed(context, '/main_screen');
           } else {
             final snackBar = mySnackBar(
                 'نام کاربری یا رمز عبور اشتباه است', SharedVars.appBarColor);

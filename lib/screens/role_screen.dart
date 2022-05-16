@@ -10,44 +10,40 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class RoleScreenWidget extends StatelessWidget {
-  final Future<UserRoleModel>? userRoleModel;
+// class RoleScreenWidget extends StatelessWidget {
+//   final Future<UserRoleModel>? userRoleModel;
 
-  RoleScreenWidget({Key? key, this.userRoleModel}) : super(key: key);
+//   RoleScreenWidget({Key? key, this.userRoleModel}) : super(key: key);
 
-  // final items = Product.getProducts();
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-        child: Directionality(
-      textDirection: TextDirection.rtl,
-      child: FutureBuilder<UserRoleModel>(
-        future: userRoleModel,
-        builder: (context, snapshot) {
-          if (snapshot.hasError) print(snapshot.error);
-          // if (snapshot.hasData) {
-          //   if (snapshot.data!.rolesData.length <= 1) {
-          //     Navigator.pushReplacementNamed(context, '/main_screen');
-          //   }
-          // }
-          return snapshot.hasData
-              ? RoleScreen(
-                  userRoleModel: snapshot.data,
-                )
-              :
-              // return the ListView widget :
-              const Center(child: CircularProgressIndicator());
-        },
-      ),
-    ));
-  }
-}
+//   // final items = Product.getProducts();
+//   @override
+//   Widget build(BuildContext context) {
+//     return Center(
+//         child: Directionality(
+//       textDirection: TextDirection.rtl,
+//       child: FutureBuilder<UserRoleModel>(
+//         future: userRoleModel,
+//         builder: (context, snapshot) {
+//           if (snapshot.hasError) print(snapshot.error);
+//           // if (snapshot.hasData) {
+//           //   if (snapshot.data!.rolesData.length <= 1) {
+//           //     Navigator.pushReplacementNamed(context, '/main_screen');
+//           //   }
+//           // }
+//           return snapshot.hasData
+//               ? RoleScreen()
+//               :
+//               // return the ListView widget :
+//               const Center(child: CircularProgressIndicator());
+//         },
+//       ),
+//     ));
+//   }
+// }
 
 class RoleScreen extends StatefulWidget {
-  UserRoleModel? userRoleModel;
   RoleScreen({
     Key? key,
-    UserRoleModel? userRoleModel,
   }) : super(key: key);
   @override
   _RoleScreenState createState() => _RoleScreenState();

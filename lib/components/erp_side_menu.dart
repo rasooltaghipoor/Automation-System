@@ -230,29 +230,32 @@ class _SideMenuState extends State<ErpSideMenu> {
                             isActive: _activeIndex == 4 ? true : false,
                             itemCount: -1,
                           ),
-                          SharedVars.userRoles!.rolesData.length > 1
-                              ? SideMenuItem(
-                                  press: () {
-                                    setState(() {
-                                      _activeIndex = 5;
-                                    });
-                                    // getErpCartableData(
-                                    //     context, menuModel.sideMenu!.menuData[1]);
-                                    Map<String, dynamic> params =
-                                        <String, dynamic>{
-                                      'formName': 'ChangeRole',
-                                    };
-                                    Provider.of<ChangeProvider>(context,
-                                            listen: false)
-                                        .setMidScreen(
-                                            ScreenName.roleScreen, params);
-                                  },
-                                  title: 'تغییر نقش',
-                                  iconSrc: "assets/Icons/File.svg",
-                                  isActive: _activeIndex == 5 ? true : false,
-                                  itemCount: -1,
-                                )
-                              : Text(''),
+                          Consumer<AuthProvider>(
+                              builder: (context, authModel, child) {
+                            return authModel.authUser.roleCount! > 1
+                                ? SideMenuItem(
+                                    press: () {
+                                      setState(() {
+                                        _activeIndex = 5;
+                                      });
+                                      // getErpCartableData(
+                                      //     context, menuModel.sideMenu!.menuData[1]);
+                                      Map<String, dynamic> params =
+                                          <String, dynamic>{
+                                        'formName': 'ChangeRole',
+                                      };
+                                      Provider.of<ChangeProvider>(context,
+                                              listen: false)
+                                          .setMidScreen(
+                                              ScreenName.roleScreen, params);
+                                    },
+                                    title: 'تغییر نقش',
+                                    iconSrc: "assets/Icons/File.svg",
+                                    isActive: _activeIndex == 5 ? true : false,
+                                    itemCount: -1,
+                                  )
+                                : Text('');
+                          }),
                           /*SideMenuItem(
                             press: () {
                               setState(() {

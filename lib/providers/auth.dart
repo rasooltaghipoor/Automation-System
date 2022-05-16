@@ -40,6 +40,11 @@ class AuthProvider with ChangeNotifier {
     UserPreferences().saveUser(_authUser!);
   }
 
+  void setRolesCount(int count) {
+    _authUser!.roleCount = count;
+    notifyListeners();
+  }
+
   Future<Map<String, dynamic>> login(String username, String password) async {
     var result;
 

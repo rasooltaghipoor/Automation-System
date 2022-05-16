@@ -442,6 +442,8 @@ Future<UserRoleModel> getUserRoles(BuildContext context) async {
       // We deserialize read data but only use Date field for now
       UserRoleModel data = UserRoleModel.fromMap(responseData);
       SharedVars.userRoles = data;
+      Provider.of<AuthProvider>(context, listen: false)
+          .setRolesCount(data.rolesData.length);
       return data;
     } else {
       throw Exception('Unable to fetch info from the REST API');
