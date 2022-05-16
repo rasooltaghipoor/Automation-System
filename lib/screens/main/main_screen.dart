@@ -1,6 +1,8 @@
 import 'package:automation_system/components/erp_side_menu.dart';
 import 'package:automation_system/components/side_menu.dart';
+import 'package:automation_system/constants.dart';
 import 'package:automation_system/models/MenuDetails.dart';
+import 'package:automation_system/responsive.dart';
 import 'package:automation_system/screens/main/components/middle_screem_selector.dart';
 import 'package:automation_system/screens/main/components/navigation_bar.dart';
 import 'package:automation_system/screens/main/components/main_header.dart';
@@ -12,7 +14,8 @@ import 'package:responsive_framework/responsive_framework.dart';
 import 'components/list_of_emails.dart';
 
 class MainScreen extends StatelessWidget {
-  const MainScreen({Key? key}) : super(key: key);
+  MainScreen({Key? key}) : super(key: key);
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
@@ -21,17 +24,42 @@ class MainScreen extends StatelessWidget {
     //getSideMenuData(context, '309');
 
     getErpSideMenuData(context);
+    // getUserRoles(context);
+    // getErpReplyButtons(context);
     //getCartableData(context, MenuItemsData('همه نامه ها', '0', 'All'));
+    // getErpRequestMenu(context);
     SizeConfig().init(context);
     // It provide us the width and height
     Size _size = MediaQuery.of(context).size;
     return Scaffold(
+      key: _scaffoldKey,
       //appBar: AppBar(),
+      endDrawer: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 250),
+        child: const ErpSideMenu(),
+      ),
       body: Column(
         children: [
           const Expanded(
             flex: 1,
             child: ScreenHeader(),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
+            child: Row(
+              children: [
+                // Once user click the menu icon the menu shows like drawer
+                // Also we want to hide this menu icon on desktop
+                if (!Responsive.isDesktop(context))
+                  IconButton(
+                    icon: const Icon(Icons.menu),
+                    onPressed: () {
+                      _scaffoldKey.currentState?.openEndDrawer();
+                    },
+                  ),
+                if (!Responsive.isDesktop(context)) const SizedBox(width: 5),
+              ],
+            ),
           ),
           Expanded(
             flex: 10,

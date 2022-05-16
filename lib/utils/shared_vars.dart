@@ -1,6 +1,9 @@
 import 'package:automation_system/models/DynamicForm.dart';
 import 'package:flutter/material.dart';
 
+import '../models/ReplyButtons.dart';
+import '../models/UserRoles.dart';
+
 class SharedVars {
   // Some colors
   static const Color buttonColor = const Color(0xff6b8dcd); //(0xff28af62);
@@ -26,12 +29,15 @@ class SharedVars {
 
   static var userID = "";
   static var roleID = "";
+  static var roleTitle = "";
   static var requestID = "";
+  static var historyID = "";
   static var formNameF = "";
   static var formNameE = "";
 
   static Map<String, ListBoxItems> listBoxItemsMap = <String, ListBoxItems>{};
-  static Map<String, dynamic> replyButtons = <String, dynamic>{};
+  static ErpReplyButtonsModel? replyButtons;
+  static UserRoleModel? userRoles;
 
   static var universities = {
     'فنی مهندسی': '1',

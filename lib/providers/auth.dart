@@ -32,6 +32,14 @@ class AuthProvider with ChangeNotifier {
   PassStatus get passStatus => _passStatus;
   User get authUser => _authUser!;
 
+  void setRoleID(String roleID, String roleTitle) {
+    _authUser!.roleID = roleID;
+    _authUser!.defaultRole = roleTitle;
+    SharedVars.roleID = roleID;
+    SharedVars.roleTitle = roleTitle;
+    UserPreferences().saveUser(_authUser!);
+  }
+
   Future<Map<String, dynamic>> login(String username, String password) async {
     var result;
 
@@ -91,6 +99,7 @@ class AuthProvider with ChangeNotifier {
         SharedVars.password = password;
         SharedVars.userID = _authUser!.userId!;
         SharedVars.roleID = _authUser!.roleID!;
+        SharedVars.roleTitle = _authUser!.defaultRole!;
 
         UserPreferences().saveUser(_authUser!);
 

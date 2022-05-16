@@ -56,7 +56,7 @@ class ProcessTimeline extends StatelessWidget {
             return Padding(
                 padding: const EdgeInsets.only(bottom: 15.0),
                 child: SizedBox(
-                  height: 35,
+                  height: 50,
                   // color: Colors.amber,
                   child: Column(
                     children: [
@@ -70,7 +70,7 @@ class ProcessTimeline extends StatelessWidget {
                       Text(
                         items[index].roleTitle,
                         style: TextStyle(
-                          fontWeight: FontWeight.bold,
+                          // fontWeight: FontWeight.bold,
                           color: getColor(index),
                         ),
                       ),
@@ -94,7 +94,7 @@ class ProcessTimeline extends StatelessWidget {
                     Text(
                       items[index].date,
                       style: TextStyle(
-                        fontWeight: FontWeight.bold,
+                        // fontWeight: FontWeight.bold,
                         color: getColor(index),
                       ),
                     ),

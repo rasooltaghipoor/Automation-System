@@ -39,10 +39,10 @@ class _ListOfEmailsState extends State<ListOfRequests> {
 
     return Scaffold(
         key: _scaffoldKey,
-        endDrawer: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 250),
-          child: const SideMenu(),
-        ),
+        // endDrawer: ConstrainedBox(
+        //   constraints: const BoxConstraints(maxWidth: 250),
+        //   child: const SideMenu(),
+        // ),
         body: Container(
           padding: EdgeInsets.only(top: kIsWeb ? kDefaultPadding : 0),
           color: kBgDarkColor,
@@ -53,49 +53,49 @@ class _ListOfEmailsState extends State<ListOfRequests> {
               child: Column(
                 children: [
                   // This is our Search bar
-                  Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: kDefaultPadding),
-                    child: Row(
-                      children: [
-                        // Once user click the menu icon the menu shows like drawer
-                        // Also we want to hide this menu icon on desktop
-                        if (!Responsive.isDesktop(context))
-                          IconButton(
-                            icon: const Icon(Icons.menu),
-                            onPressed: () {
-                              _scaffoldKey.currentState?.openEndDrawer();
-                            },
-                          ),
-                        if (!Responsive.isDesktop(context))
-                          const SizedBox(width: 5),
-                        /*Expanded(
-                          child: TextField(
-                            onChanged: (value) {},
-                            decoration: InputDecoration(
-                              hintText: "جستجو",
-                              fillColor: kBgLightColor,
-                              filled: true,
-                              suffixIcon: Padding(
-                                padding: const EdgeInsets.all(
-                                    kDefaultPadding * 0.75), //15
-                                child: WebsafeSvg.asset(
-                                  "assets/Icons/Search.svg",
-                                  width: 24,
-                                ),
-                              ),
-                              border: const OutlineInputBorder(
-                                borderRadius: BorderRadius.all(
-                                    Radius.circular(10)),
-                                borderSide: BorderSide.none,
-                              ),
-                            ),
-                          ),
-                        ),*/
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: kDefaultPadding),
+                  // Padding(
+                  //   padding:
+                  //       const EdgeInsets.symmetric(horizontal: kDefaultPadding),
+                  //   child: Row(
+                  //     children: [
+                  //       // Once user click the menu icon the menu shows like drawer
+                  //       // Also we want to hide this menu icon on desktop
+                  //       if (!Responsive.isDesktop(context))
+                  //         IconButton(
+                  //           icon: const Icon(Icons.menu),
+                  //           onPressed: () {
+                  //             _scaffoldKey.currentState?.openEndDrawer();
+                  //           },
+                  //         ),
+                  //       if (!Responsive.isDesktop(context))
+                  //         const SizedBox(width: 5),
+                  //       /*Expanded(
+                  //         child: TextField(
+                  //           onChanged: (value) {},
+                  //           decoration: InputDecoration(
+                  //             hintText: "جستجو",
+                  //             fillColor: kBgLightColor,
+                  //             filled: true,
+                  //             suffixIcon: Padding(
+                  //               padding: const EdgeInsets.all(
+                  //                   kDefaultPadding * 0.75), //15
+                  //               child: WebsafeSvg.asset(
+                  //                 "assets/Icons/Search.svg",
+                  //                 width: 24,
+                  //               ),
+                  //             ),
+                  //             border: const OutlineInputBorder(
+                  //               borderRadius: BorderRadius.all(
+                  //                   Radius.circular(10)),
+                  //               borderSide: BorderSide.none,
+                  //             ),
+                  //           ),
+                  //         ),
+                  //       ),*/
+                  //     ],
+                  //   ),
+                  // ),
+                  // const SizedBox(height: kDefaultPadding),
                   Padding(
                     padding:
                         const EdgeInsets.symmetric(horizontal: kDefaultPadding),
@@ -138,16 +138,16 @@ class _ListOfEmailsState extends State<ListOfRequests> {
                                     requestListModel.requestList!.items.length,
                                 // On mobile this active dosen't mean anything
                                 itemBuilder: (context, index) => RequestCard(
-                                      isActive: Responsive.isMobile(context)
-                                          ? false
-                                          : index == 0,
+                                      // isActive: Responsive.isMobile(context)
+                                      //     ? false
+                                      //     : index == 0,
                                       request: requestListModel
                                           .requestList!.items[index],
                                       press: () {
                                         //FIXME: This map is not necessary for now, but I keep it temporarily
                                         Map<String, dynamic> params =
                                             <String, dynamic>{
-                                          "param": 'emails[index]'
+                                          'canManage': false
                                         };
                                         SharedVars.requestID = requestListModel
                                             .requestList!

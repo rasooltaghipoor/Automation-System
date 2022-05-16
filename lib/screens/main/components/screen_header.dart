@@ -18,17 +18,17 @@ class ScreenHeader extends StatelessWidget {
                 Expanded(
                   flex: 1,
                   child: ListTile(
-                    leading: Image.asset("assets/images/Logo Outlook.png"),
+                    leading: Image.asset("assets/icon/FaraYar.png"),
                     //backgroundColor: Colors.purple,
-                    title: const Text('اتوماسیون یار'),
-                    subtitle: const Text('برنامه اتوماسیون اداری هوشمند'),
+                    title: const Text('فرایار'),
+                    subtitle: const Text('مدیریت منابع سازمانی'),
                   ),
                 ),
                 Expanded(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text('1400/02/24'),
+                      Text('تاریخ:'),
                       SizedBox(
                         height: 10,
                       ),

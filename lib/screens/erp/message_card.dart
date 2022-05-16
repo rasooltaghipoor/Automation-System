@@ -14,7 +14,7 @@ import '../../../extensions.dart';
 class MessageCard extends StatefulWidget {
   MessageCard({
     Key? key,
-    this.isActive = true,
+    this.isActive = false,
     this.cartableData,
     this.press,
   }) : super(key: key);
@@ -78,12 +78,12 @@ class _RequestCardState extends State<MessageCard> {
                         ),
                       ),
                       const SizedBox(
-                        width: 20,
+                        width: 40,
                       ),
                       CircleAvatar(
                         radius: 20,
-                        backgroundImage:
-                            NetworkImage(widget.cartableData!.profile!),
+                        backgroundImage: NetworkImage(
+                            mainUrl + widget.cartableData!.profile!),
                       ),
                       const SizedBox(
                         width: 10,
@@ -91,6 +91,9 @@ class _RequestCardState extends State<MessageCard> {
                       Text(widget.cartableData!.requester!),
                     ],
                   ),
+                ),
+                SizedBox(
+                  height: 20,
                 ),
                 Container(
                   // color: Colors.white70,
@@ -101,11 +104,11 @@ class _RequestCardState extends State<MessageCard> {
                     children: [
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           Text('اولویت: ' + widget.cartableData!.priority!),
                           SizedBox(
-                            width: 20,
+                            width: 40,
                           ),
                           Text('تاریخ: ' + widget.cartableData!.date!),
                         ],

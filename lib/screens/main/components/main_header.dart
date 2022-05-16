@@ -1,5 +1,8 @@
+import 'package:automation_system/models/MenuDetails.dart';
+import 'package:automation_system/providers/change_provider.dart';
 import 'package:automation_system/utils/SizeConfiguration.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:websafe_svg/websafe_svg.dart';
 
@@ -51,7 +54,15 @@ class MainHeader extends StatelessWidget {
                           height: 45,
                           width: 140,
                           child: ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Map<String, dynamic> params = <String, dynamic>{
+                                "itemData":
+                                    ErpMenuItemsData('all', 'کارتابل', '')
+                              };
+                              Provider.of<ChangeProvider>(context,
+                                      listen: false)
+                                  .setMidScreen(ScreenName.messageList, params);
+                            },
                             style: ElevatedButton.styleFrom(
                               primary: Colors.green,
                               /*textStyle: const TextStyle(
@@ -60,7 +71,7 @@ class MainHeader extends StatelessWidget {
                                 SharedVars.buttonFontSize * 0.8,
                                 fontWeight: FontWeight.bold)*/
                             ),
-                            child: const Text('نامه جدید'),
+                            child: const Text('کارتابل'),
                           ),
                         ),
                         Container(
@@ -68,13 +79,20 @@ class MainHeader extends StatelessWidget {
                           height: 45,
                           width: 140,
                           child: ElevatedButton.icon(
-                            onPressed: () {},
+                            onPressed: () {
+                              Map<String, dynamic> params = <String, dynamic>{
+                                "param": ''
+                              };
+                              Provider.of<ChangeProvider>(context,
+                                      listen: false)
+                                  .setMidScreen(ScreenName.requestList, params);
+                            },
                             icon: const Icon(
                               Icons.point_of_sale,
                               color: Colors.white,
                               size: 24.0,
                             ),
-                            label: const Text('ارجاع سریع'),
+                            label: const Text('درخواست های من'),
                           ),
                         ),
                         Container(
@@ -82,29 +100,38 @@ class MainHeader extends StatelessWidget {
                           height: 45,
                           width: 140,
                           child: ElevatedButton.icon(
-                            onPressed: () {},
+                            onPressed: () {
+                              Map<String, dynamic> params = <String, dynamic>{
+                                'formName': 'Buy',
+                                'title': 'درخواست خرید'
+                              };
+                              Provider.of<ChangeProvider>(context,
+                                      listen: false)
+                                  .setMidScreen(
+                                      ScreenName.requestMenuScreen, params);
+                            },
                             icon: const Icon(
                               Icons.assignment,
                               //color: Colors.pink,
                               size: 24.0,
                             ),
-                            label: const Text('امضای سریع'),
+                            label: const Text('درخواست خرید'),
                           ),
                         ),
-                        Container(
-                          padding: const EdgeInsets.all(1),
-                          height: 45,
-                          width: 140,
-                          child: ElevatedButton.icon(
-                            onPressed: () {},
-                            icon: const Icon(
-                              Icons.save_outlined,
-                              color: Colors.white,
-                              size: 24.0,
-                            ),
-                            label: const Text('بایگانی'),
-                          ),
-                        ),
+                        // Container(
+                        //   padding: const EdgeInsets.all(1),
+                        //   height: 45,
+                        //   width: 140,
+                        //   child: ElevatedButton.icon(
+                        //     onPressed: () {},
+                        //     icon: const Icon(
+                        //       Icons.save_outlined,
+                        //       color: Colors.white,
+                        //       size: 24.0,
+                        //     ),
+                        //     label: const Text('بایگانی'),
+                        //   ),
+                        // ),
                       ],
                     ),
                   ),

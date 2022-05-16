@@ -1,4 +1,5 @@
 import 'package:automation_system/components/side_drawer_menu.dart';
+import 'package:automation_system/models/MenuDetails.dart';
 import 'package:automation_system/models/User.dart';
 import 'package:automation_system/providers/auth.dart';
 import 'package:automation_system/providers/change_provider.dart';
@@ -6,6 +7,7 @@ import 'package:automation_system/providers/menu_provider.dart';
 import 'package:automation_system/providers/user_provider.dart';
 import 'package:automation_system/responsive.dart';
 import 'package:automation_system/utils/communication/web_request.dart';
+import 'package:automation_system/utils/shared_vars.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:websafe_svg/websafe_svg.dart';
@@ -26,8 +28,16 @@ class ErpSideMenu extends StatefulWidget {
 }
 
 class _SideMenuState extends State<ErpSideMenu> {
-  int _activeIndex = 0;
+  int _activeIndex = -1;
   final ScrollController _mycontroller2 = ScrollController();
+
+  void openMessageList(ErpMenuItemsData data) async {
+    await Future.delayed(const Duration(seconds: 2), () {
+      Map<String, dynamic> params = <String, dynamic>{"itemData": data};
+      Provider.of<ChangeProvider>(context, listen: false)
+          .setMidScreen(ScreenName.messageList, params);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,41 +56,6 @@ class _SideMenuState extends State<ErpSideMenu> {
               textDirection: TextDirection.rtl,
               child: Column(
                 children: [
-                  /*Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Image.asset(
-                          "assets/images/user_3.png"),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: const[
-                          Text('محمد قلی زاده اصل'),
-                          Text('هیات علمی'),
-                        ],
-                      ),
-                    ],
-                  ),*/
-                  // Consumer<AuthProvider>(
-                  //   builder: (context, userModel, child) {
-                  //     print('nana.... ' + userModel.authUser.name!);
-                  //     return ListTile(
-                  //       leading: CircleAvatar(
-                  //         child: userModel.authUser.profilePic != null
-                  //             ? Image.network(
-                  //                 mainUrl + userModel.authUser.profilePic!)
-                  //             : Image.asset("assets/images/user_3.png"),
-                  //         //backgroundColor: Colors.purple,
-                  //       ),
-                  //       title: userModel.authUser.name != null
-                  //           ? Text(userModel.authUser.name!)
-                  //           : const Text('نام کاربر'),
-                  //       subtitle: userModel.authUser.defaultRole != null
-                  //           ? Text(userModel.authUser.defaultRole!)
-                  //           : const Text('نقش کاربر'),
-                  //       trailing: Icon(Icons.add_a_photo),
-                  //     );
-                  //   },
-                  // ),
                   const SizedBox(height: kDefaultPadding),
                   ListTile(
                     leading: CircleAvatar(
@@ -103,6 +78,21 @@ class _SideMenuState extends State<ErpSideMenu> {
                   // Menu Items
                   Consumer<ErpMenuProvider>(
                     builder: (context, menuModel, child) {
+                      if (menuModel.sideMenu != null && _activeIndex < 0) {
+                        // If cartabe data is available
+                        if (int.parse(menuModel.sideMenu!.menuData[0].count!) >
+                            0) {
+                          _activeIndex = 0;
+                          openMessageList(menuModel.sideMenu!.menuData[0]);
+                        }
+                      }
+                      // else if my request data is available
+                      //   } else if (int.parse(
+                      //           menuModel.sideMenu!.menuData[3].count!) >
+                      //       0) {
+                      //     _activeIndex = 3;
+                      //   }
+                      // }
                       return Column(
                         children: [
                           ExpansionTile(
@@ -219,6 +209,50 @@ class _SideMenuState extends State<ErpSideMenu> {
                                     menuModel.sideMenu!.menuData[3].count!)
                                 : 0,
                           ),
+                          SideMenuItem(
+                            press: () {
+                              setState(() {
+                                _activeIndex = 4;
+                              });
+                              // getErpCartableData(
+                              //     context, menuModel.sideMenu!.menuData[1]);
+                              Map<String, dynamic> params = <String, dynamic>{
+                                'formName': 'Buy',
+                                'title': 'درخواست خرید'
+                              };
+                              Provider.of<ChangeProvider>(context,
+                                      listen: false)
+                                  .setMidScreen(
+                                      ScreenName.requestMenuScreen, params);
+                            },
+                            title: 'درخواست خرید',
+                            iconSrc: "assets/Icons/File.svg",
+                            isActive: _activeIndex == 4 ? true : false,
+                            itemCount: -1,
+                          ),
+                          SharedVars.userRoles!.rolesData.length > 1
+                              ? SideMenuItem(
+                                  press: () {
+                                    setState(() {
+                                      _activeIndex = 5;
+                                    });
+                                    // getErpCartableData(
+                                    //     context, menuModel.sideMenu!.menuData[1]);
+                                    Map<String, dynamic> params =
+                                        <String, dynamic>{
+                                      'formName': 'ChangeRole',
+                                    };
+                                    Provider.of<ChangeProvider>(context,
+                                            listen: false)
+                                        .setMidScreen(
+                                            ScreenName.roleScreen, params);
+                                  },
+                                  title: 'تغییر نقش',
+                                  iconSrc: "assets/Icons/File.svg",
+                                  isActive: _activeIndex == 5 ? true : false,
+                                  itemCount: -1,
+                                )
+                              : Text(''),
                           /*SideMenuItem(
                             press: () {
                               setState(() {
@@ -230,9 +264,9 @@ class _SideMenuState extends State<ErpSideMenu> {
                             isActive: _activeIndex == 9 ? true : false,
                           ),*/
 
-                          const SizedBox(height: kDefaultPadding * 2),
-                          // Tags
-                          const Tags(),
+                          // const SizedBox(height: kDefaultPadding * 2),
+                          // // Tags
+                          // const Tags(),
                         ],
                       );
                     },

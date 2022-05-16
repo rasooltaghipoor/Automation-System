@@ -1,49 +1,66 @@
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:automation_system/constants.dart';
 import 'package:automation_system/models/BuyModel.dart';
 import 'package:automation_system/models/DynamicForm.dart';
+import 'package:automation_system/models/ReplyButtons.dart';
+import 'package:automation_system/models/RequestData.dart';
+import 'package:automation_system/providers/auth.dart';
+import 'package:automation_system/screens/erp/erp_timeline.dart';
+import 'package:automation_system/screens/erp/timeline_widget.dart';
 import 'package:automation_system/utils/SizeConfiguration.dart';
 import 'package:automation_system/utils/communication/web_request.dart';
 import 'package:automation_system/utils/shared_vars.dart';
+import 'package:automation_system/utils/useful_widgets.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:persian_datetime_picker/persian_datetime_picker.dart';
+import 'package:provider/provider.dart';
 
 class DynamicEditWidget extends StatefulWidget {
-  Map<String, dynamic>? itemsData;
+  RequestData? itemData;
   bool? isEdit;
-  DynamicEditWidget({this.isEdit, this.itemsData, Key? key}) : super(key: key);
+  bool? canEdit;
+  Map<String, TextEditingController> controllerMap = Map();
+  Map<String, String> dropDownMap = Map();
+  List<FormItem> formItems = <FormItem>[];
+
+  DynamicEditWidget({this.isEdit, this.canEdit, this.itemData, Key? key})
+      : super(key: key);
 
   @override
   _State createState() => _State();
 }
 
 class _State extends State<DynamicEditWidget> {
-  Map<String, TextEditingController> _controllerMap = Map();
-  Map<String, String> _dropDownMap = Map();
   // Map<String, int> _listboxIndices = Map();
   DynamicFormModel? _formData;
-
-  // List<String> _data = [
-  //   "one",
-  //   "two",
-  //   "three",
-  //   "four",
-  // ];
-  // Future<List<String>> _retrieveData() {
-  //   return Future.value(_data);
-  // }
-
-  // Fetch content from the json file
-  Future<FullDynamicForm> readJson() async {
-    final String response = await rootBundle.loadString('assets/test.json');
-    // final responseBody = utf8.decode(response.bodyBytes);
-    final parsed = json.decode(response);
-    return FullDynamicForm.fromMap(parsed);
-  }
+  bool isEnabled = false;
+  bool value = false;
+  String filePath = "";
+  TextEditingController descriptionController = TextEditingController();
+  RequestStatus _requestStatus = RequestStatus.NotSend;
+  var loading = Row(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: <Widget>[
+      CircularProgressIndicator(),
+      Text("لطفا منتظر بمانید...")
+    ],
+  );
+  final _processes = [
+    'مدیر بخش',
+    'مدیر کل',
+    'معاون',
+    'رییس',
+    'آقای سهرابی',
+    'علی',
+    'نقی'
+  ];
 
   Widget _futureBuilder() {
-    SharedVars.formNameE = 'ConsumBuy';
+    // SharedVars.formNameE = 'ConsumBuy';
     return FutureBuilder(
       //TODO: This fucntion must be called only when no data is available!!
       future: getFormDetails(SharedVars.formNameE),
@@ -55,196 +72,243 @@ class _State extends State<DynamicEditWidget> {
 
         final data = snapshot.data!;
         _formData = data;
+        widget.formItems = data.items;
 
-        // Save listbox data indices to use in future (This eliminates the future searchs for such indices)
-        // int i = 0;
-        // _listboxIndices.clear();
-        // for (ListBoxItems item in data.listBoxItems) {
-        //   _listboxIndices[item.listboxType] = i++;
-        // }
+        return ListView.builder(
+          shrinkWrap: true,
+          itemCount: data.items.length,
+          padding: const EdgeInsets.all(5),
+          itemBuilder: (BuildContext context, int index) {
+            if (data.items[index].control == 'textbox') {
+              final controller =
+                  _getControllerOf(data.items[index].controlName);
 
-        return Column(
-          children: [
-            Text(data.formName_F),
-            ListView.builder(
-              shrinkWrap: true,
-              itemCount: data.items.length,
-              padding: const EdgeInsets.all(5),
-              itemBuilder: (BuildContext context, int index) {
-                if (data.items[index].control == 'textbox') {
-                  final controller =
-                      _getControllerOf(data.items[index].controlName);
-
-                  final textField = TextField(
-                    controller: controller,
-                    decoration: InputDecoration(
-                      border: const OutlineInputBorder(),
-                      labelText: data.items[index].title,
-                    ),
-                  );
-                  return Container(
-                    child: textField,
-                    padding: const EdgeInsets.only(bottom: 10),
-                  );
-                } else if (data.items[index].control == 'listbox') {
-                  // var dropDownValue = _getDropDownValue(
-                  //     data.items[index].controlName,
-                  //     SharedVars.listBoxItemsMap[data.items[index].dataType]!
-                  //         .items[0].title);
-                  if (_dropDownMap[data.items[index].controlName] == null) {
-                    if (widget.isEdit!) {
-                      _dropDownMap[data.items[index].controlName] =
-                          widget.itemsData![data.items[index].controlName];
-                    } else {
-                      _dropDownMap[data.items[index].controlName] =
-                          data.items[index].dataType[0].title;
-                    }
-
-                    // SharedVars
-                    //     .listBoxItemsMap[
-                    //         data.forms[0].items[index].dataType]!
-                    //     .items[0]
-                    //     .title;
-                  }
-                  return Row(children: <Widget>[
-                    Text(data.items[index].title),
-                    Container(
-                        padding:
-                            EdgeInsets.all(SizeConfig.safeBlockHorizontal! * 3),
-                        child: DropdownButton<String>(
-                          value: _dropDownMap[data.items[index].controlName],
-                          icon: const Icon(Icons.arrow_downward),
-                          iconSize: 24,
-                          elevation: 16,
-                          style: const TextStyle(color: Colors.deepPurple),
-                          underline: Container(
-                            height: 2,
-                            color: Colors.deepPurpleAccent,
-                          ),
-                          onChanged: (String? newValue) {
-                            setState(() {
-                              _dropDownMap[data.items[index].controlName] =
-                                  newValue!;
-                            });
-                          },
-                          items:
-                              // SharedVars
-                              //     .listBoxItemsMap[
-                              //         data.forms[0].items[index].dataType]!
-                              data.items[index].dataType
-                                  .map<DropdownMenuItem<String>>(
-                                      (ListItem value) {
-                            return DropdownMenuItem<String>(
-                              value: value.title,
-                              child: Text(value.title),
-                            );
-                          }).toList(),
-                        )),
-                  ]);
+              final textField = TextField(
+                enabled: isEnabled,
+                controller: controller,
+                decoration: InputDecoration(
+                  border: const OutlineInputBorder(),
+                  labelText: data.items[index].title,
+                ),
+              );
+              return Container(
+                child: textField,
+                padding: const EdgeInsets.only(bottom: 10),
+              );
+            } else if (data.items[index].control == 'listbox') {
+              if (widget.dropDownMap[data.items[index].controlName] == null) {
+                if (widget.isEdit!) {
+                  widget.dropDownMap[data.items[index].controlName] = widget
+                      .itemData!
+                      .requestDetails
+                      .items[data.items[index].controlName];
                 } else {
-                  return Container(
-                    height: 20,
-                    color: Colors.red,
-                  );
+                  widget.dropDownMap[data.items[index].controlName] =
+                      data.items[index].dataType[0].title;
                 }
-              },
-            ),
-          ],
+              }
+              return Row(children: <Widget>[
+                Text(data.items[index].title,
+                    style: TextStyle(
+                      color: isEnabled ? Colors.black : Colors.grey,
+                    )),
+                Container(
+                    padding:
+                        EdgeInsets.all(SizeConfig.safeBlockHorizontal! * 2),
+                    child: DropdownButton<String>(
+                      value: widget.dropDownMap[data.items[index].controlName],
+                      icon: const Icon(Icons.arrow_downward),
+                      iconSize: 24,
+                      elevation: 16,
+                      style: const TextStyle(color: Colors.deepPurple),
+                      underline: Container(
+                        height: 2,
+                        color: Colors.deepPurpleAccent,
+                      ),
+                      onChanged: isEnabled
+                          ? (String? newValue) {
+                              setState(() {
+                                widget.dropDownMap[
+                                    data.items[index].controlName] = newValue!;
+                              });
+                            }
+                          : null,
+                      items:
+                          // SharedVars
+                          //     .listBoxItemsMap[
+                          //         data.forms[0].items[index].dataType]!
+                          data.items[index].dataType
+                              .map<DropdownMenuItem<String>>((ListItem value) {
+                        return DropdownMenuItem<String>(
+                          value: value.title,
+                          child: Text(value.title),
+                        );
+                      }).toList(),
+                    )),
+              ]);
+            } else {
+              return Container(
+                height: 20,
+                color: Colors.red,
+              );
+            }
+          },
         );
       },
     );
   }
 
   TextEditingController _getControllerOf(String name) {
-    var controller = _controllerMap[name];
+    var controller = widget.controllerMap[name];
     if (controller == null) {
       controller = TextEditingController();
       if (widget.isEdit!) {
         print("_getControllerOf. is editting");
-        controller.text = widget.itemsData![name];
+        controller.text = widget.itemData!.requestDetails.items[name];
       }
-      _controllerMap[name] = controller;
+      widget.controllerMap[name] = controller;
     }
     return controller;
   }
 
-  // String _getDropDownValue(String name, String initialValue) {
-  //   var dropValue = _dropDownMap[name];
-  //   if (dropValue == null) {
-  //     dropValue = initialValue;
-  //     _dropDownMap[name] = dropValue;
-  //   }
-  //   return dropValue;
+  // Widget _okButton() {
+  //   return ElevatedButton(
+  //     onPressed: () async {
+  //       Map<String, String> items = <String, String>{};
+  //       for (FormItem listItem in _formData!.items) {
+  //         if (listItem.control == 'textbox') {
+  //           items[listItem.controlName] =
+  //               _getControllerOf(listItem.controlName).text;
+  //         } else if (listItem.control == 'listbox') {
+  //           items[listItem.controlName] =
+  //               widget.dropDownMap[listItem.controlName]!;
+  //         }
+  //       }
+
+  //       // String jsonTutorial = jsonEncode(items);
+  //       print(jsonEncode(items));
+  //       sendFormData(context, jsonEncode(items));
+  //     },
+  //     child: widget.isEdit! ? const Text('ویرایش') : const Text('ارسال'),
+  //   );
   // }
 
-  Widget _cancelOkButton() {
-    return Row(
-      mainAxisSize: MainAxisSize.max,
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        _cancelButton(),
-        _okButton(),
-      ],
+  void _pickFile() async {
+    filePath = '';
+    // opens storage to pick files and the picked file or files
+    // are assigned into result and if no file is chosen result is null.
+    // you can also toggle "allowMultiple" true or false depending on your need
+    final result = await FilePicker.platform.pickFiles(
+      allowMultiple: false,
+      type: FileType.custom,
+      allowedExtensions: ['jpg', 'pdf', 'png'],
     );
+
+    // if no file is picked
+    if (result == null) return;
+
+    // we will log the name, size and path of the
+    // first picked file (if multiple are selected)
+    print(result.files.first.name);
+    print(result.files.first.size);
+    print(result.files.first.path);
+    filePath = result.files.first.path!;
+
+    setState(() {});
   }
 
-  Widget _cancelButton() {
-    return ElevatedButton(
-      onPressed: () {
-        setState(() {
-          _controllerMap.forEach((key, controller) {
-            controller.text = key;
-          });
-        });
-      },
-      child: const Text("Cancel"),
-    );
+  List<Widget> getButtons(BuildContext context) {
+    {
+      final List<Widget> rowList = [];
+
+      for (ReplyButtonData buttonData in widget.itemData!.buttonsData) {
+        rowList.add(
+          SizedBox(
+              width: 140,
+              height: 40,
+              child: ElevatedButton(
+                  onPressed: () {
+                    bool isEdited = false;
+
+                    Map<String, String> items = <String, String>{};
+                    for (FormItem listItem in _formData!.items) {
+                      if (listItem.control == 'textbox') {
+                        items[listItem.controlName] =
+                            widget.controllerMap[listItem.controlName]!.text;
+                      } else if (listItem.control == 'listbox') {
+                        items[listItem.controlName] =
+                            widget.dropDownMap[listItem.controlName]!;
+                      }
+                    }
+
+                    for (String key in items.keys) {
+                      if (items[key] !=
+                          widget.itemData!.requestDetails.items[key]) {
+                        isEdited = true;
+                        break;
+                      }
+                    }
+
+                    print(isEdited.toString() + '   ++++++++++++');
+
+                    Map<String, dynamic> otherItems = {
+                      'description': descriptionController.text,
+                      'command': buttonData.cammandTitle,
+                      'commandID': buttonData.commandID,
+                      'editForm': isEdited.toString(),
+                      'filePath': filePath,
+                      'requestID': widget.itemData!.requestDetails.requestID
+                    };
+
+                    // // String jsonTutorial = jsonEncode(items);
+                    print(jsonEncode(items));
+
+                    setState(() {
+                      // textHolder = '';
+                      // errTextHolder = '';
+                      _requestStatus = RequestStatus.Sending;
+                    });
+                    final Future<Map<String, dynamic>> successfulMessage =
+                        sendReplyData(context, jsonEncode(items), otherItems);
+
+                    successfulMessage.then((response) {
+                      if (response['status']) {
+                        setState(() {
+                          _requestStatus = RequestStatus.Done;
+                          _showAlertDialog('عملیات با موفقیت انجام شد', true);
+                          getErpSideMenuData(context);
+                          // textHolder = response['message'];
+                        });
+                      } else {
+                        setState(() {
+                          _requestStatus = RequestStatus.Done;
+                          _showAlertDialog('عملیات نا موفق بود', false);
+                          // errTextHolder = response['message'];
+                        });
+                      }
+                    });
+                  },
+                  child: Text(buttonData.cammandTitle!))),
+        );
+      }
+      // sendFormData(context, jsonEncode(items));
+      return rowList;
+    }
   }
 
-  Widget _okButton() {
-    return ElevatedButton(
-      onPressed: () async {
-        // String text = _controllerMap.values
-        //     .where((element) => element.text != "")
-        //     .fold("", (acc, element) => acc += "${element.text}\n");
-        // await _showUpdatedDialog(text);
-
-        // setState(() {
-        //   _controllerMap.forEach((key, controller) {
-        //     // get the index of original text
-        //     int index = _controllerMap.keys.toList().indexOf(key);
-        //     key = controller.text;
-        //     _data[index] = controller.text;
-        //   });
-        // });
-        Map<String, String> items = <String, String>{};
-        for (FormItem listItem in _formData!.items) {
-          if (listItem.control == 'textbox') {
-            items[listItem.controlName] =
-                _getControllerOf(listItem.controlName).text;
-          } else if (listItem.control == 'listbox') {
-            items[listItem.controlName] = _dropDownMap[listItem.controlName]!;
-          }
-        }
-
-        // String jsonTutorial = jsonEncode(items);
-        print(jsonEncode(items));
-        sendFormData(context, jsonEncode(items));
-      },
-      child: widget.isEdit! ? const Text('ویرایش') : const Text('ارسال'),
-    );
-  }
-
-  Future _showUpdatedDialog(String text) {
+  Future _showUpdatedDialog(String path) {
     final alert = AlertDialog(
-      title: const Text("Updated"),
-      content: Text(text.trim()),
+      title: const Text("تصویر"),
+      content: Expanded(
+          child: Image.network(
+        path,
+      )),
       actions: [
         TextButton(
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: const Text("OK"),
+          child: const Text("بستن"),
         ),
       ],
     );
@@ -254,9 +318,70 @@ class _State extends State<DynamicEditWidget> {
     );
   }
 
+  Future _showAlertDialog(String msg, bool isOK) {
+    final alert = Directionality(
+        textDirection: TextDirection.rtl,
+        child: AlertDialog(
+          title: const Text("نتیجه"),
+          content: Text(
+            msg,
+            style: TextStyle(color: isOK ? Colors.blue : Colors.red),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text("بستن"),
+            ),
+          ],
+        ));
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) => alert,
+    );
+  }
+
+  void onEditClick() {
+    Map<String, String> items = <String, String>{};
+    for (FormItem listItem in _formData!.items) {
+      if (listItem.control == 'textbox') {
+        items[listItem.controlName] =
+            widget.controllerMap[listItem.controlName]!.text;
+      } else if (listItem.control == 'listbox') {
+        items[listItem.controlName] = widget.dropDownMap[listItem.controlName]!;
+      }
+    }
+    // String jsonTutorial = jsonEncode(items);
+    print(jsonEncode(items));
+    setState(() {
+      // textHolder = '';
+      // errTextHolder = '';
+      _requestStatus = RequestStatus.Sending;
+    });
+    final Future<Map<String, dynamic>> successfulMessage =
+        editFormData(context, jsonEncode(items), 'filePath');
+
+    successfulMessage.then((response) {
+      if (response['status']) {
+        setState(() {
+          _requestStatus = RequestStatus.Done;
+          _showAlertDialog('ویرایش با موفقیت انجام شد', true);
+          // textHolder = response['message'];
+        });
+      } else {
+        setState(() {
+          _requestStatus = RequestStatus.Done;
+          _showAlertDialog('خطا در ویرایش اطلاعات', false);
+          // errTextHolder = response['message'];
+        });
+      }
+    });
+  }
+
   @override
   void dispose() {
-    _controllerMap.forEach((_, controller) => controller.dispose());
+    widget.controllerMap.forEach((_, controller) => controller.dispose());
     super.dispose();
   }
 
@@ -265,22 +390,145 @@ class _State extends State<DynamicEditWidget> {
     //TODO: This line should be removed in the future
     SizeConfig().init(context);
 
-    return SafeArea(
-      child: Scaffold(
-          appBar: AppBar(
-            title: const Text(
-              "Dynamic Text Field with async",
+    return Column(
+      children: [
+        widget.canEdit!
+            ? Row(
+                children: <Widget>[
+                  const SizedBox(
+                    width: 10,
+                  ), //SizedBox
+                  Checkbox(
+                    value: this.value,
+                    onChanged: (bool? value) {
+                      setState(() {
+                        this.value = value!;
+                        isEnabled = !isEnabled;
+                      });
+                    },
+                  ), //Text
+                  const SizedBox(width: 10), //SizedBox
+                  /** Checkbox Widget **/
+                  const Text(
+                    'ویرایش درخواست',
+                    style: TextStyle(fontSize: 17.0),
+                  ), //Checkbox
+                ], //<Widget>[]
+              )
+            : const Text('امکان ویرایش داده ها وجود ندارد'),
+        SizedBox(
+          height: 10,
+        ),
+        _futureBuilder(),
+        Row(
+          children: [
+            const Text(':فایل ضمیمه'),
+            const SizedBox(
+              width: 20,
             ),
-          ),
-          body: Directionality(
-              textDirection: TextDirection.rtl,
-              child: Column(
-                children: [
-                  Expanded(child: _futureBuilder()),
-                  // _cancelOkButton(),
-                  _okButton(),
-                ],
-              ))),
+            widget.itemData!.requestDetails.attachFile == 'True'
+                ? GestureDetector(
+                    onTap: () {
+                      _showUpdatedDialog(mainUrl +
+                          widget.itemData!.requestDetails.fileUrl +
+                          Provider.of<AuthProvider>(context, listen: false)
+                              .authUser
+                              .token!);
+                    },
+                    child: Image.network(
+                      mainUrl +
+                          widget.itemData!.requestDetails.fileUrl +
+                          Provider.of<AuthProvider>(context, listen: false)
+                              .authUser
+                              .token!,
+                      width: 200,
+                      height: 200,
+                    ))
+                : const Text('')
+          ],
+        ),
+        Container(
+          padding: EdgeInsets.all(10),
+          color: Colors.blue[50],
+          child: widget.itemData!.canReply == 'true'
+              ? Column(
+                  children: [
+                    TextFormField(
+                      controller: descriptionController,
+                      autovalidateMode: AutovalidateMode.always,
+                      decoration: const InputDecoration(
+                        icon: Icon(Icons.person),
+                        hintText: '',
+                        labelText: 'توضیحات',
+                      ),
+                      onSaved: (String? value) {
+                        descriptionController.text = value!;
+                        // This optional block of code can be used to run
+                        // code when the user saves the form.
+                      },
+                      // validator: (String? value) {
+                      //   return value!.contains('@')
+                      //       ? 'Do not use the @ char.'
+                      //       : null;
+                      // },
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Row(
+                      children: [
+                        SizedBox(
+                          width: 120,
+                          height: 30,
+                          child: ElevatedButton(
+                              onPressed: _pickFile, child: Text('آپلود فایل')),
+                        ),
+                        const SizedBox(
+                          width: 50,
+                        ),
+                        filePath.isNotEmpty
+                            ? Image.file(
+                                File(filePath),
+                                width: 200,
+                                height: 200,
+                              )
+                            : Text('بدون فایل ضمیمه'),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: getButtons(context),
+                    )
+                  ],
+                )
+              : widget.itemData!.editable == 'true'
+                  ? _requestStatus == RequestStatus.Sending
+                      ? loading
+                      : SizedBox(
+                          width: 140,
+                          height: 40,
+                          child: ElevatedButton(
+                            onPressed: onEditClick,
+                            child: Text('ویرایش درخواست'),
+                          ),
+                        )
+                  : const Text(
+                      'امکان پاسخ گویی یا ویرایش برای شما میسر نمی باشد'),
+        ),
+        Container(
+          padding: EdgeInsets.all(10),
+          // color: Colors.yellow[100],
+          height: 250,
+          // width: 700,
+          child: ErpTimeline(widget.itemData!.historyChart.items),
+
+          // ProcessTimeline(
+          //     2, _processes, widget.itemData!.historyChart.items),
+        ),
+      ],
     );
   }
 }

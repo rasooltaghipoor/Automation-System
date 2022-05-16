@@ -91,11 +91,12 @@ class MyApp extends StatelessWidget {
               primarySwatch: Colors.blue,
               visualDensity: VisualDensity.adaptivePlatformDensity,
             ),
-            home: Login('309'),
+            home: Login(),
             debugShowCheckedModeBanner: false,
             routes: {
               '/main_screen': (context) => MainScreen(),
-              '/role_screen': (context) => DailyRequestScreen(),
+              '/role_screen': (context) =>
+                  RoleScreenWidget(userRoleModel: getUserRoles(context)),
               //'/login': (context) => Login(),
             }));
   }

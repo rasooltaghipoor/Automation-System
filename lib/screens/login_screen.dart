@@ -12,12 +12,10 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 class Login extends StatefulWidget {
-  final String userName;
-
   @override
-  _LoginState createState() => _LoginState(this.userName);
+  _LoginState createState() => _LoginState();
 
-  Login(this.userName);
+  Login();
 }
 
 class _LoginState extends State<Login> {
@@ -27,7 +25,7 @@ class _LoginState extends State<Login> {
 
   String? _username, _password;
 
-  _LoginState(this._username);
+  _LoginState();
 
   Timer? _timer;
 
@@ -103,7 +101,7 @@ class _LoginState extends State<Login> {
 
             //******Provider.of<UserProvider>(context, listen: false).setUser(user);
             //SharedVars.currentDate = response['date'];
-            Navigator.pushReplacementNamed(context, '/main_screen');
+            Navigator.pushReplacementNamed(context, '/role_screen');
           } else {
             final snackBar = mySnackBar(
                 'نام کاربری یا رمز عبور اشتباه است', SharedVars.appBarColor);
@@ -151,7 +149,7 @@ class _LoginState extends State<Login> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Image.asset(
-                      "assets/images/Logo Outlook.png",
+                      "assets/icon/FaraYar.png",
                       width: 50,
                       height: 50 * 1.25,
                     ),
@@ -160,41 +158,41 @@ class _LoginState extends State<Login> {
                       style: TextStyle(fontFamily: SharedVars.fontFamily),
                     ),
                     SizedBox(height: SizeConfig.safeBlockVertical! * 8),
-                    const Text("دانشگاه"),
+                    // const Text("دانشگاه"),
                     //Expanded(
-                    Container(
-                        alignment: Alignment.center,
-                        padding:
-                            EdgeInsets.all(SizeConfig.safeBlockHorizontal! * 2),
-                        child: DropdownButton<String>(
-                          //hint: new Text("انتخاب ساختمان"),
-                          isExpanded: true,
-                          value: dropdownValue,
-                          //icon: const Icon(Icons.arrow_downward),
-                          iconSize: 24,
-                          elevation: 16,
-                          style: const TextStyle(color: Colors.deepPurple),
-                          underline: Container(
-                            height: 2,
-                            color: Colors.deepPurpleAccent,
-                          ),
-                          onChanged: (String? newValue) {
-                            setState(() {
-                              dropdownValue = newValue!;
-                            });
-                          },
-                          items: SharedVars.universities.keys
-                              .map<DropdownMenuItem<String>>((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Center(
-                                child: Text(
-                                  value,
-                                ),
-                              ),
-                            );
-                          }).toList(),
-                        )),
+                    // Container(
+                    //     alignment: Alignment.center,
+                    //     padding:
+                    //         EdgeInsets.all(SizeConfig.safeBlockHorizontal! * 2),
+                    //     child: DropdownButton<String>(
+                    //       //hint: new Text("انتخاب ساختمان"),
+                    //       isExpanded: true,
+                    //       value: dropdownValue,
+                    //       //icon: const Icon(Icons.arrow_downward),
+                    //       iconSize: 24,
+                    //       elevation: 16,
+                    //       style: const TextStyle(color: Colors.deepPurple),
+                    //       underline: Container(
+                    //         height: 2,
+                    //         color: Colors.deepPurpleAccent,
+                    //       ),
+                    //       onChanged: (String? newValue) {
+                    //         setState(() {
+                    //           dropdownValue = newValue!;
+                    //         });
+                    //       },
+                    //       items: SharedVars.universities.keys
+                    //           .map<DropdownMenuItem<String>>((String value) {
+                    //         return DropdownMenuItem<String>(
+                    //           value: value,
+                    //           child: Center(
+                    //             child: Text(
+                    //               value,
+                    //             ),
+                    //           ),
+                    //         );
+                    //       }).toList(),
+                    //     )),
                     label("نام کاربری"),
                     SizedBox(height: SizeConfig.safeBlockVertical),
                     usernameField,
