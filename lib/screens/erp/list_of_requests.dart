@@ -45,7 +45,7 @@ class _ListOfEmailsState extends State<ListOfRequests> {
         // ),
         body: Container(
           padding: EdgeInsets.only(top: kIsWeb ? kDefaultPadding : 0),
-          color: kBgDarkColor,
+          color: kBgLightColor,
           child: SafeArea(
             right: false,
             child: Directionality(

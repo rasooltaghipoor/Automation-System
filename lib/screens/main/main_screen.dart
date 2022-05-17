@@ -45,23 +45,23 @@ class MainScreen extends StatelessWidget {
             flex: 1,
             child: ScreenHeader(),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
-            child: Row(
-              children: [
-                // Once user click the menu icon the menu shows like drawer
-                // Also we want to hide this menu icon on desktop
-                if (!Responsive.isDesktop(context))
-                  IconButton(
-                    icon: const Icon(Icons.menu),
-                    onPressed: () {
-                      _scaffoldKey.currentState?.openEndDrawer();
-                    },
-                  ),
-                if (!Responsive.isDesktop(context)) const SizedBox(width: 5),
-              ],
-            ),
-          ),
+          // Padding(
+          //   padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
+          //   child: Row(
+          //     children: [
+          //       // Once user click the menu icon the menu shows like drawer
+          //       // Also we want to hide this menu icon on desktop
+          //       if (!Responsive.isDesktop(context))
+          //         IconButton(
+          //           icon: const Icon(Icons.menu),
+          //           onPressed: () {
+          //             _scaffoldKey.currentState?.openEndDrawer();
+          //           },
+          //         ),
+          //       if (!Responsive.isDesktop(context)) const SizedBox(width: 5),
+          //     ],
+          //   ),
+          // ),
           Expanded(
             flex: 10,
             child: Row(

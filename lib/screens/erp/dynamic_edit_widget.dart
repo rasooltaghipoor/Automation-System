@@ -7,6 +7,7 @@ import 'package:automation_system/models/DynamicForm.dart';
 import 'package:automation_system/models/ReplyButtons.dart';
 import 'package:automation_system/models/RequestData.dart';
 import 'package:automation_system/providers/auth.dart';
+import 'package:automation_system/responsive.dart';
 import 'package:automation_system/screens/erp/erp_timeline.dart';
 import 'package:automation_system/screens/erp/timeline_widget.dart';
 import 'package:automation_system/utils/SizeConfiguration.dart';
@@ -16,6 +17,7 @@ import 'package:automation_system/utils/useful_widgets.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:persian_datetime_picker/persian_datetime_picker.dart';
 import 'package:provider/provider.dart';
 
@@ -77,7 +79,7 @@ class _State extends State<DynamicEditWidget> {
         return ListView.builder(
           shrinkWrap: true,
           itemCount: data.items.length,
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.all(10),
           itemBuilder: (BuildContext context, int index) {
             return Row(
               children: [
@@ -473,25 +475,24 @@ class _State extends State<DynamicEditWidget> {
             const SizedBox(
               width: 20,
             ),
-            widget.itemData!.requestDetails.attachFile == 'True'
-                ? GestureDetector(
-                    onTap: () {
-                      _showUpdatedDialog(mainUrl +
-                          widget.itemData!.requestDetails.fileUrl +
-                          Provider.of<AuthProvider>(context, listen: false)
-                              .authUser
-                              .token!);
-                    },
-                    child: Image.network(
-                      mainUrl +
-                          widget.itemData!.requestDetails.fileUrl +
-                          Provider.of<AuthProvider>(context, listen: false)
-                              .authUser
-                              .token!,
-                      width: 200,
-                      height: 200,
-                    ))
-                : const Text('')
+            if (widget.itemData!.requestDetails.attachFile == 'True')
+              GestureDetector(
+                  onTap: () {
+                    _showUpdatedDialog(mainUrl +
+                        widget.itemData!.requestDetails.fileUrl +
+                        Provider.of<AuthProvider>(context, listen: false)
+                            .authUser
+                            .token!);
+                  },
+                  child: Image.network(
+                    mainUrl +
+                        widget.itemData!.requestDetails.fileUrl +
+                        Provider.of<AuthProvider>(context, listen: false)
+                            .authUser
+                            .token!,
+                    width: 100,
+                    height: 100,
+                  ))
           ],
         ),
         Container(
@@ -567,16 +568,19 @@ class _State extends State<DynamicEditWidget> {
                   : const Text(
                       'امکان پاسخ گویی یا ویرایش برای شما میسر نمی باشد'),
         ),
-        Container(
-          padding: EdgeInsets.all(10),
-          // color: Colors.yellow[100],
-          height: 250,
-          // width: 700,
-          child: ErpTimeline(widget.itemData!.historyChart.items),
+        SvgPicture.network(Responsive.isDesktop(context)
+            ? 'http://cms2.iau-neyshabur.ac.ir/api/Request/svghistory/${SharedVars.requestID}?dir=horiz'
+            : 'http://cms2.iau-neyshabur.ac.ir/api/Request/svghistory/${SharedVars.requestID}?dir=vert'),
+        // Container(
+        //   padding: EdgeInsets.all(10),
+        //   // color: Colors.yellow[100],
+        //   height: 250,
+        //   // width: 700,
+        //   child: ErpTimeline(widget.itemData!.historyChart.items),
 
-          // ProcessTimeline(
-          //     2, _processes, widget.itemData!.historyChart.items),
-        ),
+        //   // ProcessTimeline(
+        //   //     2, _processes, widget.itemData!.historyChart.items),
+        // ),
       ],
     );
   }

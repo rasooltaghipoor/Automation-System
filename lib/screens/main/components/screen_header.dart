@@ -1,4 +1,5 @@
 import 'package:automation_system/constants.dart';
+import 'package:automation_system/utils/shared_vars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -7,50 +8,54 @@ class ScreenHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-        padding: const EdgeInsets.all(10),
-        child: Directionality(
-          textDirection: TextDirection.rtl,
-          child: Container(
-            color: kBgDarkColor,
-            child: Row(
-              children: [
-                Expanded(
-                  flex: 1,
-                  child: ListTile(
-                    leading: Image.asset("assets/icon/FaraYar.png"),
-                    //backgroundColor: Colors.purple,
-                    title: const Text('فرایار'),
-                    subtitle: const Text('مدیریت منابع سازمانی'),
-                  ),
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: Container(
+        color: SharedVars.appBarColor,
+        child: Row(
+          children: [
+            Expanded(
+              flex: 1,
+              child: ListTile(
+                leading: Image.asset("assets/icon/FaraYar.png"),
+                //backgroundColor: Colors.purple,
+                title: const Text(
+                  'فرایار',
+                  style: TextStyle(color: Colors.white),
                 ),
-                Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text('تاریخ:'),
-                      SizedBox(
-                        height: 10,
+                subtitle: const Text(
+                  'مدیریت منابع سازمانی',
+                  style: TextStyle(color: Colors.white70),
+                ),
+              ),
+            ),
+            // Expanded(
+            //   child: Column(
+            //     mainAxisAlignment: MainAxisAlignment.center,
+            //     children: [
+            //       Text('تاریخ:'),
+            //       SizedBox(
+            //         height: 10,
+            //       ),
+            //       Text('صفحه اصلی'),
+            //     ],
+            //   ),
+            // ),
+            Expanded(
+                flex: 1,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    IconButton(
+                      icon: const Icon(
+                        Icons.settings,
+                        color: Colors.white70,
+                        size: 32.0,
                       ),
-                      Text('صفحه اصلی'),
-                    ],
-                  ),
-                ),
-                Expanded(
-                    flex: 1,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        IconButton(
-                          icon: const Icon(
-                            Icons.settings,
-                            color: Colors.blue,
-                            size: 32.0,
-                          ),
-                          tooltip: 'تنظیمات کاربری',
-                          onPressed: () {},
-                        ),
-                        /*ElevatedButton.icon(
+                      tooltip: 'تنظیمات کاربری',
+                      onPressed: () {},
+                    ),
+                    /*ElevatedButton.icon(
                           icon: const Icon(
                             Icons.info,
                             color: Colors.white,
@@ -59,20 +64,29 @@ class ScreenHeader extends StatelessWidget {
                           label: const Text('درباره نرم افزار'),
                           onPressed: () {},
                         ),*/
-                        IconButton(
-                          icon: const Icon(
-                            Icons.info,
-                            color: Colors.blue,
-                            size: 32.0,
-                          ),
-                          tooltip: 'درباره نرم افزار',
-                          onPressed: () {},
-                        ),
-                      ],
-                    )),
-              ],
-            ),
-          ),
-        ));
+                    IconButton(
+                      icon: const Icon(
+                        Icons.info,
+                        color: Colors.white70,
+                        size: 32.0,
+                      ),
+                      tooltip: 'درباره نرم افزار',
+                      onPressed: () {},
+                    ),
+                    IconButton(
+                      icon: const Icon(
+                        Icons.exit_to_app_rounded,
+                        color: Colors.white70,
+                        size: 32.0,
+                      ),
+                      tooltip: 'خروج',
+                      onPressed: () {},
+                    ),
+                  ],
+                )),
+          ],
+        ),
+      ),
+    );
   }
 }

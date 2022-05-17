@@ -55,8 +55,9 @@ class SideMenuItem extends StatelessWidget {
               Text(
                 title!,
                 style: Theme.of(context).textTheme.button?.copyWith(
-                      color:
-                          (isActive! || isHover!) ? kBgLightColor : kGrayColor,
+                      color: (isActive! || isHover!)
+                          ? kBgLightColor
+                          : kTitleTextColor,
                     ),
               ),
               const Spacer(),

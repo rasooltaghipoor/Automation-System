@@ -46,7 +46,7 @@ class _SideMenuState extends State<ErpSideMenu> {
     return Container(
         height: double.infinity,
         padding: EdgeInsets.only(top: kIsWeb ? kDefaultPadding : 0),
-        color: kBgLightColor,
+        color: kMenuColor,
         child: SafeArea(
           child: SingleChildScrollView(
             controller: _mycontroller2,
