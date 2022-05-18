@@ -45,23 +45,32 @@ class MainScreen extends StatelessWidget {
             flex: 1,
             child: ScreenHeader(),
           ),
-          // Padding(
-          //   padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
-          //   child: Row(
-          //     children: [
-          //       // Once user click the menu icon the menu shows like drawer
-          //       // Also we want to hide this menu icon on desktop
-          //       if (!Responsive.isDesktop(context))
-          //         IconButton(
-          //           icon: const Icon(Icons.menu),
-          //           onPressed: () {
-          //             _scaffoldKey.currentState?.openEndDrawer();
-          //           },
-          //         ),
-          //       if (!Responsive.isDesktop(context)) const SizedBox(width: 5),
-          //     ],
-          //   ),
-          // ),
+          ResponsiveVisibility(
+            hiddenWhen: [Condition.equals(name: DESKTOP)],
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
+              child: Directionality(
+                  textDirection: TextDirection.rtl,
+                  child: Row(
+                    children: [
+                      // Once user click the menu icon the menu shows like drawer
+                      // Also we want to hide this menu icon on desktop
+                      if (!Responsive.isDesktop(context))
+                        IconButton(
+                          icon: const Icon(Icons.menu),
+                          onPressed: () {
+                            _scaffoldKey.currentState?.openEndDrawer();
+                          },
+                        ),
+                      if (!Responsive.isDesktop(context))
+                        const SizedBox(width: 20),
+                      Text(
+                        'تاریخ:',
+                      )
+                    ],
+                  )),
+            ),
+          ),
           Expanded(
             flex: 10,
             child: Row(
@@ -75,14 +84,14 @@ class MainScreen extends StatelessWidget {
                 Expanded(
                   flex: _size.width > 1340 ? 15 : 16,
                   child: Column(
-                    children: const [
-                      //ResponsiveVisibility(
-                      //hiddenWhen: [Condition.smallerThan(name: DESKTOP)],
-                      Expanded(
-                        flex: 1,
-                        child: MainHeader(),
+                    children: [
+                      ResponsiveVisibility(
+                        hiddenWhen: [Condition.smallerThan(name: DESKTOP)],
+                        child: Expanded(
+                          flex: 1,
+                          child: MainHeader(),
+                        ),
                       ),
-                      // ),
                       Expanded(
                         flex: 10,
                         child: MiddleScreenSelector(),

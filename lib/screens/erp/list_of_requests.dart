@@ -130,8 +130,13 @@ class _ListOfEmailsState extends State<ListOfRequests> {
                   Expanded(
                     child: Consumer<RequestListProvider>(
                       builder: (context, requestListModel, child) {
-                        return requestListModel.requestList == null
-                            ? const Center(child: CircularProgressIndicator())
+                        return requestListModel.requestList == null ||
+                                requestListModel.requestList!.items.isEmpty
+                            ? const Center(
+                                child: Text(
+                                'داده ای برای نمایش وجود ندارد',
+                                style: TextStyle(fontSize: 20),
+                              ))
                             : ListView.builder(
                                 controller: _mycontroller1,
                                 itemCount:

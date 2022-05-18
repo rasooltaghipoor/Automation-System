@@ -26,7 +26,7 @@ class SideMenuItem extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(top: 1),
       child: TextButton(
-        onPressed: itemCount != null && itemCount == 0 ? null : press,
+        onPressed: itemCount == null ? null : press,
         style: ElevatedButton.styleFrom(
             primary: (isActive!) ? kTitleTextColor : Colors.white70,
             textStyle: const TextStyle(

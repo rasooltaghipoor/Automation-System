@@ -135,8 +135,13 @@ class _ListOfEmailsState extends State<ListOfMessages> {
                   Expanded(
                     child: Consumer<ErpCartableProvider>(
                       builder: (context, cartablrModel, child) {
-                        return cartablrModel.cartable == null
-                            ? const Center(child: CircularProgressIndicator())
+                        return cartablrModel.cartable == null ||
+                                cartablrModel.cartable!.catableData.isEmpty
+                            ? const Center(
+                                child: Text(
+                                'داده ای برای نمایش وجود ندارد',
+                                style: TextStyle(fontSize: 20),
+                              ))
                             : ListView.builder(
                                 controller: _mycontroller1,
                                 itemCount:

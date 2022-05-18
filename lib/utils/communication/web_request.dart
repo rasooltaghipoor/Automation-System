@@ -137,6 +137,12 @@ Future<void> getRequestList(BuildContext context) async {
         // print('form id: ' + data.items[0].formName_F);
         Provider.of<RequestListProvider>(context, listen: false)
             .setRequestList(data, 'درخواست های من');
+      } else {
+        List<Request> items = [];
+        RequestListModel data = RequestListModel(items);
+        // print('form id: ' + data.items[0].formName_F);
+        Provider.of<RequestListProvider>(context, listen: false)
+            .setRequestList(data, 'درخواست های من');
       }
       //return data;
     } else {
@@ -337,6 +343,11 @@ Future<void> getErpCartableData(
         // We deserialize read data but only use Date field for now
         ErpCartableModel data = ErpCartableModel.fromMap(responseData);
         print('name: ' + data.catableData[0].formName_F!);
+        Provider.of<ErpCartableProvider>(context, listen: false)
+            .setCartable(data, itemData.title!);
+      } else {
+        List<ErpCartableData> catableData = [];
+        ErpCartableModel data = ErpCartableModel(catableData);
         Provider.of<ErpCartableProvider>(context, listen: false)
             .setCartable(data, itemData.title!);
       }

@@ -1,4 +1,5 @@
 import 'package:automation_system/constants.dart';
+import 'package:automation_system/screens/login_screen.dart';
 import 'package:automation_system/utils/shared_vars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -80,7 +81,11 @@ class ScreenHeader extends StatelessWidget {
                         size: 32.0,
                       ),
                       tooltip: 'خروج',
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(builder: (context) => Login()),
+                            (Route<dynamic> route) => false);
+                      },
                     ),
                   ],
                 )),

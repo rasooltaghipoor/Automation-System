@@ -139,7 +139,7 @@ class _SideMenuState extends State<ErpSideMenu> {
                                   //     context, menuModel.sideMenu!.menuData[1]);
                                   Map<String, dynamic> params =
                                       <String, dynamic>{
-                                    "param": menuModel.sideMenu!.menuData[1]
+                                    "itemData": menuModel.sideMenu!.menuData[1]
                                   };
                                   Provider.of<ChangeProvider>(context,
                                           listen: false)
@@ -165,7 +165,7 @@ class _SideMenuState extends State<ErpSideMenu> {
                                   //     context, menuModel.sideMenu!.menuData[2]);
                                   Map<String, dynamic> params =
                                       <String, dynamic>{
-                                    "param": menuModel.sideMenu!.menuData[2]
+                                    "itemData": menuModel.sideMenu!.menuData[2]
                                   };
                                   Provider.of<ChangeProvider>(context,
                                           listen: false)
@@ -177,10 +177,11 @@ class _SideMenuState extends State<ErpSideMenu> {
                                     : "...",
                                 iconSrc: "assets/Icons/File.svg",
                                 isActive: _activeIndex == 2 ? true : false,
-                                itemCount: menuModel.sideMenu != null
-                                    ? int.parse(
-                                        menuModel.sideMenu!.menuData[2].count!)
-                                    : 0,
+                                itemCount: -1,
+                                // itemCount: menuModel.sideMenu != null
+                                //     ? int.parse(
+                                //         menuModel.sideMenu!.menuData[2].count!)
+                                //     : 0,
                               ),
                             ],
                           ),
