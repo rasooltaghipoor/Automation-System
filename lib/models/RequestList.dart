@@ -26,9 +26,10 @@ class Request {
   String state;
   String date;
   String icon;
+  String itemsTitle;
 
   Request(this.requestID, this.formName_F, this.priority, this.state, this.date,
-      this.icon);
+      this.icon, this.itemsTitle);
 
   factory Request.fromMap(Map<String, dynamic> parsedJson) {
     return Request(
@@ -38,6 +39,7 @@ class Request {
       parsedJson['Column1'],
       parsedJson['Column2'],
       parsedJson['icon'],
+      parsedJson['itemstitle'],
     );
   }
 }

@@ -13,7 +13,7 @@ const kGrayColor = Color(0xFF8793B2);
 const kTitleTextColor = Color(0xFF30384D);
 const kTextColor = Color(0xFF4D5875);
 
-const kDefaultPadding = 20.0;
+const kDefaultPadding = 15.0;
 const kDefaultPaddingMedium = 15.0;
 const kDefaultPaddingSmall = 10.0;
 const kDefaultPaddingSmaller = 5.0;

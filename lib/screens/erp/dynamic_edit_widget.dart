@@ -335,6 +335,12 @@ class _State extends State<DynamicEditWidget> {
                       }
                     });
                   },
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    primary: SharedVars.buttonColor,
+                  ),
                   child: Text(buttonData.cammandTitle!))),
         );
       }
@@ -560,6 +566,12 @@ class _State extends State<DynamicEditWidget> {
                               width: 140,
                               height: 40,
                               child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  primary: SharedVars.buttonColor,
+                                ),
                                 onPressed: onEditClick,
                                 child: Text('ویرایش درخواست'),
                               ),
@@ -568,9 +580,23 @@ class _State extends State<DynamicEditWidget> {
                   : const Text(
                       'امکان پاسخ گویی یا ویرایش برای شما میسر نمی باشد'),
         ),
-        SvgPicture.network(Responsive.isDesktop(context)
-            ? 'http://cms2.iau-neyshabur.ac.ir/api/Request/svghistory/${SharedVars.requestID}?dir=horiz'
-            : 'http://cms2.iau-neyshabur.ac.ir/api/Request/svghistory/${SharedVars.requestID}?dir=vert'),
+        Responsive.isDesktop(context)
+            ? Container(
+                width: MediaQuery.of(context).size.width * 0.6,
+                height: MediaQuery.of(context).size.width * 0.6 / 3,
+                child: SvgPicture.network(
+                  'http://cms2.iau-neyshabur.ac.ir/api/Request/svghistory/${SharedVars.requestID}?dir=horiz',
+                  // fit: BoxFit.fill,
+                ),
+              )
+            : Container(
+                width: MediaQuery.of(context).size.width * 0.7,
+                height: MediaQuery.of(context).size.width * 0.7 * 3,
+                child: SvgPicture.network(
+                  'http://cms2.iau-neyshabur.ac.ir/api/Request/svghistory/${SharedVars.requestID}?dir=vert',
+                  // fit: BoxFit.fill,
+                ),
+              ),
         // Container(
         //   padding: EdgeInsets.all(10),
         //   // color: Colors.yellow[100],

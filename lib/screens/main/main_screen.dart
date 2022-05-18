@@ -46,7 +46,7 @@ class MainScreen extends StatelessWidget {
             child: ScreenHeader(),
           ),
           ResponsiveVisibility(
-            hiddenWhen: [Condition.equals(name: DESKTOP)],
+            hiddenWhen: [Condition.largerThan(name: TABLET)],
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
               child: Directionality(

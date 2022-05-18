@@ -1,8 +1,11 @@
 import 'package:automation_system/constants.dart';
+import 'package:automation_system/models/RequestMenu.dart';
 import 'package:automation_system/models/UserRoles.dart';
 import 'package:automation_system/providers/auth.dart';
+import 'package:automation_system/providers/change_provider.dart';
 import 'package:automation_system/providers/request_list_provider.dart';
 import 'package:automation_system/responsive.dart';
+import 'package:automation_system/screens/erp/request_menu.dart';
 import 'package:automation_system/utils/SizeConfiguration.dart';
 import 'package:automation_system/utils/communication/web_request.dart';
 import 'package:automation_system/utils/shared_vars.dart';
@@ -12,54 +15,60 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:websafe_svg/websafe_svg.dart';
 
-// class RoleScreenWidget extends StatelessWidget {
-//   final Future<UserRoleModel>? userRoleModel;
+class RequestSelectionWidget extends StatelessWidget {
+  final String? title;
+  final Future<RequestMenuModel>? menuModel;
 
-//   RoleScreenWidget({Key? key, this.userRoleModel}) : super(key: key);
+  RequestSelectionWidget({Key? key, this.title, this.menuModel})
+      : super(key: key);
 
-//   // final items = Product.getProducts();
-//   @override
-//   Widget build(BuildContext context) {
-//     return Center(
-//         child: Directionality(
-//       textDirection: TextDirection.rtl,
-//       child: FutureBuilder<UserRoleModel>(
-//         future: userRoleModel,
-//         builder: (context, snapshot) {
-//           if (snapshot.hasError) print(snapshot.error);
-//           // if (snapshot.hasData) {
-//           //   if (snapshot.data!.rolesData.length <= 1) {
-//           //     Navigator.pushReplacementNamed(context, '/main_screen');
-//           //   }
-//           // }
-//           return snapshot.hasData
-//               ? RoleScreen()
-//               :
-//               // return the ListView widget :
-//               const Center(child: CircularProgressIndicator());
-//         },
-//       ),
-//     ));
-//   }
-// }
-
-class RoleScreen extends StatefulWidget {
-  RoleScreen({
-    Key? key,
-  }) : super(key: key);
+  // final items = Product.getProducts();
   @override
-  _RoleScreenState createState() => _RoleScreenState();
+  Widget build(BuildContext context) {
+    return Center(
+        child: Directionality(
+      textDirection: TextDirection.rtl,
+      child: FutureBuilder<RequestMenuModel>(
+        future: menuModel,
+        builder: (context, snapshot) {
+          if (snapshot.hasError) print(snapshot.error);
+          return snapshot.hasData
+              ? RequestSelection(
+                  menuModel: snapshot.data,
+                  title: title,
+                )
+              :
+
+              // return the ListView widget :
+              const Center(child: CircularProgressIndicator());
+        },
+      ),
+    ));
+  }
 }
 
-class _RoleScreenState extends State<RoleScreen> {
-  String? _roleID = SharedVars.roleID;
-  String? _roleTitle = SharedVars.roleTitle;
+class RequestSelection extends StatefulWidget {
+  RequestMenuModel? menuModel;
+  String? title;
+
+  RequestSelection({Key? key, this.menuModel, this.title}) : super(key: key);
+
+  @override
+  _RequestSelectionState createState() =>
+      _RequestSelectionState(menuModel!.items[0].id);
+}
+
+class _RequestSelectionState extends State<RequestSelection> {
+  String? _requestTypeID;
+  String? _requestTypeTitle;
+
+  _RequestSelectionState(this._requestTypeID);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         // appBar: AppBar(
-        //   title: const Text('انتخاب نقش'),
+        //   title: const Text('انتخاب درخواست'),
         // ),
         body: SafeArea(
       child: Directionality(
@@ -76,7 +85,7 @@ class _RoleScreenState extends State<RoleScreen> {
                   Consumer<RequestListProvider>(
                     builder: (context, requestListModel, child) {
                       return Text(
-                        'تغییر نقش',
+                        widget.title!,
                         style: TextStyle(
                             fontSize: SizeConfig.safeBlockVertical! * 2,
                             color: const Color.fromARGB(255, 2, 19, 94),
@@ -110,23 +119,22 @@ class _RoleScreenState extends State<RoleScreen> {
                             SizeConfig.safeBlockHorizontal! * 20,
                             1)
                         : EdgeInsets.all(10),
-                    itemCount: SharedVars.userRoles!.rolesData.length,
+                    itemCount: widget.menuModel!.items.length,
                     itemBuilder: (context, index) {
                       return RadioListTile<String>(
-                        title: Text(
-                            SharedVars.userRoles!.rolesData[index].roleTitle!),
+                        title: Text(widget.menuModel!.items[index].title!),
                         // selected:
                         //     SharedVars.userRoles!.rolesData[index].roleID! ==
                         //         SharedVars.roleID,
-                        value: SharedVars.userRoles!.rolesData[index].roleID!,
+                        value: widget.menuModel!.items[index].id!,
                         contentPadding: EdgeInsets.only(left: 100, right: 100),
-                        groupValue: _roleID,
+                        groupValue: _requestTypeID,
                         onChanged: (String? value) {
                           setState(() {
-                            _roleID = value;
-                            _roleTitle = SharedVars
-                                .userRoles!.rolesData[index].roleTitle!;
-                            print('$_roleTitle is selected');
+                            _requestTypeID = value;
+                            _requestTypeTitle =
+                                widget.menuModel!.items[index].title!;
+                            print('$_requestTypeTitle is selected');
                           });
                         },
                       );
@@ -160,14 +168,20 @@ class _RoleScreenState extends State<RoleScreen> {
                               textStyle: TextStyle(
                                 color: Colors.white,
                                 fontFamily: SharedVars.fontFamily,
-                                fontSize: 30,
+                                fontSize: 20,
                               )),
                           onPressed: () {
-                            Provider.of<AuthProvider>(context, listen: false)
-                                .setRoleID(_roleID!, _roleTitle!);
+                            Map<String, dynamic> items = <String, dynamic>{
+                              'item': ''
+                            };
+                            Map<String, dynamic> params = <String, dynamic>{
+                              'edit': false,
+                              'itemData': items,
+                            };
+                            SharedVars.formNameE = _requestTypeID!;
 
-                            Navigator.pushReplacementNamed(
-                                context, '/main_screen');
+                            Provider.of<ChangeProvider>(context, listen: false)
+                                .setMidScreen(ScreenName.editRequest, params);
                           },
                           child: const Text('ادامه'))),
                 ],
@@ -177,11 +191,11 @@ class _RoleScreenState extends State<RoleScreen> {
             //   title: const Text('استاد'),
             //   value: 'استاد',
             //   contentPadding: EdgeInsets.only(left: 100, right: 100),
-            //   groupValue: _roleID,
+            //   groupValue: _requestTypeID,
             //   onChanged: (String? value) {
             //     setState(() {
             //       print('Teacher is selected');
-            //       _roleID = value;
+            //       _requestTypeID = value;
             //     });
             //   },
             // ),
@@ -189,11 +203,11 @@ class _RoleScreenState extends State<RoleScreen> {
             //   title: const Text('مدیر کل'),
             //   value: 'مدیر کل',
             //   contentPadding: EdgeInsets.only(left: 100, right: 100),
-            //   groupValue: _roleID,
+            //   groupValue: _requestTypeID,
             //   onChanged: (String? value) {
             //     setState(() {
             //       print('Manager is selected');
-            //       _roleID = value;
+            //       _requestTypeID = value;
             //     });
             //   },
             // ),

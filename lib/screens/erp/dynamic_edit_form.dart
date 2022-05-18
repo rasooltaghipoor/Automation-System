@@ -280,6 +280,12 @@ class _View2State extends State<DynamicEditForm> {
                   }
                 });
               },
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                primary: SharedVars.buttonColor,
+              ),
               child: widget.isEdit!
                   ? const Text(
                       'ویرایش',

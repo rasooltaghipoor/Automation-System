@@ -130,55 +130,56 @@ class _ListOfEmailsState extends State<ListOfRequests> {
                   Expanded(
                     child: Consumer<RequestListProvider>(
                       builder: (context, requestListModel, child) {
-                        return requestListModel.requestList == null ||
-                                requestListModel.requestList!.items.isEmpty
-                            ? const Center(
-                                child: Text(
-                                'داده ای برای نمایش وجود ندارد',
-                                style: TextStyle(fontSize: 20),
-                              ))
-                            : ListView.builder(
-                                controller: _mycontroller1,
-                                itemCount:
-                                    requestListModel.requestList!.items.length,
-                                // On mobile this active dosen't mean anything
-                                itemBuilder: (context, index) => RequestCard(
-                                      // isActive: Responsive.isMobile(context)
-                                      //     ? false
-                                      //     : index == 0,
-                                      request: requestListModel
-                                          .requestList!.items[index],
-                                      press: () {
-                                        //FIXME: This map is not necessary for now, but I keep it temporarily
-                                        Map<String, dynamic> params =
-                                            <String, dynamic>{
-                                          'canManage': false
-                                        };
-                                        SharedVars.requestID = requestListModel
-                                            .requestList!
-                                            .items[index]
-                                            .requestID;
-                                        SharedVars.formNameF = requestListModel
-                                            .requestList!
-                                            .items[index]
-                                            .formName_F;
-                                        // SharedVars.formNameE = requestListModel
-                                        //     .requestList!
-                                        //     .items[index]
-                                        //     .formName_E;
-                                        Provider.of<ChangeProvider>(context,
-                                                listen: false)
-                                            .setMidScreen(
-                                                ScreenName.viewRequest, params);
-                                        // Navigator.push(
-                                        //   context,
-                                        //   MaterialPageRoute(
-                                        //     builder: (context) => EmailScreen(
-                                        //         email: emails[index]),
-                                        //   ),
-                                        // );
-                                      },
-                                    ));
+                        return requestListModel.requestList == null
+                            ? Center(child: CircularProgressIndicator())
+                            : requestListModel.requestList!.items.isEmpty
+                                ? const Center(
+                                    child: Text(
+                                    'داده ای برای نمایش وجود ندارد',
+                                    style: TextStyle(fontSize: 20),
+                                  ))
+                                : ListView.builder(
+                                    controller: _mycontroller1,
+                                    itemCount: requestListModel
+                                        .requestList!.items.length,
+                                    // On mobile this active dosen't mean anything
+                                    itemBuilder: (context, index) =>
+                                        RequestCard(
+                                          // isActive: Responsive.isMobile(context)
+                                          //     ? false
+                                          //     : index == 0,
+                                          request: requestListModel
+                                              .requestList!.items[index],
+                                          press: () {
+                                            //FIXME: This map is not necessary for now, but I keep it temporarily
+                                            Map<String, dynamic> params =
+                                                <String, dynamic>{
+                                              'canManage': false
+                                            };
+                                            SharedVars.requestID =
+                                                requestListModel.requestList!
+                                                    .items[index].requestID;
+                                            SharedVars.formNameF =
+                                                requestListModel.requestList!
+                                                    .items[index].formName_F;
+                                            // SharedVars.formNameE = requestListModel
+                                            //     .requestList!
+                                            //     .items[index]
+                                            //     .formName_E;
+                                            Provider.of<ChangeProvider>(context,
+                                                    listen: false)
+                                                .setMidScreen(
+                                                    ScreenName.viewRequest,
+                                                    params);
+                                            // Navigator.push(
+                                            //   context,
+                                            //   MaterialPageRoute(
+                                            //     builder: (context) => EmailScreen(
+                                            //         email: emails[index]),
+                                            //   ),
+                                            // );
+                                          },
+                                        ));
                       },
                     ),
                   ),

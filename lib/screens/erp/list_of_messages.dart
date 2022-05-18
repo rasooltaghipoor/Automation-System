@@ -135,59 +135,62 @@ class _ListOfEmailsState extends State<ListOfMessages> {
                   Expanded(
                     child: Consumer<ErpCartableProvider>(
                       builder: (context, cartablrModel, child) {
-                        return cartablrModel.cartable == null ||
-                                cartablrModel.cartable!.catableData.isEmpty
-                            ? const Center(
-                                child: Text(
-                                'داده ای برای نمایش وجود ندارد',
-                                style: TextStyle(fontSize: 20),
-                              ))
-                            : ListView.builder(
-                                controller: _mycontroller1,
-                                itemCount:
-                                    cartablrModel.cartable!.catableData.length,
-                                // On mobile this active dosen't mean anything
-                                itemBuilder: (context, index) => MessageCard(
-                                      // isActive: Responsive.isMobile(context)
-                                      //     ? false
-                                      //     : index == 0,
-                                      cartableData: cartablrModel
-                                          .cartable!.catableData[index],
-                                      press: () {
-                                        //FIXME: This map is not necessary for now, but I keep it temporarily
-                                        Map<String, dynamic> params =
-                                            <String, dynamic>{
-                                          'canManage': true
-                                        };
-                                        SharedVars.requestID = cartablrModel
-                                            .cartable!
-                                            .catableData[index]
-                                            .requestID!;
-                                        SharedVars.historyID = cartablrModel
-                                            .cartable!
-                                            .catableData[index]
-                                            .history!;
-                                        SharedVars.formNameF = cartablrModel
-                                            .cartable!
-                                            .catableData[index]
-                                            .formName_F!;
-                                        // SharedVars.formNameE = requestListModel
-                                        //     .requestList!
-                                        //     .items[index]
-                                        //     .formName_E;
-                                        Provider.of<ChangeProvider>(context,
-                                                listen: false)
-                                            .setMidScreen(
-                                                ScreenName.viewRequest, params);
-                                        // Navigator.push(
-                                        //   context,
-                                        //   MaterialPageRoute(
-                                        //     builder: (context) => EmailScreen(
-                                        //         email: emails[index]),
-                                        //   ),
-                                        // );
-                                      },
-                                    ));
+                        return cartablrModel.cartable == null
+                            ? Center(child: CircularProgressIndicator())
+                            : cartablrModel.cartable!.catableData.isEmpty
+                                ? const Center(
+                                    child: Text(
+                                    'داده ای برای نمایش وجود ندارد',
+                                    style: TextStyle(fontSize: 20),
+                                  ))
+                                : ListView.builder(
+                                    controller: _mycontroller1,
+                                    itemCount: cartablrModel
+                                        .cartable!.catableData.length,
+                                    // On mobile this active dosen't mean anything
+                                    itemBuilder: (context, index) =>
+                                        MessageCard(
+                                          // isActive: Responsive.isMobile(context)
+                                          //     ? false
+                                          //     : index == 0,
+                                          cartableData: cartablrModel
+                                              .cartable!.catableData[index],
+                                          press: () {
+                                            //FIXME: This map is not necessary for now, but I keep it temporarily
+                                            Map<String, dynamic> params =
+                                                <String, dynamic>{
+                                              'canManage': true
+                                            };
+                                            SharedVars.requestID = cartablrModel
+                                                .cartable!
+                                                .catableData[index]
+                                                .requestID!;
+                                            SharedVars.historyID = cartablrModel
+                                                .cartable!
+                                                .catableData[index]
+                                                .history!;
+                                            SharedVars.formNameF = cartablrModel
+                                                .cartable!
+                                                .catableData[index]
+                                                .formName_F!;
+                                            // SharedVars.formNameE = requestListModel
+                                            //     .requestList!
+                                            //     .items[index]
+                                            //     .formName_E;
+                                            Provider.of<ChangeProvider>(context,
+                                                    listen: false)
+                                                .setMidScreen(
+                                                    ScreenName.viewRequest,
+                                                    params);
+                                            // Navigator.push(
+                                            //   context,
+                                            //   MaterialPageRoute(
+                                            //     builder: (context) => EmailScreen(
+                                            //         email: emails[index]),
+                                            //   ),
+                                            // );
+                                          },
+                                        ));
                       },
                     ),
                   ),
