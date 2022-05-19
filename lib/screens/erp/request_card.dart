@@ -51,7 +51,7 @@ class _RequestCardState extends State<RequestCard> {
           //children: [
           child: Container(
             width: double.infinity,
-            padding: const EdgeInsets.all(kDefaultPaddingSmall),
+            padding: const EdgeInsets.all(kDefaultPaddingSmall / 2),
             decoration: BoxDecoration(
               color: widget.isActive! ? kPrimaryColor : kBgDarkColor,
               borderRadius: BorderRadius.circular(15),
@@ -72,29 +72,35 @@ class _RequestCardState extends State<RequestCard> {
                     //     ? SizeConfig.safeBlockHorizontal! * 90
                     //     : SizeConfig.safeBlockHorizontal! * 90,
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Image.network(
-                          mainUrl + widget.request!.icon,
-                          width: 35,
-                          height: 35,
-                        ),
-                        SizedBox(
-                          width: SizeConfig.safeBlockHorizontal! * 2 * zarib1,
-                          child: RotatedBox(
-                            quarterTurns: 3,
-                            child: Text(widget.request!.formName_F),
+                        Row(children: [
+                          Image.network(
+                            mainUrl + widget.request!.icon,
+                            width: 35,
+                            height: 35,
                           ),
-                        ),
-                        const SizedBox(
-                          width: 30,
-                        ),
+                          SizedBox(
+                            width: SizeConfig.safeBlockHorizontal! * 2 * zarib1,
+                            child: RotatedBox(
+                              quarterTurns: 3,
+                              child: Text(
+                                widget.request!.formName_F,
+                                style: TextStyle(fontSize: 12),
+                              ),
+                            ),
+                          ),
+                        ]),
+                        // const SizedBox(
+                        //   width: 30,
+                        // ),
                         SizedBox(
                           width: 100,
                           child: Text(widget.request!.itemsTitle),
                         ),
-                        const SizedBox(
-                          width: 10,
-                        ),
+                        // const SizedBox(
+                        //   width: 10,
+                        // ),
                         SizedBox(
                           width: 80,
                           child: Text(widget.request!.date),
@@ -113,16 +119,24 @@ class _RequestCardState extends State<RequestCard> {
                     child: Column(
                       children: [
                         Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: Responsive.isDesktop(context)
-                              ? MainAxisAlignment.start
+                              ? MainAxisAlignment.spaceEvenly
                               : MainAxisAlignment.spaceAround,
                           children: [
                             Text('اولویت: ' + widget.request!.priority),
-                            SizedBox(
-                              width: 50,
-                            ),
-                            Text('وضعیت: ' + widget.request!.state)
+                            // SizedBox(
+                            //   width: 50,
+                            // ),
+                            Text('وضعیت: ' + widget.request!.state),
+                            // SizedBox(width: 20),
+                            Responsive.isDesktop(context)
+                                ? Image.network(
+                                    mainUrl + widget.request!.stateIcon,
+                                    width: 30,
+                                    height: 30,
+                                  )
+                                : Text(''),
                           ],
                         ),
                       ],

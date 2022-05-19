@@ -51,7 +51,7 @@ class _RequestCardState extends State<MessageCard> {
           //children: [
           child: Container(
             width: double.infinity,
-            padding: const EdgeInsets.all(kDefaultPaddingSmall),
+            padding: const EdgeInsets.all(kDefaultPaddingSmall / 2),
             decoration: BoxDecoration(
               color: widget.isActive! ? kPrimaryColor : kBgDarkColor,
               borderRadius: BorderRadius.circular(15),
@@ -72,29 +72,38 @@ class _RequestCardState extends State<MessageCard> {
                     //     ? SizeConfig.safeBlockHorizontal! * 90
                     //     : SizeConfig.safeBlockHorizontal! * 90,
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Image.network(
-                          mainUrl + widget.cartableData!.icon!,
-                          width: 35,
-                          height: 35,
+                        Row(
+                          children: [
+                            Image.network(
+                              mainUrl + widget.cartableData!.icon!,
+                              width: 35,
+                              height: 35,
+                            ),
+                            SizedBox(
+                              width:
+                                  SizeConfig.safeBlockHorizontal! * 2 * zarib1,
+                              child: RotatedBox(
+                                quarterTurns: 3,
+                                child: Text(
+                                  widget.cartableData!.formName_F!,
+                                  style: TextStyle(fontSize: 12),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                        SizedBox(
-                          width: SizeConfig.safeBlockHorizontal! * 2 * zarib1,
-                          child: RotatedBox(
-                            quarterTurns: 3,
-                            child: Text(widget.cartableData!.formName_F!),
-                          ),
-                        ),
-                        const SizedBox(
-                          width: 30,
-                        ),
+                        // const SizedBox(
+                        //   width: 30,
+                        // ),
                         SizedBox(
                           width: 100,
                           child: Text(widget.cartableData!.itemsTitle),
                         ),
-                        const SizedBox(
-                          width: 30,
-                        ),
+                        // const SizedBox(
+                        //   width: 30,
+                        // ),
                         Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -121,14 +130,22 @@ class _RequestCardState extends State<MessageCard> {
                     child: Column(
                       children: [
                         Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             Text('اولویت: ' + widget.cartableData!.priority!),
-                            SizedBox(
-                              width: 40,
-                            ),
+                            // SizedBox(
+                            //   width: 40,
+                            // ),
                             Text(widget.cartableData!.date!),
+                            // SizedBox(width: 20),
+                            Responsive.isDesktop(context)
+                                ? Image.network(
+                                    mainUrl + widget.cartableData!.stateIcon,
+                                    width: 30,
+                                    height: 30,
+                                  )
+                                : Text(''),
                           ],
                         ),
                       ],

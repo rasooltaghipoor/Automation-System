@@ -111,6 +111,7 @@ class _RequestSelectionState extends State<RequestSelection> {
               child: ListView(
                 children: [
                   ListView.builder(
+                    physics: NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
                     padding: Responsive.isDesktop(context)
                         ? EdgeInsets.fromLTRB(

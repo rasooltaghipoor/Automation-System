@@ -77,6 +77,7 @@ class _State extends State<DynamicEditWidget> {
         widget.formItems = data.items;
 
         return ListView.builder(
+          physics: NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           itemCount: data.items.length,
           padding: const EdgeInsets.all(10),
@@ -122,6 +123,7 @@ class _State extends State<DynamicEditWidget> {
         widget.formItems = data.items;
 
         return ListView.builder(
+          physics: NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           itemCount: data.items.length,
           padding: const EdgeInsets.all(5),
@@ -576,7 +578,7 @@ class _State extends State<DynamicEditWidget> {
                                 child: Text('ویرایش درخواست'),
                               ),
                             )
-                      : Text('')
+                      : Container()
                   : const Text(
                       'امکان پاسخ گویی یا ویرایش برای شما میسر نمی باشد'),
         ),
@@ -584,16 +586,16 @@ class _State extends State<DynamicEditWidget> {
             ? Container(
                 width: MediaQuery.of(context).size.width * 0.6,
                 height: MediaQuery.of(context).size.width * 0.6 / 3,
-                child: SvgPicture.network(
-                  'http://cms2.iau-neyshabur.ac.ir/api/Request/svghistory/${SharedVars.requestID}?dir=horiz',
+                child: Image.network(
+                  'http://cms2.iau-neyshabur.ac.ir/api/Request/pnghistory/${SharedVars.requestID}?dir=horiz',
                   // fit: BoxFit.fill,
                 ),
               )
             : Container(
                 width: MediaQuery.of(context).size.width * 0.7,
                 height: MediaQuery.of(context).size.width * 0.7 * 3,
-                child: SvgPicture.network(
-                  'http://cms2.iau-neyshabur.ac.ir/api/Request/svghistory/${SharedVars.requestID}?dir=vert',
+                child: Image.network(
+                  'http://cms2.iau-neyshabur.ac.ir/api/Request/pnghistory/${SharedVars.requestID}?dir=vert',
                   // fit: BoxFit.fill,
                 ),
               ),

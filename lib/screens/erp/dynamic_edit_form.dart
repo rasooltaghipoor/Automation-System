@@ -87,6 +87,7 @@ class _View2State extends State<DynamicEditForm> {
               height: 20,
             ),
             ListView.builder(
+              physics: NeverScrollableScrollPhysics(),
               shrinkWrap: true,
               itemCount: data.items.length,
               padding: const EdgeInsets.all(5),
@@ -438,6 +439,9 @@ class _View2State extends State<DynamicEditForm> {
               height: 20,
             ),
             _okButton(),
+            const SizedBox(
+              height: 20,
+            ),
           ],
         ),
       ),
