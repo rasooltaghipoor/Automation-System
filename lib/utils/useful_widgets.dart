@@ -75,7 +75,7 @@ SnackBar mySnackBar(String text, Color color) {
         text,
         style: TextStyle(
             fontFamily: SharedVars.fontFamily,
-            fontSize: SizeConfig.safeBlockHorizontal! * 5,
+            fontSize: 20,
             color: Colors.white,
             fontWeight: FontWeight.bold),
         textAlign: TextAlign.center,

@@ -121,8 +121,8 @@ class _LoginState extends State<Login> {
 
     return SafeArea(
       child: Scaffold(
-        appBar: myCustomAppBar('دانشگاه آزاد اسلامی واحد نیشابور',
-            SizeConfig.safeBlockVertical! * 10, null),
+        appBar: myCustomAppBar(
+            'دانشگاه آزاد اسلامی', SizeConfig.safeBlockVertical! * 10, null),
         body: Container(
           /*decoration: BoxDecoration(
               //color: Colors.yellow[100],
@@ -153,7 +153,7 @@ class _LoginState extends State<Login> {
                       height: 50 * 1.25,
                     ),
                     const Text(
-                      "سیستم مدیریت منابع انسانی",
+                      "سیستم اتوماسیون فرآیندی",
                       style: TextStyle(fontFamily: SharedVars.fontFamily),
                     ),
                     SizedBox(height: SizeConfig.safeBlockVertical! * 8),

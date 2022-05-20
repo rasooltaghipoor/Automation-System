@@ -18,14 +18,18 @@ class ScreenHeader extends StatelessWidget {
             Expanded(
               flex: 1,
               child: ListTile(
-                leading: Image.asset("assets/icon/FaraYar.png"),
+                leading: Image.asset(
+                  "assets/icon/FaraYar.png",
+                  width: 40,
+                  height: 40,
+                ),
                 //backgroundColor: Colors.purple,
                 title: const Text(
                   'فرایار',
                   style: TextStyle(color: Colors.white),
                 ),
                 subtitle: const Text(
-                  'مدیریت منابع سازمانی',
+                  'سیستم اتوماسیون فرآیندی',
                   style: TextStyle(color: Colors.white70),
                 ),
               ),

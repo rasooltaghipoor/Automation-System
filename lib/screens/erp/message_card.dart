@@ -78,12 +78,14 @@ class _RequestCardState extends State<MessageCard> {
                           children: [
                             Image.network(
                               mainUrl + widget.cartableData!.icon!,
-                              width: 35,
-                              height: 35,
+                              width: 30,
+                              height: 30,
                             ),
                             SizedBox(
-                              width:
-                                  SizeConfig.safeBlockHorizontal! * 2 * zarib1,
+                              width: 7,
+                            ),
+                            SizedBox(
+                              // width: 30,
                               child: RotatedBox(
                                 quarterTurns: 3,
                                 child: Text(
@@ -91,6 +93,9 @@ class _RequestCardState extends State<MessageCard> {
                                   style: TextStyle(fontSize: 12),
                                 ),
                               ),
+                            ),
+                            SizedBox(
+                              width: 5,
                             ),
                           ],
                         ),
@@ -104,17 +109,20 @@ class _RequestCardState extends State<MessageCard> {
                         // const SizedBox(
                         //   width: 30,
                         // ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            CircleAvatar(
-                              radius: 20,
-                              backgroundImage: NetworkImage(
-                                  mainUrl + widget.cartableData!.profile!),
-                            ),
-                            Text(widget.cartableData!.requester!),
-                          ],
+                        SizedBox(
+                          width: 90,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              CircleAvatar(
+                                radius: 20,
+                                backgroundImage: NetworkImage(
+                                    mainUrl + widget.cartableData!.profile!),
+                              ),
+                              Text(widget.cartableData!.requester!),
+                            ],
+                          ),
                         ),
                       ],
                     ),

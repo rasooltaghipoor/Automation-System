@@ -32,7 +32,7 @@ class _SideMenuState extends State<ErpSideMenu> {
   final ScrollController _mycontroller2 = ScrollController();
 
   void openMessageList(ErpMenuItemsData data) async {
-    await Future.delayed(const Duration(seconds: 2), () {
+    await Future.delayed(const Duration(seconds: 1), () {
       Map<String, dynamic> params = <String, dynamic>{"itemData": data};
       Provider.of<ChangeProvider>(context, listen: false)
           .setMidScreen(ScreenName.messageList, params);
