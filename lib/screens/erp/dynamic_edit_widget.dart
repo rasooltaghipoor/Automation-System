@@ -4,9 +4,11 @@ import 'dart:io';
 import 'package:automation_system/constants.dart';
 import 'package:automation_system/models/BuyModel.dart';
 import 'package:automation_system/models/DynamicForm.dart';
+import 'package:automation_system/models/MenuDetails.dart';
 import 'package:automation_system/models/ReplyButtons.dart';
 import 'package:automation_system/models/RequestData.dart';
 import 'package:automation_system/providers/auth.dart';
+import 'package:automation_system/providers/change_provider.dart';
 import 'package:automation_system/responsive.dart';
 import 'package:automation_system/screens/erp/erp_timeline.dart';
 import 'package:automation_system/screens/erp/timeline_widget.dart';
@@ -39,7 +41,7 @@ class DynamicEditWidget extends StatefulWidget {
 class _State extends State<DynamicEditWidget> {
   // Map<String, int> _listboxIndices = Map();
   DynamicFormModel? _formData;
-  bool isEnabled = false;
+  bool isEditEnabled = false;
   bool value = false;
   String filePath = "";
   TextEditingController descriptionController = TextEditingController();
@@ -133,7 +135,7 @@ class _State extends State<DynamicEditWidget> {
                   _getControllerOf(data.items[index].controlName);
 
               final textField = TextField(
-                enabled: isEnabled,
+                enabled: isEditEnabled,
                 controller: controller,
                 decoration: InputDecoration(
                   border: const OutlineInputBorder(),
@@ -159,7 +161,7 @@ class _State extends State<DynamicEditWidget> {
               return Row(children: <Widget>[
                 Text(data.items[index].title,
                     style: TextStyle(
-                      color: isEnabled ? Colors.black : Colors.grey,
+                      color: isEditEnabled ? Colors.black : Colors.grey,
                     )),
                 Container(
                     padding:
@@ -174,7 +176,7 @@ class _State extends State<DynamicEditWidget> {
                         height: 2,
                         color: Colors.deepPurpleAccent,
                       ),
-                      onChanged: isEnabled
+                      onChanged: isEditEnabled
                           ? (String? newValue) {
                               setState(() {
                                 widget.dropDownMap[
@@ -281,12 +283,17 @@ class _State extends State<DynamicEditWidget> {
 
                     Map<String, String> items = <String, String>{};
                     for (FormItem listItem in _formData!.items) {
-                      if (listItem.control == 'textbox') {
-                        items[listItem.controlName] =
-                            widget.controllerMap[listItem.controlName]!.text;
-                      } else if (listItem.control == 'listbox') {
-                        items[listItem.controlName] =
-                            widget.dropDownMap[listItem.controlName]!;
+                      if (isEditEnabled) {
+                        if (listItem.control == 'textbox') {
+                          items[listItem.controlName] =
+                              widget.controllerMap[listItem.controlName]!.text;
+                        } else if (listItem.control == 'listbox') {
+                          items[listItem.controlName] =
+                              widget.dropDownMap[listItem.controlName]!;
+                        }
+                      } else {
+                        items[listItem.controlName] = widget.itemData!
+                            .requestDetails.items[listItem.controlName];
                       }
                     }
 
@@ -386,6 +393,11 @@ class _State extends State<DynamicEditWidget> {
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
+                Map<String, dynamic> params = <String, dynamic>{
+                  "itemData": ErpMenuItemsData('all', 'کارتابل', '-1')
+                };
+                Provider.of<ChangeProvider>(context, listen: false)
+                    .setMidScreen(ScreenName.messageList, params);
               },
               child: const Text("بستن"),
             ),
@@ -458,7 +470,7 @@ class _State extends State<DynamicEditWidget> {
                     onChanged: (bool? value) {
                       setState(() {
                         this.value = value!;
-                        isEnabled = !isEnabled;
+                        isEditEnabled = !isEditEnabled;
                       });
                     },
                   ), //Text
@@ -474,7 +486,7 @@ class _State extends State<DynamicEditWidget> {
         SizedBox(
           height: 5,
         ),
-        widget.canEdit! && isEnabled
+        widget.canEdit! && isEditEnabled
             ? _futureBuilder()
             : _requestOverviewBuilder(),
         Row(
@@ -554,14 +566,16 @@ class _State extends State<DynamicEditWidget> {
                     const SizedBox(
                       height: 20,
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: getButtons(context),
-                    )
+                    _requestStatus == RequestStatus.Sending
+                        ? loading
+                        : Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: getButtons(context),
+                          )
                   ],
                 )
               : widget.itemData!.editable == 'true'
-                  ? isEnabled
+                  ? isEditEnabled
                       ? _requestStatus == RequestStatus.Sending
                           ? loading
                           : SizedBox(

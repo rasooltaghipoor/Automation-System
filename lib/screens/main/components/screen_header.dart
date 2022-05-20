@@ -1,4 +1,5 @@
 import 'package:automation_system/constants.dart';
+import 'package:automation_system/responsive.dart';
 import 'package:automation_system/screens/login_screen.dart';
 import 'package:automation_system/utils/shared_vars.dart';
 import 'package:flutter/material.dart';
@@ -16,24 +17,43 @@ class ScreenHeader extends StatelessWidget {
         child: Row(
           children: [
             Expanded(
-              flex: 1,
-              child: ListTile(
-                leading: Image.asset(
-                  "assets/icon/FaraYar.png",
-                  width: 40,
-                  height: 40,
+                flex: 1,
+                child: Row(
+                  children: [
+                    SizedBox(
+                      width: 5,
+                    ),
+                    Image.asset(
+                      "assets/icon/FaraYar.png",
+                      width: 35,
+                      height: 35,
+                    ),
+                    SizedBox(
+                      width: 5,
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'فرایار',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        const Text(
+                          'سیستم اتوماسیون فرآیندی',
+                          style: TextStyle(color: Colors.white70, fontSize: 10),
+                        ),
+                      ],
+                    ),
+                  ],
+                )
+                // child: ListTile(
+                //   leading:
+                //   //backgroundColor: Colors.purple,
+                //   title:
+                //   subtitle:
+                // ),
                 ),
-                //backgroundColor: Colors.purple,
-                title: const Text(
-                  'فرایار',
-                  style: TextStyle(color: Colors.white),
-                ),
-                subtitle: const Text(
-                  'سیستم اتوماسیون فرآیندی',
-                  style: TextStyle(color: Colors.white70),
-                ),
-              ),
-            ),
             // Expanded(
             //   child: Column(
             //     mainAxisAlignment: MainAxisAlignment.center,

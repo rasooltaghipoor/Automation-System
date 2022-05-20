@@ -2,6 +2,8 @@ import 'dart:async';
 import 'package:automation_system/models/User.dart';
 import 'package:automation_system/providers/auth.dart';
 import 'package:automation_system/providers/user_provider.dart';
+import 'package:automation_system/screens/main/components/main_header.dart';
+import 'package:automation_system/screens/main/main_screen.dart';
 import 'package:automation_system/utils/SizeConfiguration.dart';
 import 'package:automation_system/utils/communication/web_request.dart';
 import 'package:automation_system/utils/shared_vars.dart';
@@ -100,7 +102,10 @@ class _LoginState extends State<Login> {
             User user = response['user'];
             //******Provider.of<UserProvider>(context, listen: false).setUser(user);
             //SharedVars.currentDate = response['date'];
-            Navigator.pushReplacementNamed(context, '/main_screen');
+            // Navigator.pushReplacementNamed(context, '/main_screen');
+            Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(builder: (context) => MainScreen()),
+                (Route<dynamic> route) => false);
           } else {
             final snackBar = mySnackBar(
                 'نام کاربری یا رمز عبور اشتباه است', SharedVars.appBarColor);
