@@ -94,6 +94,7 @@ flutter:
     - assets/images/
     - assets/icon/
     - assets/test.json
+    - assets/fonts/
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 
@@ -129,3 +130,6 @@ flutter:
     - family: Koodak
       fonts:
         - asset: assets/fonts/Yekan.ttf
+    - family: Roboto
+      fonts:
+        - asset: assets/fonts/KFOmCnqEu92Fr1Me5WZLCzYlKw.ttf    

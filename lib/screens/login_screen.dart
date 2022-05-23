@@ -103,9 +103,13 @@ class _LoginState extends State<Login> {
             //******Provider.of<UserProvider>(context, listen: false).setUser(user);
             //SharedVars.currentDate = response['date'];
             // Navigator.pushReplacementNamed(context, '/main_screen');
-            Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(builder: (context) => MainScreen()),
-                (Route<dynamic> route) => false);
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (BuildContext context) => MainScreen()));
+            // Navigator.of(context).pushAndRemoveUntil(
+            //     MaterialPageRoute(builder: (context) => MainScreen()),
+            //     (Route<dynamic> route) => false);
           } else {
             final snackBar = mySnackBar(
                 'نام کاربری یا رمز عبور اشتباه است', SharedVars.appBarColor);

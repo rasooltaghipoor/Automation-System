@@ -6,6 +6,7 @@ import '../../../constants.dart';
 import '../../../extensions.dart';
 
 class ErpIntroScreen extends StatelessWidget {
+  
   const ErpIntroScreen({
     Key? key,
   }) : super(key: key);

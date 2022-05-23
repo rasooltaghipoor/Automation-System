@@ -183,9 +183,37 @@ class _SideMenuState extends State<ErpSideMenu> {
                                 //         menuModel.sideMenu!.menuData[2].count!)
                                 //     : 0,
                               ),
+                              SideMenuItem(
+                                press: () {},
+                                title: "در دست اقدام",
+                                iconSrc: "assets/Icons/File.svg",
+                                isActive: false,
+                                itemCount: -1,
+                              ),
+                              SideMenuItem(
+                                press: () {},
+                                title: "پیگیری",
+                                iconSrc: "assets/Icons/File.svg",
+                                isActive: false,
+                                itemCount: -1,
+                              ),
+                              SideMenuItem(
+                                press: () {},
+                                title: "نامه ارسالی",
+                                iconSrc: "assets/Icons/File.svg",
+                                isActive: false,
+                                itemCount: -1,
+                              ),
+                              SideMenuItem(
+                                press: () {},
+                                title: "پیشنویس",
+                                iconSrc: "assets/Icons/File.svg",
+                                isActive: false,
+                                itemCount: -1,
+                              ),
                             ],
                           ),
-                          const SizedBox(height: kDefaultPadding * 2),
+                          const SizedBox(height: kDefaultPadding),
                           SideMenuItem(
                             press: () {
                               setState(() {
@@ -257,16 +285,55 @@ class _SideMenuState extends State<ErpSideMenu> {
                                   )
                                 : Text('');
                           }),
-                          /*SideMenuItem(
-                            press: () {
-                              setState(() {
-                                _activeIndex = 9;
-                              });
-                            },
-                            title: "بایگانی اداری",
+                          SideMenuItem(
+                            press: () {},
+                            title: "جستجوی پیشرفته",
                             iconSrc: "assets/Icons/File.svg",
-                            isActive: _activeIndex == 9 ? true : false,
-                          ),*/
+                            isActive: false,
+                            itemCount: -1,
+                          ),
+                          SideMenuItem(
+                            press: () {},
+                            title: "تالار گفتگو",
+                            iconSrc: "assets/Icons/File.svg",
+                            isActive: false,
+                            itemCount: -1,
+                          ),
+                          SideMenuItem(
+                            press: () {},
+                            title: "یادآوری",
+                            iconSrc: "assets/Icons/File.svg",
+                            isActive: false,
+                            itemCount: -1,
+                          ),
+                          SideMenuItem(
+                            press: () {},
+                            title: "ایجاد نامه",
+                            iconSrc: "assets/Icons/File.svg",
+                            isActive: false,
+                            itemCount: -1,
+                          ),
+                          SideMenuItem(
+                            press: () {},
+                            title: "صورت جلسات",
+                            iconSrc: "assets/Icons/File.svg",
+                            isActive: false,
+                            itemCount: -1,
+                          ),
+                          SideMenuItem(
+                            press: () {},
+                            title: "بایگانی شخصی",
+                            iconSrc: "assets/Icons/File.svg",
+                            isActive: false,
+                            itemCount: -1,
+                          ),
+                          SideMenuItem(
+                            press: () {},
+                            title: "الگوهای پیوست",
+                            iconSrc: "assets/Icons/File.svg",
+                            isActive: false,
+                            itemCount: -1,
+                          ),
 
                           // const SizedBox(height: kDefaultPadding * 2),
                           // // Tags

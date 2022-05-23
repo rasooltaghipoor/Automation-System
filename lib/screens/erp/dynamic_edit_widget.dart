@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:automation_system/constants.dart';
 import 'package:automation_system/models/BuyModel.dart';
@@ -601,7 +602,7 @@ class _State extends State<DynamicEditWidget> {
                 width: MediaQuery.of(context).size.width * 0.6,
                 height: MediaQuery.of(context).size.width * 0.6 / 3,
                 child: Image.network(
-                  'http://cms2.iau-neyshabur.ac.ir/api/Request/pnghistory/${SharedVars.requestID}?dir=horiz',
+                  'http://cms2.iau-neyshabur.ac.ir/api/Request/pnghistory/${SharedVars.requestID}?dir=horiz&rnd=${Random().nextInt(1000000)}',
                   // fit: BoxFit.fill,
                 ),
               )
@@ -609,7 +610,7 @@ class _State extends State<DynamicEditWidget> {
                 width: MediaQuery.of(context).size.width * 0.7,
                 height: MediaQuery.of(context).size.width * 0.7 * 3,
                 child: Image.network(
-                  'http://cms2.iau-neyshabur.ac.ir/api/Request/pnghistory/${SharedVars.requestID}?dir=vert',
+                  'http://cms2.iau-neyshabur.ac.ir/api/Request/pnghistory/${SharedVars.requestID}?dir=vert&rnd=${Random().nextInt(1000000)}',
                   // fit: BoxFit.fill,
                 ),
               ),
