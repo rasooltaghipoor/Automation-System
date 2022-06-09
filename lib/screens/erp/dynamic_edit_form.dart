@@ -22,6 +22,7 @@ class DynamicEditForm extends StatefulWidget {
 }
 
 class _View2State extends State<DynamicEditForm> {
+  final formKey = new GlobalKey<FormState>();
   Map<String, TextEditingController> _controllerMap = Map();
   Map<String, String> _dropDownMap = Map();
   String filePath = '';
@@ -77,112 +78,123 @@ class _View2State extends State<DynamicEditForm> {
         //   _listboxIndices[item.listboxType] = i++;
         // }
 
-        return Column(
-          children: [
-            Text(
-              data.formName_F,
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            ListView.builder(
-              physics: NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: data.items.length,
-              padding: const EdgeInsets.all(5),
-              itemBuilder: (BuildContext context, int index) {
-                if (data.items[index].control == 'textbox') {
-                  final controller =
-                      _getControllerOf(data.items[index].controlName);
+        return Form(
+          key: formKey,
+          child: Column(
+            children: [
+              Text(
+                data.formName_F,
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              ListView.builder(
+                physics: NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                itemCount: data.items.length,
+                padding: const EdgeInsets.all(5),
+                itemBuilder: (BuildContext context, int index) {
+                  if (data.items[index].control == 'textbox') {
+                    final controller =
+                        _getControllerOf(data.items[index].controlName);
 
-                  final textField = TextField(
-                    controller: controller,
-                    decoration: InputDecoration(
-                      border: const OutlineInputBorder(),
-                      labelText: data.items[index].title,
-                    ),
-                    onTap: data.items[index].dataType == 'date'
-                        ? () async {
-                            Jalali? picked = await showPersianDatePicker(
-                              context: context,
-                              initialDate: Jalali.now(),
-                              firstDate: Jalali(1385, 8),
-                              lastDate: Jalali(1450, 9),
-                            );
-                            if (picked != null) {
-                              controller.text = picked.formatCompactDate();
+                    final textField = TextFormField(
+                      controller: controller,
+                      decoration: InputDecoration(
+                        border: const OutlineInputBorder(),
+                        labelText: data.items[index].title,
+                      ),
+                      validator: (value) =>
+                          value!.isEmpty ? "لطفا فیلد را پر نمایید" : null,
+                      //keyboardType: TextInputType.number,
+                      inputFormatters: data.items[index].dataType == 'digit'
+                          ? <TextInputFormatter>[
+                              FilteringTextInputFormatter.digitsOnly
+                            ]
+                          : null,
+                      onTap: data.items[index].dataType == 'date'
+                          ? () async {
+                              Jalali? picked = await showPersianDatePicker(
+                                context: context,
+                                initialDate: Jalali.now(),
+                                firstDate: Jalali(1385, 8),
+                                lastDate: Jalali(1450, 9),
+                              );
+                              if (picked != null) {
+                                controller.text = picked.formatCompactDate();
+                              }
                             }
-                          }
-                        : null,
-                  );
-                  return Container(
-                    child: textField,
-                    padding: const EdgeInsets.only(bottom: 10),
-                  );
-                } else if (data.items[index].control == 'listbox') {
-                  // var dropDownValue = _getDropDownValue(
-                  //     data.items[index].controlName,
-                  //     SharedVars.listBoxItemsMap[data.items[index].dataType]!
-                  //         .items[0].title);
-                  if (_dropDownMap[data.items[index].controlName] == null) {
-                    if (widget.isEdit!) {
-                      _dropDownMap[data.items[index].controlName] =
-                          widget.itemsData![data.items[index].controlName];
-                    } else {
-                      _dropDownMap[data.items[index].controlName] =
-                          data.items[index].dataType[0].title;
-                    }
+                          : null,
+                    );
+                    return Container(
+                      child: textField,
+                      padding: const EdgeInsets.only(bottom: 10),
+                    );
+                  } else if (data.items[index].control == 'listbox') {
+                    // var dropDownValue = _getDropDownValue(
+                    //     data.items[index].controlName,
+                    //     SharedVars.listBoxItemsMap[data.items[index].dataType]!
+                    //         .items[0].title);
+                    if (_dropDownMap[data.items[index].controlName] == null) {
+                      if (widget.isEdit!) {
+                        _dropDownMap[data.items[index].controlName] =
+                            widget.itemsData![data.items[index].controlName];
+                      } else {
+                        _dropDownMap[data.items[index].controlName] =
+                            data.items[index].dataType[0].title;
+                      }
 
-                    // SharedVars
-                    //     .listBoxItemsMap[
-                    //         data.forms[0].items[index].dataType]!
-                    //     .items[0]
-                    //     .title;
+                      // SharedVars
+                      //     .listBoxItemsMap[
+                      //         data.forms[0].items[index].dataType]!
+                      //     .items[0]
+                      //     .title;
+                    }
+                    return Row(children: <Widget>[
+                      Text(data.items[index].title),
+                      Container(
+                          padding: EdgeInsets.all(20),
+                          child: DropdownButton<String>(
+                            value: _dropDownMap[data.items[index].controlName],
+                            icon: const Icon(Icons.arrow_downward),
+                            iconSize: 24,
+                            elevation: 16,
+                            style: const TextStyle(color: Colors.deepPurple),
+                            underline: Container(
+                              height: 2,
+                              color: Colors.deepPurpleAccent,
+                            ),
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                _dropDownMap[data.items[index].controlName] =
+                                    newValue!;
+                              });
+                            },
+                            items:
+                                // SharedVars
+                                //     .listBoxItemsMap[
+                                //         data.forms[0].items[index].dataType]!
+                                data.items[index].dataType
+                                    .map<DropdownMenuItem<String>>(
+                                        (ListItem value) {
+                              return DropdownMenuItem<String>(
+                                value: value.title,
+                                child: Text(value.title),
+                              );
+                            }).toList(),
+                          )),
+                    ]);
+                  } else {
+                    return Container(
+                      height: 20,
+                      color: Colors.red,
+                    );
                   }
-                  return Row(children: <Widget>[
-                    Text(data.items[index].title),
-                    Container(
-                        padding: EdgeInsets.all(20),
-                        child: DropdownButton<String>(
-                          value: _dropDownMap[data.items[index].controlName],
-                          icon: const Icon(Icons.arrow_downward),
-                          iconSize: 24,
-                          elevation: 16,
-                          style: const TextStyle(color: Colors.deepPurple),
-                          underline: Container(
-                            height: 2,
-                            color: Colors.deepPurpleAccent,
-                          ),
-                          onChanged: (String? newValue) {
-                            setState(() {
-                              _dropDownMap[data.items[index].controlName] =
-                                  newValue!;
-                            });
-                          },
-                          items:
-                              // SharedVars
-                              //     .listBoxItemsMap[
-                              //         data.forms[0].items[index].dataType]!
-                              data.items[index].dataType
-                                  .map<DropdownMenuItem<String>>(
-                                      (ListItem value) {
-                            return DropdownMenuItem<String>(
-                              value: value.title,
-                              child: Text(value.title),
-                            );
-                          }).toList(),
-                        )),
-                  ]);
-                } else {
-                  return Container(
-                    height: 20,
-                    color: Colors.red,
-                  );
-                }
-              },
-            ),
-          ],
+                },
+              ),
+            ],
+          ),
         );
       },
     );
@@ -242,57 +254,63 @@ class _View2State extends State<DynamicEditForm> {
             height: 60,
             child: ElevatedButton(
               onPressed: () async {
-                // String text = _controllerMap.values
-                //     .where((element) => element.text != "")
-                //     .fold("", (acc, element) => acc += "${element.text}\n");
-                // await _showUpdatedDialog(text);
+                final form = formKey.currentState;
 
-                // setState(() {
-                //   _controllerMap.forEach((key, controller) {
-                //     // get the index of original text
-                //     int index = _controllerMap.keys.toList().indexOf(key);
-                //     key = controller.text;
-                //     _data[index] = controller.text;
-                //   });
-                // });
-                Map<String, String> items = <String, String>{};
-                for (FormItem listItem in _formData!.items) {
-                  if (listItem.control == 'textbox') {
-                    items[listItem.controlName] =
-                        _getControllerOf(listItem.controlName).text;
-                  } else if (listItem.control == 'listbox') {
-                    items[listItem.controlName] =
-                        _dropDownMap[listItem.controlName]!;
+                if (form!.validate()) {
+                  form.save();
+
+                  // String text = _controllerMap.values
+                  //     .where((element) => element.text != "")
+                  //     .fold("", (acc, element) => acc += "${element.text}\n");
+                  // await _showUpdatedDialog(text);
+
+                  // setState(() {
+                  //   _controllerMap.forEach((key, controller) {
+                  //     // get the index of original text
+                  //     int index = _controllerMap.keys.toList().indexOf(key);
+                  //     key = controller.text;
+                  //     _data[index] = controller.text;
+                  //   });
+                  // });
+                  Map<String, String> items = <String, String>{};
+                  for (FormItem listItem in _formData!.items) {
+                    if (listItem.control == 'textbox') {
+                      items[listItem.controlName] =
+                          _getControllerOf(listItem.controlName).text;
+                    } else if (listItem.control == 'listbox') {
+                      items[listItem.controlName] =
+                          _dropDownMap[listItem.controlName]!;
+                    }
                   }
+
+                  // String jsonTutorial = jsonEncode(items);
+                  print(jsonEncode(items));
+                  setState(() {
+                    // textHolder = '';
+                    // errTextHolder = '';
+                    _requestStatus = RequestStatus.Sending;
+                  });
+                  final Future<Map<String, dynamic>> successfulMessage =
+                      sendFormData(context, jsonEncode(items), dropPriority,
+                          filePath, _formData!.formName_E);
+
+                  successfulMessage.then((response) {
+                    if (response['status']) {
+                      setState(() {
+                        _requestStatus = RequestStatus.Done;
+                        _showAlertDialog('عملیات با موفقیت انجام شد', true);
+                        getErpSideMenuData(context);
+                        // textHolder = response['message'];
+                      });
+                    } else {
+                      setState(() {
+                        _requestStatus = RequestStatus.Done;
+                        _showAlertDialog('عملیات نا موفق بود', false);
+                        // errTextHolder = response['message'];
+                      });
+                    }
+                  });
                 }
-
-                // String jsonTutorial = jsonEncode(items);
-                print(jsonEncode(items));
-                setState(() {
-                  // textHolder = '';
-                  // errTextHolder = '';
-                  _requestStatus = RequestStatus.Sending;
-                });
-                final Future<Map<String, dynamic>> successfulMessage =
-                    sendFormData(context, jsonEncode(items), dropPriority,
-                        filePath, _formData!.formName_E);
-
-                successfulMessage.then((response) {
-                  if (response['status']) {
-                    setState(() {
-                      _requestStatus = RequestStatus.Done;
-                      _showAlertDialog('عملیات با موفقیت انجام شد', true);
-                      getErpSideMenuData(context);
-                      // textHolder = response['message'];
-                    });
-                  } else {
-                    setState(() {
-                      _requestStatus = RequestStatus.Done;
-                      _showAlertDialog('عملیات نا موفق بود', false);
-                      // errTextHolder = response['message'];
-                    });
-                  }
-                });
               },
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
