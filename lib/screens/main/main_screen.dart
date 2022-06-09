@@ -17,11 +17,45 @@ class MainScreen extends StatelessWidget {
   MainScreen({Key? key}) : super(key: key);
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
+  Future _showFirstMessageDialog(BuildContext context, String path) async {
+    await Future.delayed(const Duration(seconds: 1), () {
+      double width = MediaQuery.of(context).size.width * 0.5;
+      if (!Responsive.isDesktop(context))
+        width = MediaQuery.of(context).size.width * 0.9;
+      double height = width * 0.45;
+      final alert = AlertDialog(
+        title: const Text(
+          "پیام روز",
+          textAlign: TextAlign.center,
+        ),
+        content: Container(
+            width: width,
+            height: height,
+            child: Image.network(
+              path,
+            )),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text("بستن"),
+          ),
+        ],
+      );
+      return showDialog(
+        context: context,
+        builder: (BuildContext context) => alert,
+      );
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     //Provider.of<AuthProvider>(context).login('309', '309');
     //getUserDetails2(context, '309');
     //getSideMenuData(context, '309');
+    _showFirstMessageDialog(context, mainUrl + 'erp/images/message.jpg');
 
     getErpSideMenuData(context);
     getUserRoles(context);

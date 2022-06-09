@@ -765,3 +765,14 @@ void send3(String filename) async {
   request.files.add(await http.MultipartFile.fromPath('picture', filename));
   var res = await request.send();
 }
+
+Future<void> getCategories() async {
+  final response =
+      await http.get(Uri.parse('https://fakestoreapi.com/products/categories'));
+
+  if (response.statusCode == 200) {
+    //  final responseBody = utf8.decode(response.bodyBytes);
+    final parsed = json.decode(response.body);
+    print(parsed);
+  }
+}

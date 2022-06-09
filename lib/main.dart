@@ -35,6 +35,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    getCategories();
     /*List<ItemData> tags = [
       ItemData('قند', 20, 'کیلوگرم', 1000, 'ندارد'),
       ItemData('میز', 12, 'عدد', 500000, 'تجهیز کارگاه کامپیوتر'),
