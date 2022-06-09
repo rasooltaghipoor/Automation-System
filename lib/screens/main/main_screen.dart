@@ -17,13 +17,48 @@ class MainScreen extends StatelessWidget {
   MainScreen({Key? key}) : super(key: key);
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
+  Future _showFirstMessageDialog(BuildContext context, String path) async {
+    await Future.delayed(const Duration(seconds: 1), () {
+      double width = MediaQuery.of(context).size.width * 0.5;
+      if (!Responsive.isDesktop(context))
+        width = MediaQuery.of(context).size.width * 0.9;
+      double height = width * 0.45;
+      final alert = AlertDialog(
+        title: const Text(
+          "پیام روز",
+          textAlign: TextAlign.center,
+        ),
+        content: Container(
+            width: width,
+            height: height,
+            child: Image.network(
+              path,
+            )),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text("بستن"),
+          ),
+        ],
+      );
+      return showDialog(
+        context: context,
+        builder: (BuildContext context) => alert,
+      );
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     //Provider.of<AuthProvider>(context).login('309', '309');
     //getUserDetails2(context, '309');
     //getSideMenuData(context, '309');
+    _showFirstMessageDialog(context, mainUrl + 'erp/images/message.jpg');
 
     getErpSideMenuData(context);
+    getUserRoles(context);
     // getUserRoles(context);
     // getErpReplyButtons(context);
     //getCartableData(context, MenuItemsData('همه نامه ها', '0', 'All'));
@@ -44,21 +79,30 @@ class MainScreen extends StatelessWidget {
             flex: 1,
             child: ScreenHeader(),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
-            child: Row(
-              children: [
-                // Once user click the menu icon the menu shows like drawer
-                // Also we want to hide this menu icon on desktop
-                if (!Responsive.isDesktop(context))
-                  IconButton(
-                    icon: const Icon(Icons.menu),
-                    onPressed: () {
-                      _scaffoldKey.currentState?.openEndDrawer();
-                    },
-                  ),
-                if (!Responsive.isDesktop(context)) const SizedBox(width: 5),
-              ],
+          ResponsiveVisibility(
+            hiddenWhen: [Condition.largerThan(name: TABLET)],
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
+              child: Directionality(
+                  textDirection: TextDirection.rtl,
+                  child: Row(
+                    children: [
+                      // Once user click the menu icon the menu shows like drawer
+                      // Also we want to hide this menu icon on desktop
+                      if (!Responsive.isDesktop(context))
+                        IconButton(
+                          icon: const Icon(Icons.menu),
+                          onPressed: () {
+                            _scaffoldKey.currentState?.openEndDrawer();
+                          },
+                        ),
+                      if (!Responsive.isDesktop(context))
+                        const SizedBox(width: 20),
+                      Text(
+                        'تاریخ:',
+                      )
+                    ],
+                  )),
             ),
           ),
           Expanded(
@@ -74,14 +118,14 @@ class MainScreen extends StatelessWidget {
                 Expanded(
                   flex: _size.width > 1340 ? 15 : 16,
                   child: Column(
-                    children: const [
-                      //ResponsiveVisibility(
-                      //hiddenWhen: [Condition.smallerThan(name: DESKTOP)],
-                      Expanded(
-                        flex: 1,
-                        child: MainHeader(),
+                    children: [
+                      ResponsiveVisibility(
+                        hiddenWhen: [Condition.smallerThan(name: DESKTOP)],
+                        child: Expanded(
+                          flex: 1,
+                          child: MainHeader(),
+                        ),
                       ),
-                      // ),
                       Expanded(
                         flex: 10,
                         child: MiddleScreenSelector(),

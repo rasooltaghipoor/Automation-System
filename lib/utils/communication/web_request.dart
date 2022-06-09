@@ -137,6 +137,12 @@ Future<void> getRequestList(BuildContext context) async {
         // print('form id: ' + data.items[0].formName_F);
         Provider.of<RequestListProvider>(context, listen: false)
             .setRequestList(data, 'درخواست های من');
+      } else {
+        List<Request> items = [];
+        RequestListModel data = RequestListModel(items);
+        // print('form id: ' + data.items[0].formName_F);
+        Provider.of<RequestListProvider>(context, listen: false)
+            .setRequestList(data, 'درخواست های من');
       }
       //return data;
     } else {
@@ -339,6 +345,11 @@ Future<void> getErpCartableData(
         print('name: ' + data.catableData[0].formName_F!);
         Provider.of<ErpCartableProvider>(context, listen: false)
             .setCartable(data, itemData.title!);
+      } else {
+        List<ErpCartableData> catableData = [];
+        ErpCartableModel data = ErpCartableModel(catableData);
+        Provider.of<ErpCartableProvider>(context, listen: false)
+            .setCartable(data, itemData.title!);
       }
     } else {
       throw Exception('Unable to fetch info from the REST API');
@@ -442,6 +453,8 @@ Future<UserRoleModel> getUserRoles(BuildContext context) async {
       // We deserialize read data but only use Date field for now
       UserRoleModel data = UserRoleModel.fromMap(responseData);
       SharedVars.userRoles = data;
+      Provider.of<AuthProvider>(context, listen: false)
+          .setRolesCount(data.rolesData.length);
       return data;
     } else {
       throw Exception('Unable to fetch info from the REST API');
@@ -751,4 +764,15 @@ void send3(String filename) async {
       'POST', Uri.parse(mainUrl + 'api/info/UploadTest/0'));
   request.files.add(await http.MultipartFile.fromPath('picture', filename));
   var res = await request.send();
+}
+
+Future<void> getCategories() async {
+  final response =
+      await http.get(Uri.parse('https://fakestoreapi.com/products/categories'));
+
+  if (response.statusCode == 200) {
+    //  final responseBody = utf8.decode(response.bodyBytes);
+    final parsed = json.decode(response.body);
+    print(parsed);
+  }
 }

@@ -6,6 +6,7 @@ import 'package:automation_system/screens/erp/erp_intro_screen.dart';
 import 'package:automation_system/screens/erp/list_of_messages.dart';
 import 'package:automation_system/screens/erp/list_of_requests.dart';
 import 'package:automation_system/screens/erp/request_menu.dart';
+import 'package:automation_system/screens/erp/reuqest_selection.dart';
 import 'package:automation_system/screens/erp/view_request.dart';
 import 'package:automation_system/screens/role_screen.dart';
 import 'package:automation_system/utils/communication/web_request.dart';
@@ -42,11 +43,12 @@ class MiddleScreenSelector extends StatelessWidget {
             requestListModel.params!['itemData'],
           );
         case ScreenName.requestMenuScreen:
-          return RequestMenuScreen(
+          return RequestSelectionWidget(
               title: requestListModel.params!['title'],
               menuModel: getErpRequestMenu(context));
         case ScreenName.roleScreen:
-          return RoleScreenWidget(userRoleModel: getUserRoles(context));
+          // return RoleScreenWidget(userRoleModel: getUserRoles(context));
+          return RoleScreen();
         default:
           return ListOfRequests();
       }

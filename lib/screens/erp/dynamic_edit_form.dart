@@ -87,6 +87,7 @@ class _View2State extends State<DynamicEditForm> {
               height: 20,
             ),
             ListView.builder(
+              physics: NeverScrollableScrollPhysics(),
               shrinkWrap: true,
               itemCount: data.items.length,
               padding: const EdgeInsets.all(5),
@@ -280,6 +281,12 @@ class _View2State extends State<DynamicEditForm> {
                   }
                 });
               },
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                primary: SharedVars.buttonColor,
+              ),
               child: widget.isEdit!
                   ? const Text(
                       'ویرایش',
@@ -432,6 +439,9 @@ class _View2State extends State<DynamicEditForm> {
               height: 20,
             ),
             _okButton(),
+            const SizedBox(
+              height: 20,
+            ),
           ],
         ),
       ),

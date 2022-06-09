@@ -32,7 +32,7 @@ class _SideMenuState extends State<ErpSideMenu> {
   final ScrollController _mycontroller2 = ScrollController();
 
   void openMessageList(ErpMenuItemsData data) async {
-    await Future.delayed(const Duration(seconds: 2), () {
+    await Future.delayed(const Duration(seconds: 1), () {
       Map<String, dynamic> params = <String, dynamic>{"itemData": data};
       Provider.of<ChangeProvider>(context, listen: false)
           .setMidScreen(ScreenName.messageList, params);
@@ -46,7 +46,7 @@ class _SideMenuState extends State<ErpSideMenu> {
     return Container(
         height: double.infinity,
         padding: EdgeInsets.only(top: kIsWeb ? kDefaultPadding : 0),
-        color: kBgLightColor,
+        color: kMenuColor,
         child: SafeArea(
           child: SingleChildScrollView(
             controller: _mycontroller2,
@@ -139,7 +139,7 @@ class _SideMenuState extends State<ErpSideMenu> {
                                   //     context, menuModel.sideMenu!.menuData[1]);
                                   Map<String, dynamic> params =
                                       <String, dynamic>{
-                                    "param": menuModel.sideMenu!.menuData[1]
+                                    "itemData": menuModel.sideMenu!.menuData[1]
                                   };
                                   Provider.of<ChangeProvider>(context,
                                           listen: false)
@@ -165,7 +165,7 @@ class _SideMenuState extends State<ErpSideMenu> {
                                   //     context, menuModel.sideMenu!.menuData[2]);
                                   Map<String, dynamic> params =
                                       <String, dynamic>{
-                                    "param": menuModel.sideMenu!.menuData[2]
+                                    "itemData": menuModel.sideMenu!.menuData[2]
                                   };
                                   Provider.of<ChangeProvider>(context,
                                           listen: false)
@@ -177,14 +177,43 @@ class _SideMenuState extends State<ErpSideMenu> {
                                     : "...",
                                 iconSrc: "assets/Icons/File.svg",
                                 isActive: _activeIndex == 2 ? true : false,
-                                itemCount: menuModel.sideMenu != null
-                                    ? int.parse(
-                                        menuModel.sideMenu!.menuData[2].count!)
-                                    : 0,
+                                itemCount: -1,
+                                // itemCount: menuModel.sideMenu != null
+                                //     ? int.parse(
+                                //         menuModel.sideMenu!.menuData[2].count!)
+                                //     : 0,
+                              ),
+                              SideMenuItem(
+                                press: () {},
+                                title: "در دست اقدام",
+                                iconSrc: "assets/Icons/File.svg",
+                                isActive: false,
+                                itemCount: -1,
+                              ),
+                              SideMenuItem(
+                                press: () {},
+                                title: "پیگیری",
+                                iconSrc: "assets/Icons/File.svg",
+                                isActive: false,
+                                itemCount: -1,
+                              ),
+                              SideMenuItem(
+                                press: () {},
+                                title: "نامه ارسالی",
+                                iconSrc: "assets/Icons/File.svg",
+                                isActive: false,
+                                itemCount: -1,
+                              ),
+                              SideMenuItem(
+                                press: () {},
+                                title: "پیشنویس",
+                                iconSrc: "assets/Icons/File.svg",
+                                isActive: false,
+                                itemCount: -1,
                               ),
                             ],
                           ),
-                          const SizedBox(height: kDefaultPadding * 2),
+                          const SizedBox(height: kDefaultPadding),
                           SideMenuItem(
                             press: () {
                               setState(() {
@@ -230,39 +259,81 @@ class _SideMenuState extends State<ErpSideMenu> {
                             isActive: _activeIndex == 4 ? true : false,
                             itemCount: -1,
                           ),
-                          SharedVars.userRoles!.rolesData.length > 1
-                              ? SideMenuItem(
-                                  press: () {
-                                    setState(() {
-                                      _activeIndex = 5;
-                                    });
-                                    // getErpCartableData(
-                                    //     context, menuModel.sideMenu!.menuData[1]);
-                                    Map<String, dynamic> params =
-                                        <String, dynamic>{
-                                      'formName': 'ChangeRole',
-                                    };
-                                    Provider.of<ChangeProvider>(context,
-                                            listen: false)
-                                        .setMidScreen(
-                                            ScreenName.roleScreen, params);
-                                  },
-                                  title: 'تغییر نقش',
-                                  iconSrc: "assets/Icons/File.svg",
-                                  isActive: _activeIndex == 5 ? true : false,
-                                  itemCount: -1,
-                                )
-                              : Text(''),
-                          /*SideMenuItem(
-                            press: () {
-                              setState(() {
-                                _activeIndex = 9;
-                              });
-                            },
-                            title: "بایگانی اداری",
+                          Consumer<AuthProvider>(
+                              builder: (context, authModel, child) {
+                            return authModel.authUser.roleCount! > 1
+                                ? SideMenuItem(
+                                    press: () {
+                                      setState(() {
+                                        _activeIndex = 5;
+                                      });
+                                      // getErpCartableData(
+                                      //     context, menuModel.sideMenu!.menuData[1]);
+                                      Map<String, dynamic> params =
+                                          <String, dynamic>{
+                                        'formName': 'ChangeRole',
+                                      };
+                                      Provider.of<ChangeProvider>(context,
+                                              listen: false)
+                                          .setMidScreen(
+                                              ScreenName.roleScreen, params);
+                                    },
+                                    title: 'تغییر نقش',
+                                    iconSrc: "assets/Icons/File.svg",
+                                    isActive: _activeIndex == 5 ? true : false,
+                                    itemCount: -1,
+                                  )
+                                : Text('');
+                          }),
+                          SideMenuItem(
+                            press: () {},
+                            title: "جستجوی پیشرفته",
                             iconSrc: "assets/Icons/File.svg",
-                            isActive: _activeIndex == 9 ? true : false,
-                          ),*/
+                            isActive: false,
+                            itemCount: -1,
+                          ),
+                          SideMenuItem(
+                            press: () {},
+                            title: "تالار گفتگو",
+                            iconSrc: "assets/Icons/File.svg",
+                            isActive: false,
+                            itemCount: -1,
+                          ),
+                          SideMenuItem(
+                            press: () {},
+                            title: "یادآوری",
+                            iconSrc: "assets/Icons/File.svg",
+                            isActive: false,
+                            itemCount: -1,
+                          ),
+                          SideMenuItem(
+                            press: () {},
+                            title: "ایجاد نامه",
+                            iconSrc: "assets/Icons/File.svg",
+                            isActive: false,
+                            itemCount: -1,
+                          ),
+                          SideMenuItem(
+                            press: () {},
+                            title: "صورت جلسات",
+                            iconSrc: "assets/Icons/File.svg",
+                            isActive: false,
+                            itemCount: -1,
+                          ),
+                          SideMenuItem(
+                            press: () {},
+                            title: "بایگانی شخصی",
+                            iconSrc: "assets/Icons/File.svg",
+                            isActive: false,
+                            itemCount: -1,
+                          ),
+                          SideMenuItem(
+                            press: () {},
+                            title: "الگوهای پیوست",
+                            iconSrc: "assets/Icons/File.svg",
+                            isActive: false,
+                            itemCount: -1,
+                          ),
 
                           // const SizedBox(height: kDefaultPadding * 2),
                           // // Tags

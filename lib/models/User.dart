@@ -10,6 +10,7 @@ class User {
   String? profilePic;
   String? token;
   String? renewalToken;
+  int? roleCount;
 
   User(
       {this.userId,
@@ -19,7 +20,8 @@ class User {
       this.defaultRole,
       this.profilePic,
       this.token,
-      this.renewalToken});
+      this.renewalToken,
+      this.roleCount});
 
   factory User.fromJson(Map<String, dynamic> responseData) {
     return User(
@@ -30,7 +32,8 @@ class User {
         defaultRole: responseData['DefaultRole'],
         profilePic: responseData['profile'],
         token: responseData['token'],
-        renewalToken: ''); //responseData['renewal_token']);
+        renewalToken: '',
+        roleCount: 1); //responseData['renewal_token']);
   }
 }
 

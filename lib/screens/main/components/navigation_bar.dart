@@ -76,8 +76,9 @@ class _NavigationBarState extends State<MyNavigationBar> {
                   gap: 8,
                   activeColor: Colors.black,
                   iconSize: 24,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                  padding: MediaQuery.of(context).size.height > 700
+                      ? const EdgeInsets.symmetric(horizontal: 20, vertical: 12)
+                      : const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
                   duration: const Duration(milliseconds: 400),
                   tabBackgroundColor: Colors.grey[100]!,
                   color: Colors.black,
@@ -85,7 +86,7 @@ class _NavigationBarState extends State<MyNavigationBar> {
                     GButton(
                       backgroundColor: Colors.amber,
                       iconActiveColor: Colors.blue,
-                      icon: LineIcons.book,
+                      icon: Icons.email,
                       text: 'کارتابل',
                       onPressed: () {
                         Map<String, dynamic> params = <String, dynamic>{
@@ -98,7 +99,7 @@ class _NavigationBarState extends State<MyNavigationBar> {
                     GButton(
                       backgroundColor: Colors.amber,
                       iconActiveColor: Colors.blue,
-                      icon: LineIcons.staylinked,
+                      icon: Icons.format_list_bulleted_rounded,
                       text: 'درخواست های من',
                       onPressed: () {
                         Map<String, dynamic> params = <String, dynamic>{
@@ -111,7 +112,7 @@ class _NavigationBarState extends State<MyNavigationBar> {
                     GButton(
                       backgroundColor: Colors.amber,
                       iconActiveColor: Colors.blue,
-                      icon: LineIcons.signature,
+                      icon: Icons.format_align_center_rounded,
                       text: 'درخواست خرید',
                       onPressed: () {
                         Map<String, dynamic> params = <String, dynamic>{

@@ -2,6 +2,9 @@ import 'dart:async';
 import 'package:automation_system/models/User.dart';
 import 'package:automation_system/providers/auth.dart';
 import 'package:automation_system/providers/user_provider.dart';
+import 'package:automation_system/screens/buy_process/buy_request_screen.dart';
+import 'package:automation_system/screens/main/components/main_header.dart';
+import 'package:automation_system/screens/main/main_screen.dart';
 import 'package:automation_system/utils/SizeConfiguration.dart';
 import 'package:automation_system/utils/communication/web_request.dart';
 import 'package:automation_system/utils/shared_vars.dart';
@@ -98,10 +101,16 @@ class _LoginState extends State<Login> {
         successfulMessage.then((response) {
           if (response['status']) {
             User user = response['user'];
-
             //******Provider.of<UserProvider>(context, listen: false).setUser(user);
             //SharedVars.currentDate = response['date'];
-            Navigator.pushReplacementNamed(context, '/role_screen');
+            // Navigator.pushReplacementNamed(context, '/main_screen');
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (BuildContext context) => MainScreen()));
+            // Navigator.of(context).pushAndRemoveUntil(
+            //     MaterialPageRoute(builder: (context) => MainScreen()),
+            //     (Route<dynamic> route) => false);
           } else {
             final snackBar = mySnackBar(
                 'نام کاربری یا رمز عبور اشتباه است', SharedVars.appBarColor);
@@ -122,8 +131,8 @@ class _LoginState extends State<Login> {
 
     return SafeArea(
       child: Scaffold(
-        appBar: myCustomAppBar('دانشگاه آزاد اسلامی واحد نیشابور',
-            SizeConfig.safeBlockVertical! * 10, null),
+        appBar: myCustomAppBar(
+            'دانشگاه آزاد اسلامی', SizeConfig.safeBlockVertical! * 10, null),
         body: Container(
           /*decoration: BoxDecoration(
               //color: Colors.yellow[100],
@@ -154,7 +163,7 @@ class _LoginState extends State<Login> {
                       height: 50 * 1.25,
                     ),
                     const Text(
-                      "سیستم مدیریت منابع انسانی",
+                      "سیستم اتوماسیون فرآیندی",
                       style: TextStyle(fontFamily: SharedVars.fontFamily),
                     ),
                     SizedBox(height: SizeConfig.safeBlockVertical! * 8),

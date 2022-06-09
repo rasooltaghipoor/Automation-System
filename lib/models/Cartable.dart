@@ -96,6 +96,8 @@ class ErpCartableData {
   String? priority;
   String? date;
   String? icon;
+  String itemsTitle;
+  String stateIcon;
 
   ErpCartableData(
     this.history,
@@ -106,6 +108,8 @@ class ErpCartableData {
     this.priority,
     this.date,
     this.icon,
+    this.itemsTitle,
+    this.stateIcon,
   );
   factory ErpCartableData.fromMap(Map<String, dynamic> parsedJson) {
     return ErpCartableData(
@@ -117,6 +121,8 @@ class ErpCartableData {
       parsedJson['priority'],
       parsedJson['date'],
       parsedJson['icon'],
+      parsedJson['itemstitle'],
+      parsedJson['StateIcon'],
     );
   }
 }

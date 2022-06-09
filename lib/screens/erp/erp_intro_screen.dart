@@ -6,6 +6,7 @@ import '../../../constants.dart';
 import '../../../extensions.dart';
 
 class ErpIntroScreen extends StatelessWidget {
+  
   const ErpIntroScreen({
     Key? key,
   }) : super(key: key);
@@ -17,15 +18,24 @@ class ErpIntroScreen extends StatelessWidget {
         child: Column(
             //color: Colors.blue[100],
             mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
+            children: [
+          Image.asset(
+            "assets/icon/FaraYar.png",
+            width: 40,
+            height: 40,
+          ),
+          SizedBox(
+            height: 15,
+          ),
           Text(
             'فرایار',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
-          ),
-          SizedBox(height: 20),
-          Text(
-            'سیستم مدیریت منابع دانشگاه آزاد اسلامی',
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+          ),
+          SizedBox(height: 15),
+          Text(
+            'سیستم اتوماسیون فرآیندی',
+            textAlign: TextAlign.center,
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
           ),
         ]));
   }

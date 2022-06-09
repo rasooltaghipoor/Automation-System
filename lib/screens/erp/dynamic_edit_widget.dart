@@ -1,12 +1,16 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:automation_system/constants.dart';
 import 'package:automation_system/models/BuyModel.dart';
 import 'package:automation_system/models/DynamicForm.dart';
+import 'package:automation_system/models/MenuDetails.dart';
 import 'package:automation_system/models/ReplyButtons.dart';
 import 'package:automation_system/models/RequestData.dart';
 import 'package:automation_system/providers/auth.dart';
+import 'package:automation_system/providers/change_provider.dart';
+import 'package:automation_system/responsive.dart';
 import 'package:automation_system/screens/erp/erp_timeline.dart';
 import 'package:automation_system/screens/erp/timeline_widget.dart';
 import 'package:automation_system/utils/SizeConfiguration.dart';
@@ -16,6 +20,7 @@ import 'package:automation_system/utils/useful_widgets.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:persian_datetime_picker/persian_datetime_picker.dart';
 import 'package:provider/provider.dart';
 
@@ -37,7 +42,7 @@ class DynamicEditWidget extends StatefulWidget {
 class _State extends State<DynamicEditWidget> {
   // Map<String, int> _listboxIndices = Map();
   DynamicFormModel? _formData;
-  bool isEnabled = false;
+  bool isEditEnabled = false;
   bool value = false;
   String filePath = "";
   TextEditingController descriptionController = TextEditingController();
@@ -59,6 +64,52 @@ class _State extends State<DynamicEditWidget> {
     'نقی'
   ];
 
+  Widget _requestOverviewBuilder() {
+    // SharedVars.formNameE = 'ConsumBuy';
+    return FutureBuilder(
+      //TODO: This fucntion must be called only when no data is available!!
+      future: getFormDetails(SharedVars.formNameE),
+      builder:
+          (BuildContext context, AsyncSnapshot<DynamicFormModel?> snapshot) {
+        if (!snapshot.hasData) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        final data = snapshot.data!;
+        _formData = data;
+        widget.formItems = data.items;
+
+        return ListView.builder(
+          physics: NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          itemCount: data.items.length,
+          padding: const EdgeInsets.all(10),
+          itemBuilder: (BuildContext context, int index) {
+            return Row(
+              children: [
+                Container(
+                  padding: EdgeInsets.all(8),
+                  color: index % 2 == 0 ? Colors.blue[100] : Colors.blue[50],
+                  width: 150,
+                  child: Text(data.items[index].title + ":"),
+                ),
+                SizedBox(
+                  width: 2,
+                ),
+                Container(
+                    padding: EdgeInsets.all(8),
+                    color: index % 2 == 0 ? Colors.blue[100] : Colors.blue[50],
+                    width: 150,
+                    child: Text(widget.itemData!.requestDetails
+                        .items[data.items[index].controlName])),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
   Widget _futureBuilder() {
     // SharedVars.formNameE = 'ConsumBuy';
     return FutureBuilder(
@@ -75,6 +126,7 @@ class _State extends State<DynamicEditWidget> {
         widget.formItems = data.items;
 
         return ListView.builder(
+          physics: NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           itemCount: data.items.length,
           padding: const EdgeInsets.all(5),
@@ -84,7 +136,7 @@ class _State extends State<DynamicEditWidget> {
                   _getControllerOf(data.items[index].controlName);
 
               final textField = TextField(
-                enabled: isEnabled,
+                enabled: isEditEnabled,
                 controller: controller,
                 decoration: InputDecoration(
                   border: const OutlineInputBorder(),
@@ -110,7 +162,7 @@ class _State extends State<DynamicEditWidget> {
               return Row(children: <Widget>[
                 Text(data.items[index].title,
                     style: TextStyle(
-                      color: isEnabled ? Colors.black : Colors.grey,
+                      color: isEditEnabled ? Colors.black : Colors.grey,
                     )),
                 Container(
                     padding:
@@ -125,7 +177,7 @@ class _State extends State<DynamicEditWidget> {
                         height: 2,
                         color: Colors.deepPurpleAccent,
                       ),
-                      onChanged: isEnabled
+                      onChanged: isEditEnabled
                           ? (String? newValue) {
                               setState(() {
                                 widget.dropDownMap[
@@ -232,12 +284,17 @@ class _State extends State<DynamicEditWidget> {
 
                     Map<String, String> items = <String, String>{};
                     for (FormItem listItem in _formData!.items) {
-                      if (listItem.control == 'textbox') {
-                        items[listItem.controlName] =
-                            widget.controllerMap[listItem.controlName]!.text;
-                      } else if (listItem.control == 'listbox') {
-                        items[listItem.controlName] =
-                            widget.dropDownMap[listItem.controlName]!;
+                      if (isEditEnabled) {
+                        if (listItem.control == 'textbox') {
+                          items[listItem.controlName] =
+                              widget.controllerMap[listItem.controlName]!.text;
+                        } else if (listItem.control == 'listbox') {
+                          items[listItem.controlName] =
+                              widget.dropDownMap[listItem.controlName]!;
+                        }
+                      } else {
+                        items[listItem.controlName] = widget.itemData!
+                            .requestDetails.items[listItem.controlName];
                       }
                     }
 
@@ -288,6 +345,12 @@ class _State extends State<DynamicEditWidget> {
                       }
                     });
                   },
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    primary: SharedVars.buttonColor,
+                  ),
                   child: Text(buttonData.cammandTitle!))),
         );
       }
@@ -331,6 +394,11 @@ class _State extends State<DynamicEditWidget> {
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
+                Map<String, dynamic> params = <String, dynamic>{
+                  "itemData": ErpMenuItemsData('all', 'کارتابل', '-1')
+                };
+                Provider.of<ChangeProvider>(context, listen: false)
+                    .setMidScreen(ScreenName.messageList, params);
               },
               child: const Text("بستن"),
             ),
@@ -403,48 +471,49 @@ class _State extends State<DynamicEditWidget> {
                     onChanged: (bool? value) {
                       setState(() {
                         this.value = value!;
-                        isEnabled = !isEnabled;
+                        isEditEnabled = !isEditEnabled;
                       });
                     },
                   ), //Text
-                  const SizedBox(width: 10), //SizedBox
+                  const SizedBox(width: 5), //SizedBox
                   /** Checkbox Widget **/
                   const Text(
                     'ویرایش درخواست',
-                    style: TextStyle(fontSize: 17.0),
+                    style: TextStyle(fontSize: 15.0),
                   ), //Checkbox
                 ], //<Widget>[]
               )
             : const Text('امکان ویرایش داده ها وجود ندارد'),
         SizedBox(
-          height: 10,
+          height: 5,
         ),
-        _futureBuilder(),
+        widget.canEdit! && isEditEnabled
+            ? _futureBuilder()
+            : _requestOverviewBuilder(),
         Row(
           children: [
-            const Text(':فایل ضمیمه'),
+            const Text('فایل ضمیمه'),
             const SizedBox(
               width: 20,
             ),
-            widget.itemData!.requestDetails.attachFile == 'True'
-                ? GestureDetector(
-                    onTap: () {
-                      _showUpdatedDialog(mainUrl +
-                          widget.itemData!.requestDetails.fileUrl +
-                          Provider.of<AuthProvider>(context, listen: false)
-                              .authUser
-                              .token!);
-                    },
-                    child: Image.network(
-                      mainUrl +
-                          widget.itemData!.requestDetails.fileUrl +
-                          Provider.of<AuthProvider>(context, listen: false)
-                              .authUser
-                              .token!,
-                      width: 200,
-                      height: 200,
-                    ))
-                : const Text('')
+            if (widget.itemData!.requestDetails.attachFile == 'True')
+              GestureDetector(
+                  onTap: () {
+                    _showUpdatedDialog(mainUrl +
+                        widget.itemData!.requestDetails.fileUrl +
+                        Provider.of<AuthProvider>(context, listen: false)
+                            .authUser
+                            .token!);
+                  },
+                  child: Image.network(
+                    mainUrl +
+                        widget.itemData!.requestDetails.fileUrl +
+                        Provider.of<AuthProvider>(context, listen: false)
+                            .authUser
+                            .token!,
+                    width: 100,
+                    height: 100,
+                  ))
           ],
         ),
         Container(
@@ -498,36 +567,63 @@ class _State extends State<DynamicEditWidget> {
                     const SizedBox(
                       height: 20,
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: getButtons(context),
-                    )
+                    _requestStatus == RequestStatus.Sending
+                        ? loading
+                        : Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: getButtons(context),
+                          )
                   ],
                 )
               : widget.itemData!.editable == 'true'
-                  ? _requestStatus == RequestStatus.Sending
-                      ? loading
-                      : SizedBox(
-                          width: 140,
-                          height: 40,
-                          child: ElevatedButton(
-                            onPressed: onEditClick,
-                            child: Text('ویرایش درخواست'),
-                          ),
-                        )
+                  ? isEditEnabled
+                      ? _requestStatus == RequestStatus.Sending
+                          ? loading
+                          : SizedBox(
+                              width: 140,
+                              height: 40,
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  primary: SharedVars.buttonColor,
+                                ),
+                                onPressed: onEditClick,
+                                child: Text('ویرایش درخواست'),
+                              ),
+                            )
+                      : Container()
                   : const Text(
                       'امکان پاسخ گویی یا ویرایش برای شما میسر نمی باشد'),
         ),
-        Container(
-          padding: EdgeInsets.all(10),
-          // color: Colors.yellow[100],
-          height: 250,
-          // width: 700,
-          child: ErpTimeline(widget.itemData!.historyChart.items),
+        Responsive.isDesktop(context)
+            ? Container(
+                width: MediaQuery.of(context).size.width * 0.6,
+                height: MediaQuery.of(context).size.width * 0.6 / 3,
+                child: Image.network(
+                  'http://cms2.iau-neyshabur.ac.ir/api/Request/pnghistory/${SharedVars.requestID}?dir=horiz&rnd=${Random().nextInt(1000000)}',
+                  // fit: BoxFit.fill,
+                ),
+              )
+            : Container(
+                width: MediaQuery.of(context).size.width * 0.7,
+                height: MediaQuery.of(context).size.width * 0.7 * 3,
+                child: Image.network(
+                  'http://cms2.iau-neyshabur.ac.ir/api/Request/pnghistory/${SharedVars.requestID}?dir=vert&rnd=${Random().nextInt(1000000)}',
+                  // fit: BoxFit.fill,
+                ),
+              ),
+        // Container(
+        //   padding: EdgeInsets.all(10),
+        //   // color: Colors.yellow[100],
+        //   height: 250,
+        //   // width: 700,
+        //   child: ErpTimeline(widget.itemData!.historyChart.items),
 
-          // ProcessTimeline(
-          //     2, _processes, widget.itemData!.historyChart.items),
-        ),
+        //   // ProcessTimeline(
+        //   //     2, _processes, widget.itemData!.historyChart.items),
+        // ),
       ],
     );
   }

@@ -6,6 +6,8 @@ import 'package:automation_system/utils/SizeConfiguration.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:google_speech/generated/google/cloud/speech/v1p1beta1/cloud_speech.pb.dart';
+import 'package:responsive_framework/responsive_row_column.dart';
+import 'package:responsive_framework/responsive_wrapper.dart';
 import 'package:websafe_svg/websafe_svg.dart';
 
 import '../../../constants.dart';
@@ -49,74 +51,181 @@ class _RequestCardState extends State<MessageCard> {
           //children: [
           child: Container(
             width: double.infinity,
-            padding: const EdgeInsets.all(kDefaultPaddingSmall),
+            padding: const EdgeInsets.all(kDefaultPaddingSmall / 2),
             decoration: BoxDecoration(
               color: widget.isActive! ? kPrimaryColor : kBgDarkColor,
               borderRadius: BorderRadius.circular(15),
             ),
-            child: Column(
-              //spacing: kDefaultPaddingSmaller,
-              //runSpacing: kDefaultPaddingSmall,
+            child: ResponsiveRowColumn(
+              rowMainAxisAlignment: MainAxisAlignment.start,
+              rowPadding: const EdgeInsets.all(1),
+              columnPadding: const EdgeInsets.all(10),
+              layout: ResponsiveWrapper.of(context).isSmallerThan(DESKTOP)
+                  ? ResponsiveRowColumnType.COLUMN
+                  : ResponsiveRowColumnType.ROW,
               children: [
-                Container(
-                  // color: Colors.amber[100],
-                  width: Responsive.isDesktop(context)
-                      ? SizeConfig.safeBlockHorizontal! * 90
-                      : SizeConfig.safeBlockHorizontal! * 90,
-                  child: Row(
-                    children: [
-                      Image.network(
-                        mainUrl + widget.cartableData!.icon!,
-                        width: 35,
-                        height: 35,
-                      ),
-                      SizedBox(
-                        width: SizeConfig.safeBlockHorizontal! * 2 * zarib1,
-                        child: RotatedBox(
-                          quarterTurns: 3,
-                          child: Text(widget.cartableData!.formName_F!),
+                ResponsiveRowColumnItem(
+                  rowFlex: 4,
+                  child: Container(
+                    // color: Colors.amber[100],
+                    // width: Responsive.isDesktop(context)
+                    //     ? SizeConfig.safeBlockHorizontal! * 90
+                    //     : SizeConfig.safeBlockHorizontal! * 90,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Row(
+                          children: [
+                            Image.network(
+                              mainUrl + widget.cartableData!.icon!,
+                              width: 30,
+                              height: 30,
+                            ),
+                            SizedBox(
+                              width: 7,
+                            ),
+                            SizedBox(
+                              // width: 30,
+                              child: RotatedBox(
+                                quarterTurns: 3,
+                                child: Text(
+                                  widget.cartableData!.formName_F!,
+                                  style: TextStyle(fontSize: 12),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 5,
+                            ),
+                          ],
                         ),
-                      ),
-                      const SizedBox(
-                        width: 40,
-                      ),
-                      CircleAvatar(
-                        radius: 20,
-                        backgroundImage: NetworkImage(
-                            mainUrl + widget.cartableData!.profile!),
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Text(widget.cartableData!.requester!),
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Container(
-                  // color: Colors.white70,
-                  width: Responsive.isDesktop(context)
-                      ? SizeConfig.safeBlockHorizontal! * 90
-                      : SizeConfig.safeBlockHorizontal! * 90,
-                  child: Column(
-                    children: [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Text('اولویت: ' + widget.cartableData!.priority!),
-                          SizedBox(
-                            width: 40,
+                        // const SizedBox(
+                        //   width: 30,
+                        // ),
+                        SizedBox(
+                          width: 100,
+                          child: Text(widget.cartableData!.itemsTitle),
+                        ),
+                        // const SizedBox(
+                        //   width: 30,
+                        // ),
+                        SizedBox(
+                          width: 90,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              CircleAvatar(
+                                radius: 20,
+                                backgroundImage: NetworkImage(
+                                    mainUrl + widget.cartableData!.profile!),
+                              ),
+                              Text(widget.cartableData!.requester!),
+                            ],
                           ),
-                          Text('تاریخ: ' + widget.cartableData!.date!),
-                        ],
-                      ),
-                    ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-                /*Column(
+                ResponsiveRowColumnItem(
+                  rowFlex: 3,
+                  child: Container(
+                    // color: Colors.white70,
+                    // width: Responsive.isDesktop(context)
+                    //     ? SizeConfig.safeBlockHorizontal! * 90
+                    //     : SizeConfig.safeBlockHorizontal! * 90,
+                    child: Column(
+                      children: [
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Text('اولویت: ' + widget.cartableData!.priority!),
+                            // SizedBox(
+                            //   width: 40,
+                            // ),
+                            Text(widget.cartableData!.date!),
+                            // SizedBox(width: 20),
+                            Responsive.isDesktop(context)
+                                ? Image.network(
+                                    mainUrl + widget.cartableData!.stateIcon,
+                                    width: 30,
+                                    height: 30,
+                                  )
+                                : Text(''),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+
+            // Column(
+            //   //spacing: kDefaultPaddingSmaller,
+            //   //runSpacing: kDefaultPaddingSmall,
+            //   children: [
+            //     Container(
+            //       // color: Colors.amber[100],
+            //       // width: Responsive.isDesktop(context)
+            //       //     ? SizeConfig.safeBlockHorizontal! * 90
+            //       //     : SizeConfig.safeBlockHorizontal! * 90,
+            //       child: Row(
+            //         children: [
+            //           Image.network(
+            //             mainUrl + widget.cartableData!.icon!,
+            //             width: 35,
+            //             height: 35,
+            //           ),
+            //           SizedBox(
+            //             width: SizeConfig.safeBlockHorizontal! * 2 * zarib1,
+            //             child: RotatedBox(
+            //               quarterTurns: 3,
+            //               child: Text(widget.cartableData!.formName_F!),
+            //             ),
+            //           ),
+            //           const SizedBox(
+            //             width: 40,
+            //           ),
+            //           CircleAvatar(
+            //             radius: 20,
+            //             backgroundImage: NetworkImage(
+            //                 mainUrl + widget.cartableData!.profile!),
+            //           ),
+            //           const SizedBox(
+            //             width: 10,
+            //           ),
+            //           Text(widget.cartableData!.requester!),
+            //         ],
+            //       ),
+            //     ),
+            //     SizedBox(
+            //       height: 20,
+            //     ),
+            //     Container(
+            //       // color: Colors.white70,
+            //       // width: Responsive.isDesktop(context)
+            //       //     ? SizeConfig.safeBlockHorizontal! * 90
+            //       //     : SizeConfig.safeBlockHorizontal! * 90,
+            //       child: Column(
+            //         children: [
+            //           Row(
+            //             crossAxisAlignment: CrossAxisAlignment.start,
+            //             mainAxisAlignment: MainAxisAlignment.end,
+            //             children: [
+            //               Text('اولویت: ' + widget.cartableData!.priority!),
+            //               SizedBox(
+            //                 width: 40,
+            //               ),
+            //               Text('تاریخ: ' + widget.cartableData!.date!),
+            //             ],
+            //           ),
+            //         ],
+            //       ),
+            //     ),
+            /*Column(
                     children: [
                       const SizedBox(height: 5),
                       if (email!.isAttachmentAvailable!)
@@ -126,8 +235,8 @@ class _RequestCardState extends State<MessageCard> {
                         )
                     ],
                   ),*/
-              ],
-            ),
+            //   ],
+            // ),
           ).addNeumorphism(
             blurRadius: 15,
             borderRadius: 15,
