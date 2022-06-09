@@ -142,6 +142,19 @@ class _State extends State<DynamicEditWidget> {
                   border: const OutlineInputBorder(),
                   labelText: data.items[index].title,
                 ),
+                onTap: data.items[index].dataType == 'date'
+                    ? () async {
+                        Jalali? picked = await showPersianDatePicker(
+                          context: context,
+                          initialDate: Jalali.now(),
+                          firstDate: Jalali(1385, 8),
+                          lastDate: Jalali(1450, 9),
+                        );
+                        if (picked != null) {
+                          controller.text = picked.formatCompactDate();
+                        }
+                      }
+                    : null,
               );
               return Container(
                 child: textField,
@@ -357,6 +370,97 @@ class _State extends State<DynamicEditWidget> {
       // sendFormData(context, jsonEncode(items));
       return rowList;
     }
+  }
+
+  /// Generates the list of items for the history view
+  List<Widget> getHistoryList() {
+    final List<Widget> historyList = [];
+    for (HistoryItems historyItem in widget.itemData!.history.items) {
+      if (historyItem.command != 'منتظر بررسی') {
+        historyList.add(Container(
+            color: Colors.blue[50],
+            padding: EdgeInsets.all(10),
+            margin: EdgeInsets.all(5),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SizedBox(
+                      width: 200,
+                      height: 50,
+                      child: ListTile(
+                        leading: Container(
+                          width: 35,
+                          height: 35,
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Colors.blueGrey,
+                              ),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20))),
+                          child: Center(
+                            child: Text(
+                              historyItem.step,
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
+                        title: Text(
+                          historyItem.userName,
+                        ),
+                        subtitle: Text(historyItem.roleTitle),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 100,
+                      child: Text(
+                        'وضعیت: ' + historyItem.command,
+                        style: TextStyle(),
+                      ),
+                    ),
+                    Responsive.isDesktop(context)
+                        ? SizedBox(
+                            width: 100,
+                            child: historyItem.editForm == 'False'
+                                ? Text(
+                                    'ویرایش شده: خیر',
+                                    style: TextStyle(),
+                                  )
+                                : Text(
+                                    'ویرایش شده: بله',
+                                    style: TextStyle(),
+                                  ),
+                          )
+                        : Text(''),
+                    Text(historyItem.date),
+                  ],
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Text('توضیحات: ' + historyItem.description),
+                SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  children: [
+                    Text('فایل ضمیمه: '),
+                    historyItem.attachFile != 'True'
+                        ? Text('ندارد')
+                        : Image.network(
+                            historyItem.fileUrl,
+                            width: 200,
+                            height: 200,
+                          ),
+                  ],
+                ),
+              ],
+            )));
+      }
+    }
+    return historyList;
   }
 
   Future _showUpdatedDialog(String path) {
@@ -614,6 +718,15 @@ class _State extends State<DynamicEditWidget> {
                   // fit: BoxFit.fill,
                 ),
               ),
+        SizedBox(
+          height: 10,
+        ),
+        Text('شرح سوابق'),
+        Container(
+          margin: EdgeInsets.all(10),
+          child: Column(children: getHistoryList()),
+        ),
+
         // Container(
         //   padding: EdgeInsets.all(10),
         //   // color: Colors.yellow[100],

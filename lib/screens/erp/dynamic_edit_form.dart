@@ -102,6 +102,19 @@ class _View2State extends State<DynamicEditForm> {
                       border: const OutlineInputBorder(),
                       labelText: data.items[index].title,
                     ),
+                    onTap: data.items[index].dataType == 'date'
+                        ? () async {
+                            Jalali? picked = await showPersianDatePicker(
+                              context: context,
+                              initialDate: Jalali.now(),
+                              firstDate: Jalali(1385, 8),
+                              lastDate: Jalali(1450, 9),
+                            );
+                            if (picked != null) {
+                              controller.text = picked.formatCompactDate();
+                            }
+                          }
+                        : null,
                   );
                   return Container(
                     child: textField,
