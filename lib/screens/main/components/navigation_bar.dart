@@ -113,11 +113,11 @@ class _NavigationBarState extends State<MyNavigationBar> {
                       backgroundColor: Colors.amber,
                       iconActiveColor: Colors.blue,
                       icon: Icons.format_align_center_rounded,
-                      text: 'درخواست خرید',
+                      text: 'درخواست جدید',
                       onPressed: () {
                         Map<String, dynamic> params = <String, dynamic>{
                           'formName': 'Buy',
-                          'title': 'درخواست خرید'
+                          'title': 'درخواست جدید'
                         };
                         Provider.of<ChangeProvider>(context, listen: false)
                             .setMidScreen(ScreenName.requestMenuScreen, params);

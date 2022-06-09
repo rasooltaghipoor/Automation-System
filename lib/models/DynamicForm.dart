@@ -51,7 +51,9 @@ class FormItem {
   String controlName;
   String title;
   dynamic dataType;
-  FormItem(this.control, this.controlName, this.title, this.dataType);
+  String fill;
+  FormItem(
+      this.control, this.controlName, this.title, this.dataType, this.fill);
 
   factory FormItem.fromMap(Map<String, dynamic> parsedJson) {
     if (parsedJson['Control'] == 'textbox') {
@@ -60,6 +62,7 @@ class FormItem {
         parsedJson['ControlName'],
         parsedJson['title'],
         parsedJson['datatype'],
+        parsedJson['Fill'],
       );
     } else if (parsedJson['Control'] == 'listbox') {
       var list = parsedJson['datatype'] as List;
@@ -69,9 +72,10 @@ class FormItem {
         parsedJson['ControlName'],
         parsedJson['title'],
         itemList,
+        parsedJson['Fill'],
       );
     } else
-      return FormItem('', '', '', '');
+      return FormItem('', '', '', '', '');
   }
 }
 

@@ -32,11 +32,13 @@ class _ListOfEmailsState extends State<ListOfRequests> {
   final ScrollController _mycontroller1 = ScrollController();
 
   @override
-  Widget build(BuildContext context) {
-    //TODO: These two lines should be removed in the future
+  void initState() {
+    super.initState();
     getRequestList(context);
-    SizeConfig().init(context);
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
         key: _scaffoldKey,
         // endDrawer: ConstrainedBox(

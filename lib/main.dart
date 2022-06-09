@@ -36,9 +36,6 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    Timer.periodic(const Duration(seconds: 5), (timer) {
-      print(timer.tick);
-    });
     /*List<ItemData> tags = [
       ItemData('قند', 20, 'کیلوگرم', 1000, 'ندارد'),
       ItemData('میز', 12, 'عدد', 500000, 'تجهیز کارگاه کامپیوتر'),

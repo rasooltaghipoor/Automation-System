@@ -247,14 +247,14 @@ class _SideMenuState extends State<ErpSideMenu> {
                               //     context, menuModel.sideMenu!.menuData[1]);
                               Map<String, dynamic> params = <String, dynamic>{
                                 'formName': 'Buy',
-                                'title': 'درخواست خرید'
+                                'title': 'درخواست جدید'
                               };
                               Provider.of<ChangeProvider>(context,
                                       listen: false)
                                   .setMidScreen(
                                       ScreenName.requestMenuScreen, params);
                             },
-                            title: 'درخواست خرید',
+                            title: 'درخواست جدید',
                             iconSrc: "assets/Icons/File.svg",
                             isActive: _activeIndex == 4 ? true : false,
                             itemCount: -1,
@@ -285,6 +285,7 @@ class _SideMenuState extends State<ErpSideMenu> {
                                   )
                                 : Text('');
                           }),
+                          const SizedBox(height: kDefaultPadding),
                           SideMenuItem(
                             press: () {},
                             title: "جستجوی پیشرفته",

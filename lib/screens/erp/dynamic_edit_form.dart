@@ -105,8 +105,10 @@ class _View2State extends State<DynamicEditForm> {
                         border: const OutlineInputBorder(),
                         labelText: data.items[index].title,
                       ),
-                      validator: (value) =>
-                          value!.isEmpty ? "لطفا فیلد را پر نمایید" : null,
+                      validator: data.items[index].fill == 'True'
+                          ? (value) =>
+                              value!.isEmpty ? "لطفا فیلد را پر کنید" : null
+                          : null,
                       //keyboardType: TextInputType.number,
                       inputFormatters: data.items[index].dataType == 'digit'
                           ? <TextInputFormatter>[

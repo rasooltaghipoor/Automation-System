@@ -15,12 +15,23 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:websafe_svg/websafe_svg.dart';
 
-class RequestSelectionWidget extends StatelessWidget {
+class RequestSelectionWidget extends StatefulWidget {
   final String? title;
-  final Future<RequestMenuModel>? menuModel;
 
-  RequestSelectionWidget({Key? key, this.title, this.menuModel})
-      : super(key: key);
+  RequestSelectionWidget({Key? key, this.title}) : super(key: key);
+
+  @override
+  State<RequestSelectionWidget> createState() => _RequestSelectionWidgetState();
+}
+
+class _RequestSelectionWidgetState extends State<RequestSelectionWidget> {
+  Future<RequestMenuModel>? menuModel;
+
+  @override
+  void initState() {
+    super.initState();
+    menuModel = getErpRequestMenu(context);
+  }
 
   // final items = Product.getProducts();
   @override
@@ -35,7 +46,7 @@ class RequestSelectionWidget extends StatelessWidget {
           return snapshot.hasData
               ? RequestSelection(
                   menuModel: snapshot.data,
-                  title: title,
+                  title: widget.title,
                 )
               :
 
