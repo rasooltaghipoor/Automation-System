@@ -11,6 +11,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:persian_datetime_picker/persian_datetime_picker.dart';
+import 'package:persian_number_utility/persian_number_utility.dart';
 
 class DynamicEditForm extends StatefulWidget {
   Map<String, dynamic>? itemsData;
@@ -109,12 +110,18 @@ class _View2State extends State<DynamicEditForm> {
                           ? (value) =>
                               value!.isEmpty ? "لطفا فیلد را پر کنید" : null
                           : null,
-                      //keyboardType: TextInputType.number,
+                      keyboardType: data.items[index].dataType == 'digit'
+                          ? TextInputType.number
+                          : null,
                       inputFormatters: data.items[index].dataType == 'digit'
                           ? <TextInputFormatter>[
                               FilteringTextInputFormatter.digitsOnly
                             ]
                           : null,
+                      // keyboardType: TextInputType.number,
+                      // inputFormatters: [
+                      //   _DigitPersianFormatter(),
+                      // ],
                       onTap: data.items[index].dataType == 'date'
                           ? () async {
                               Jalali? picked = await showPersianDatePicker(

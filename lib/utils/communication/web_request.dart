@@ -474,7 +474,9 @@ Future<RequestMenuModel> getErpRequestMenu(BuildContext context) async {
   // };
 
   final response = await http.get(
-    Uri.parse(mainUrl + 'api/info/RequestForm/Type'),
+    // Uri.parse(mainUrl + 'api/info/RequestForm/Type'),
+    Uri.parse(mainUrl +
+        'api/info/RequestFormType/${Provider.of<AuthProvider>(context, listen: false).authUser.roleID!}'),
     headers: <String, String>{
       'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
     },
