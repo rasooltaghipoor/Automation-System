@@ -36,7 +36,7 @@ class MiddleScreenSelector extends StatelessWidget {
         case ScreenName.viewRequest:
           return ViewRequestScreen(
             canManage: requestListModel.params!['canManage'],
-            itemData: getRequestDetails(context),
+            // itemData: getRequestDetails(context),
           );
         case ScreenName.messageList:
           return ListOfMessages(

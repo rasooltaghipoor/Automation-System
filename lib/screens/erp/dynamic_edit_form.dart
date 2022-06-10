@@ -31,6 +31,7 @@ class _View2State extends State<DynamicEditForm> {
   RequestStatus _requestStatus = RequestStatus.NotSend;
   // Map<String, int> _listboxIndices = Map();
   DynamicFormModel? _formData;
+  Future<DynamicFormModel>? formData;
 
   var loading = Row(
     mainAxisAlignment: MainAxisAlignment.center,
@@ -56,13 +57,17 @@ class _View2State extends State<DynamicEditForm> {
   //   final parsed = json.decode(response);
   //   return FullDynamicForm.fromMap(parsed);
   // }
+  @override
+  void initState() {
+    super.initState();
+    formData = getFormDetails(SharedVars.formNameE);
+  }
 
   Widget _futureBuilder() {
     // SharedVars.formNameE = 'ConsumBuy';
-    print(' ************** ' + SharedVars.formNameE);
+    // print(' ************** ' + SharedVars.formNameE);
     return FutureBuilder(
-      //TODO: This fucntion must be called only when no data is available!!
-      future: getFormDetails(SharedVars.formNameE),
+      future: formData,
       builder:
           (BuildContext context, AsyncSnapshot<DynamicFormModel?> snapshot) {
         if (!snapshot.hasData) {

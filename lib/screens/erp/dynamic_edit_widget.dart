@@ -43,6 +43,7 @@ class _State extends State<DynamicEditWidget> {
   // Map<String, int> _listboxIndices = Map();
   final formKey = new GlobalKey<FormState>();
   DynamicFormModel? _formData;
+  Future<DynamicFormModel>? formData;
   bool isEditEnabled = false;
   bool value = false;
   String filePath = "";
@@ -65,11 +66,16 @@ class _State extends State<DynamicEditWidget> {
     'نقی'
   ];
 
+  @override
+  void initState() {
+    super.initState();
+    formData = getFormDetails(SharedVars.formNameE);
+  }
+
   Widget _requestOverviewBuilder() {
     // SharedVars.formNameE = 'ConsumBuy';
     return FutureBuilder(
-      //TODO: This fucntion must be called only when no data is available!!
-      future: getFormDetails(SharedVars.formNameE),
+      future: formData,
       builder:
           (BuildContext context, AsyncSnapshot<DynamicFormModel?> snapshot) {
         if (!snapshot.hasData) {
@@ -114,8 +120,7 @@ class _State extends State<DynamicEditWidget> {
   Widget _futureBuilder() {
     // SharedVars.formNameE = 'ConsumBuy';
     return FutureBuilder(
-      //TODO: This fucntion must be called only when no data is available!!
-      future: getFormDetails(SharedVars.formNameE),
+      future: formData,
       builder:
           (BuildContext context, AsyncSnapshot<DynamicFormModel?> snapshot) {
         if (!snapshot.hasData) {
@@ -396,7 +401,7 @@ class _State extends State<DynamicEditWidget> {
       if (historyItem.command != 'منتظر بررسی') {
         historyList.add(Container(
             color: Colors.blue[50],
-            padding: EdgeInsets.all(10),
+            padding: EdgeInsets.all(5),
             margin: EdgeInsets.all(5),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -451,9 +456,13 @@ class _State extends State<DynamicEditWidget> {
                                   ),
                           )
                         : Text(''),
-                    Text(historyItem.date),
+                    Text(Responsive.isDesktop(context) ? historyItem.date : ''),
                   ],
                 ),
+                SizedBox(
+                  height: 10,
+                ),
+                Text(!Responsive.isDesktop(context) ? historyItem.date : ''),
                 SizedBox(
                   height: 10,
                 ),
@@ -733,8 +742,8 @@ class _State extends State<DynamicEditWidget> {
               : Container(
                   width: MediaQuery.of(context).size.width * 0.7,
                   height: MediaQuery.of(context).size.width * 0.7 * 3,
-                  child: SvgPicture.network(
-                    'http://cms2.iau-neyshabur.ac.ir/api/Request/svghistory/${SharedVars.requestID}?dir=vert&rnd=${Random().nextInt(1000000)}',
+                  child: Image.network(
+                    'http://cms2.iau-neyshabur.ac.ir/api/Request/pnghistory/${SharedVars.requestID}?dir=vert&rnd=${Random().nextInt(1000000)}',
                     // fit: BoxFit.fill,
                   ),
                 ),
@@ -743,7 +752,7 @@ class _State extends State<DynamicEditWidget> {
           ),
           Text('شرح سوابق'),
           Container(
-            margin: EdgeInsets.all(10),
+            margin: EdgeInsets.all(5),
             child: Column(children: getHistoryList()),
           ),
 
