@@ -16,16 +16,27 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class ViewRequestScreen extends StatelessWidget {
+class ViewRequestScreen extends StatefulWidget {
   // final String title;
   // final String listTitle;
   final bool? canManage;
-  final Future<RequestData>? itemData;
 
-  ViewRequestScreen({Key? key, this.canManage, this.itemData})
-      : super(key: key);
+  ViewRequestScreen({Key? key, this.canManage}) : super(key: key);
 
+  @override
+  State<ViewRequestScreen> createState() => _ViewRequestScreenState();
+}
+
+class _ViewRequestScreenState extends State<ViewRequestScreen> {
+  Future<RequestData>? itemData;
   // final items = Product.getProducts();
+
+  @override
+  void initState() {
+    super.initState();
+    itemData = getRequestDetails(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,7 +49,7 @@ class ViewRequestScreen extends StatelessWidget {
         builder: (context, snapshot) {
           if (snapshot.hasError) print(snapshot.error);
           return snapshot.hasData
-              ? ItemList(canManage: canManage, itemData: snapshot.data)
+              ? ItemList(canManage: widget.canManage, itemData: snapshot.data)
               :
 
               // return the ListView widget :

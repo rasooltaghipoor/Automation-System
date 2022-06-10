@@ -41,7 +41,9 @@ class DynamicEditWidget extends StatefulWidget {
 
 class _State extends State<DynamicEditWidget> {
   // Map<String, int> _listboxIndices = Map();
+  final formKey = new GlobalKey<FormState>();
   DynamicFormModel? _formData;
+  Future<DynamicFormModel>? formData;
   bool isEditEnabled = false;
   bool value = false;
   String filePath = "";
@@ -64,11 +66,16 @@ class _State extends State<DynamicEditWidget> {
     'نقی'
   ];
 
+  @override
+  void initState() {
+    super.initState();
+    formData = getFormDetails(SharedVars.formNameE);
+  }
+
   Widget _requestOverviewBuilder() {
     // SharedVars.formNameE = 'ConsumBuy';
     return FutureBuilder(
-      //TODO: This fucntion must be called only when no data is available!!
-      future: getFormDetails(SharedVars.formNameE),
+      future: formData,
       builder:
           (BuildContext context, AsyncSnapshot<DynamicFormModel?> snapshot) {
         if (!snapshot.hasData) {
@@ -113,8 +120,7 @@ class _State extends State<DynamicEditWidget> {
   Widget _futureBuilder() {
     // SharedVars.formNameE = 'ConsumBuy';
     return FutureBuilder(
-      //TODO: This fucntion must be called only when no data is available!!
-      future: getFormDetails(SharedVars.formNameE),
+      future: formData,
       builder:
           (BuildContext context, AsyncSnapshot<DynamicFormModel?> snapshot) {
         if (!snapshot.hasData) {
@@ -135,13 +141,24 @@ class _State extends State<DynamicEditWidget> {
               final controller =
                   _getControllerOf(data.items[index].controlName);
 
-              final textField = TextField(
+              final textField = TextFormField(
                 enabled: isEditEnabled,
                 controller: controller,
                 decoration: InputDecoration(
                   border: const OutlineInputBorder(),
                   labelText: data.items[index].title,
                 ),
+                validator: data.items[index].fill == 'True'
+                    ? (value) => value!.isEmpty ? "لطفا فیلد را پر کنید" : null
+                    : null,
+                keyboardType: data.items[index].dataType == 'digit'
+                    ? TextInputType.number
+                    : null,
+                inputFormatters: data.items[index].dataType == 'digit'
+                    ? <TextInputFormatter>[
+                        FilteringTextInputFormatter.digitsOnly
+                      ]
+                    : null,
                 onTap: data.items[index].dataType == 'date'
                     ? () async {
                         Jalali? picked = await showPersianDatePicker(
@@ -293,70 +310,75 @@ class _State extends State<DynamicEditWidget> {
               height: 40,
               child: ElevatedButton(
                   onPressed: () {
-                    bool isEdited = false;
+                    final form = formKey.currentState;
 
-                    Map<String, String> items = <String, String>{};
-                    for (FormItem listItem in _formData!.items) {
-                      if (isEditEnabled) {
-                        if (listItem.control == 'textbox') {
-                          items[listItem.controlName] =
-                              widget.controllerMap[listItem.controlName]!.text;
-                        } else if (listItem.control == 'listbox') {
-                          items[listItem.controlName] =
-                              widget.dropDownMap[listItem.controlName]!;
+                    if (form!.validate()) {
+                      form.save();
+                      bool isEdited = false;
+
+                      Map<String, String> items = <String, String>{};
+                      for (FormItem listItem in _formData!.items) {
+                        if (isEditEnabled) {
+                          if (listItem.control == 'textbox') {
+                            items[listItem.controlName] = widget
+                                .controllerMap[listItem.controlName]!.text;
+                          } else if (listItem.control == 'listbox') {
+                            items[listItem.controlName] =
+                                widget.dropDownMap[listItem.controlName]!;
+                          }
+                        } else {
+                          items[listItem.controlName] = widget.itemData!
+                              .requestDetails.items[listItem.controlName];
                         }
-                      } else {
-                        items[listItem.controlName] = widget.itemData!
-                            .requestDetails.items[listItem.controlName];
                       }
+
+                      for (String key in items.keys) {
+                        if (items[key] !=
+                            widget.itemData!.requestDetails.items[key]) {
+                          isEdited = true;
+                          break;
+                        }
+                      }
+
+                      print(isEdited.toString() + '   ++++++++++++');
+
+                      Map<String, dynamic> otherItems = {
+                        'description': descriptionController.text,
+                        'command': buttonData.cammandTitle,
+                        'commandID': buttonData.commandID,
+                        'editForm': isEdited.toString(),
+                        'filePath': filePath,
+                        'requestID': widget.itemData!.requestDetails.requestID
+                      };
+
+                      // // String jsonTutorial = jsonEncode(items);
+                      print(jsonEncode(items));
+
+                      setState(() {
+                        // textHolder = '';
+                        // errTextHolder = '';
+                        _requestStatus = RequestStatus.Sending;
+                      });
+                      final Future<Map<String, dynamic>> successfulMessage =
+                          sendReplyData(context, jsonEncode(items), otherItems);
+
+                      successfulMessage.then((response) {
+                        if (response['status']) {
+                          setState(() {
+                            _requestStatus = RequestStatus.Done;
+                            _showAlertDialog('عملیات با موفقیت انجام شد', true);
+                            getErpSideMenuData(context);
+                            // textHolder = response['message'];
+                          });
+                        } else {
+                          setState(() {
+                            _requestStatus = RequestStatus.Done;
+                            _showAlertDialog('عملیات نا موفق بود', false);
+                            // errTextHolder = response['message'];
+                          });
+                        }
+                      });
                     }
-
-                    for (String key in items.keys) {
-                      if (items[key] !=
-                          widget.itemData!.requestDetails.items[key]) {
-                        isEdited = true;
-                        break;
-                      }
-                    }
-
-                    print(isEdited.toString() + '   ++++++++++++');
-
-                    Map<String, dynamic> otherItems = {
-                      'description': descriptionController.text,
-                      'command': buttonData.cammandTitle,
-                      'commandID': buttonData.commandID,
-                      'editForm': isEdited.toString(),
-                      'filePath': filePath,
-                      'requestID': widget.itemData!.requestDetails.requestID
-                    };
-
-                    // // String jsonTutorial = jsonEncode(items);
-                    print(jsonEncode(items));
-
-                    setState(() {
-                      // textHolder = '';
-                      // errTextHolder = '';
-                      _requestStatus = RequestStatus.Sending;
-                    });
-                    final Future<Map<String, dynamic>> successfulMessage =
-                        sendReplyData(context, jsonEncode(items), otherItems);
-
-                    successfulMessage.then((response) {
-                      if (response['status']) {
-                        setState(() {
-                          _requestStatus = RequestStatus.Done;
-                          _showAlertDialog('عملیات با موفقیت انجام شد', true);
-                          getErpSideMenuData(context);
-                          // textHolder = response['message'];
-                        });
-                      } else {
-                        setState(() {
-                          _requestStatus = RequestStatus.Done;
-                          _showAlertDialog('عملیات نا موفق بود', false);
-                          // errTextHolder = response['message'];
-                        });
-                      }
-                    });
                   },
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
@@ -379,7 +401,7 @@ class _State extends State<DynamicEditWidget> {
       if (historyItem.command != 'منتظر بررسی') {
         historyList.add(Container(
             color: Colors.blue[50],
-            padding: EdgeInsets.all(10),
+            padding: EdgeInsets.all(5),
             margin: EdgeInsets.all(5),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -434,9 +456,13 @@ class _State extends State<DynamicEditWidget> {
                                   ),
                           )
                         : Text(''),
-                    Text(historyItem.date),
+                    Text(Responsive.isDesktop(context) ? historyItem.date : ''),
                   ],
                 ),
+                SizedBox(
+                  height: 10,
+                ),
+                Text(!Responsive.isDesktop(context) ? historyItem.date : ''),
                 SizedBox(
                   height: 10,
                 ),
@@ -562,182 +588,186 @@ class _State extends State<DynamicEditWidget> {
     //TODO: This line should be removed in the future
     SizeConfig().init(context);
 
-    return Column(
-      children: [
-        widget.canEdit!
-            ? Row(
-                children: <Widget>[
-                  const SizedBox(
-                    width: 10,
-                  ), //SizedBox
-                  Checkbox(
-                    value: this.value,
-                    onChanged: (bool? value) {
-                      setState(() {
-                        this.value = value!;
-                        isEditEnabled = !isEditEnabled;
-                      });
-                    },
-                  ), //Text
-                  const SizedBox(width: 5), //SizedBox
-                  /** Checkbox Widget **/
-                  const Text(
-                    'ویرایش درخواست',
-                    style: TextStyle(fontSize: 15.0),
-                  ), //Checkbox
-                ], //<Widget>[]
-              )
-            : const Text('امکان ویرایش داده ها وجود ندارد'),
-        SizedBox(
-          height: 5,
-        ),
-        widget.canEdit! && isEditEnabled
-            ? _futureBuilder()
-            : _requestOverviewBuilder(),
-        Row(
-          children: [
-            const Text('فایل ضمیمه'),
-            const SizedBox(
-              width: 20,
-            ),
-            if (widget.itemData!.requestDetails.attachFile == 'True')
-              GestureDetector(
-                  onTap: () {
-                    _showUpdatedDialog(mainUrl +
-                        widget.itemData!.requestDetails.fileUrl +
-                        Provider.of<AuthProvider>(context, listen: false)
-                            .authUser
-                            .token!);
-                  },
-                  child: Image.network(
-                    mainUrl +
-                        widget.itemData!.requestDetails.fileUrl +
-                        Provider.of<AuthProvider>(context, listen: false)
-                            .authUser
-                            .token!,
-                    width: 100,
-                    height: 100,
-                  ))
-          ],
-        ),
-        Container(
-          padding: EdgeInsets.all(10),
-          color: Colors.blue[50],
-          child: widget.itemData!.canReply == 'true'
-              ? Column(
-                  children: [
-                    TextFormField(
-                      controller: descriptionController,
-                      autovalidateMode: AutovalidateMode.always,
-                      decoration: const InputDecoration(
-                        icon: Icon(Icons.person),
-                        hintText: '',
-                        labelText: 'توضیحات',
-                      ),
-                      onSaved: (String? value) {
-                        descriptionController.text = value!;
-                        // This optional block of code can be used to run
-                        // code when the user saves the form.
+    return Form(
+      key: formKey,
+      child: Column(
+        children: [
+          widget.canEdit!
+              ? Row(
+                  children: <Widget>[
+                    const SizedBox(
+                      width: 10,
+                    ), //SizedBox
+                    Checkbox(
+                      value: this.value,
+                      onChanged: (bool? value) {
+                        setState(() {
+                          this.value = value!;
+                          isEditEnabled = !isEditEnabled;
+                        });
                       },
-                      // validator: (String? value) {
-                      //   return value!.contains('@')
-                      //       ? 'Do not use the @ char.'
-                      //       : null;
-                      // },
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Row(
-                      children: [
-                        SizedBox(
-                          width: 120,
-                          height: 30,
-                          child: ElevatedButton(
-                              onPressed: _pickFile, child: Text('آپلود فایل')),
-                        ),
-                        const SizedBox(
-                          width: 50,
-                        ),
-                        filePath.isNotEmpty
-                            ? Image.file(
-                                File(filePath),
-                                width: 200,
-                                height: 200,
-                              )
-                            : Text('بدون فایل ضمیمه'),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    _requestStatus == RequestStatus.Sending
-                        ? loading
-                        : Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: getButtons(context),
-                          )
-                  ],
+                    ), //Text
+                    const SizedBox(width: 5), //SizedBox
+                    /** Checkbox Widget **/
+                    const Text(
+                      'ویرایش درخواست',
+                      style: TextStyle(fontSize: 15.0),
+                    ), //Checkbox
+                  ], //<Widget>[]
                 )
-              : widget.itemData!.editable == 'true'
-                  ? isEditEnabled
-                      ? _requestStatus == RequestStatus.Sending
-                          ? loading
-                          : SizedBox(
-                              width: 140,
-                              height: 40,
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  primary: SharedVars.buttonColor,
-                                ),
-                                onPressed: onEditClick,
-                                child: Text('ویرایش درخواست'),
-                              ),
-                            )
-                      : Container()
-                  : const Text(
-                      'امکان پاسخ گویی یا ویرایش برای شما میسر نمی باشد'),
-        ),
-        Responsive.isDesktop(context)
-            ? Container(
-                width: MediaQuery.of(context).size.width * 0.6,
-                height: MediaQuery.of(context).size.width * 0.6 / 3,
-                child: Image.network(
-                  'http://cms2.iau-neyshabur.ac.ir/api/Request/pnghistory/${SharedVars.requestID}?dir=horiz&rnd=${Random().nextInt(1000000)}',
-                  // fit: BoxFit.fill,
-                ),
-              )
-            : Container(
-                width: MediaQuery.of(context).size.width * 0.7,
-                height: MediaQuery.of(context).size.width * 0.7 * 3,
-                child: Image.network(
-                  'http://cms2.iau-neyshabur.ac.ir/api/Request/pnghistory/${SharedVars.requestID}?dir=vert&rnd=${Random().nextInt(1000000)}',
-                  // fit: BoxFit.fill,
-                ),
+              : const Text('امکان ویرایش داده ها وجود ندارد'),
+          SizedBox(
+            height: 5,
+          ),
+          widget.canEdit! && isEditEnabled
+              ? _futureBuilder()
+              : _requestOverviewBuilder(),
+          Row(
+            children: [
+              const Text('فایل ضمیمه'),
+              const SizedBox(
+                width: 20,
               ),
-        SizedBox(
-          height: 10,
-        ),
-        Text('شرح سوابق'),
-        Container(
-          margin: EdgeInsets.all(10),
-          child: Column(children: getHistoryList()),
-        ),
+              if (widget.itemData!.requestDetails.attachFile == 'True')
+                GestureDetector(
+                    onTap: () {
+                      _showUpdatedDialog(mainUrl +
+                          widget.itemData!.requestDetails.fileUrl +
+                          Provider.of<AuthProvider>(context, listen: false)
+                              .authUser
+                              .token!);
+                    },
+                    child: Image.network(
+                      mainUrl +
+                          widget.itemData!.requestDetails.fileUrl +
+                          Provider.of<AuthProvider>(context, listen: false)
+                              .authUser
+                              .token!,
+                      width: 100,
+                      height: 100,
+                    ))
+            ],
+          ),
+          Container(
+            padding: EdgeInsets.all(10),
+            color: Colors.blue[50],
+            child: widget.itemData!.canReply == 'true'
+                ? Column(
+                    children: [
+                      TextFormField(
+                        controller: descriptionController,
+                        autovalidateMode: AutovalidateMode.always,
+                        decoration: const InputDecoration(
+                          icon: Icon(Icons.person),
+                          hintText: '',
+                          labelText: 'توضیحات',
+                        ),
+                        onSaved: (String? value) {
+                          descriptionController.text = value!;
+                          // This optional block of code can be used to run
+                          // code when the user saves the form.
+                        },
+                        // validator: (String? value) {
+                        //   return value!.contains('@')
+                        //       ? 'Do not use the @ char.'
+                        //       : null;
+                        // },
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Row(
+                        children: [
+                          SizedBox(
+                            width: 120,
+                            height: 30,
+                            child: ElevatedButton(
+                                onPressed: _pickFile,
+                                child: Text('آپلود فایل')),
+                          ),
+                          const SizedBox(
+                            width: 50,
+                          ),
+                          filePath.isNotEmpty
+                              ? Image.file(
+                                  File(filePath),
+                                  width: 200,
+                                  height: 200,
+                                )
+                              : Text('بدون فایل ضمیمه'),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      _requestStatus == RequestStatus.Sending
+                          ? loading
+                          : Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: getButtons(context),
+                            )
+                    ],
+                  )
+                : widget.itemData!.editable == 'true'
+                    ? isEditEnabled
+                        ? _requestStatus == RequestStatus.Sending
+                            ? loading
+                            : SizedBox(
+                                width: 140,
+                                height: 40,
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    primary: SharedVars.buttonColor,
+                                  ),
+                                  onPressed: onEditClick,
+                                  child: Text('ویرایش درخواست'),
+                                ),
+                              )
+                        : Container()
+                    : const Text(
+                        'امکان پاسخ گویی یا ویرایش برای شما میسر نمی باشد'),
+          ),
+          Responsive.isDesktop(context)
+              ? Container(
+                  width: MediaQuery.of(context).size.width * 0.6,
+                  height: MediaQuery.of(context).size.width * 0.6 / 3,
+                  child: SvgPicture.network(
+                    'http://cms2.iau-neyshabur.ac.ir/api/Request/svghistory/${SharedVars.requestID}?dir=horiz&rnd=${Random().nextInt(1000000)}',
+                    // fit: BoxFit.fill,
+                  ),
+                )
+              : Container(
+                  width: MediaQuery.of(context).size.width * 0.7,
+                  height: MediaQuery.of(context).size.width * 0.7 * 3,
+                  child: Image.network(
+                    'http://cms2.iau-neyshabur.ac.ir/api/Request/pnghistory/${SharedVars.requestID}?dir=vert&rnd=${Random().nextInt(1000000)}',
+                    // fit: BoxFit.fill,
+                  ),
+                ),
+          SizedBox(
+            height: 10,
+          ),
+          Text('شرح سوابق'),
+          Container(
+            margin: EdgeInsets.all(5),
+            child: Column(children: getHistoryList()),
+          ),
 
-        // Container(
-        //   padding: EdgeInsets.all(10),
-        //   // color: Colors.yellow[100],
-        //   height: 250,
-        //   // width: 700,
-        //   child: ErpTimeline(widget.itemData!.historyChart.items),
+          // Container(
+          //   padding: EdgeInsets.all(10),
+          //   // color: Colors.yellow[100],
+          //   height: 250,
+          //   // width: 700,
+          //   child: ErpTimeline(widget.itemData!.historyChart.items),
 
-        //   // ProcessTimeline(
-        //   //     2, _processes, widget.itemData!.historyChart.items),
-        // ),
-      ],
+          //   // ProcessTimeline(
+          //   //     2, _processes, widget.itemData!.historyChart.items),
+          // ),
+        ],
+      ),
     );
   }
 }

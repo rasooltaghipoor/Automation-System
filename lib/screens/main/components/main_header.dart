@@ -116,7 +116,7 @@ class MainHeader extends StatelessWidget {
                         onPressed: () {
                           Map<String, dynamic> params = <String, dynamic>{
                             'formName': 'Buy',
-                            'title': 'درخواست خرید'
+                            'title': 'درخواست جدید'
                           };
                           Provider.of<ChangeProvider>(context, listen: false)
                               .setMidScreen(
@@ -135,7 +135,7 @@ class MainHeader extends StatelessWidget {
                                 SharedVars.buttonFontSize * 0.8,
                                 fontWeight: FontWeight.bold)*/
                         ),
-                        label: const Text('درخواست خرید'),
+                        label: const Text('درخواست جدید'),
                       ),
                     ),
                     SizedBox(

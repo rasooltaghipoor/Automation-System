@@ -256,9 +256,6 @@ class _View2State extends State<View2> {
 
   @override
   Widget build(BuildContext context) {
-    //TODO: This line should be removed in the future
-    SizeConfig().init(context);
-
     return SafeArea(
       child: Scaffold(
           appBar: AppBar(

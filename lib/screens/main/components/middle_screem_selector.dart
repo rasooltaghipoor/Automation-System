@@ -36,7 +36,7 @@ class MiddleScreenSelector extends StatelessWidget {
         case ScreenName.viewRequest:
           return ViewRequestScreen(
             canManage: requestListModel.params!['canManage'],
-            itemData: getRequestDetails(context),
+            // itemData: getRequestDetails(context),
           );
         case ScreenName.messageList:
           return ListOfMessages(
@@ -44,8 +44,8 @@ class MiddleScreenSelector extends StatelessWidget {
           );
         case ScreenName.requestMenuScreen:
           return RequestSelectionWidget(
-              title: requestListModel.params!['title'],
-              menuModel: getErpRequestMenu(context));
+            title: requestListModel.params!['title'],
+          );
         case ScreenName.roleScreen:
           // return RoleScreenWidget(userRoleModel: getUserRoles(context));
           return RoleScreen();
