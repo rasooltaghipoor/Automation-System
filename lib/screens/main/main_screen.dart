@@ -58,7 +58,7 @@ class MainScreen extends StatelessWidget {
     //Provider.of<AuthProvider>(context).login('309', '309');
     //getUserDetails2(context, '309');
     //getSideMenuData(context, '309');
-    print('first ' + _isFirstLoad.toString());
+    // print('first ' + _isFirstLoad.toString());
     if (_isFirstLoad) {
       _isFirstLoad = false;
       _showFirstMessageDialog(context, mainUrl + 'erp/images/message.jpg');

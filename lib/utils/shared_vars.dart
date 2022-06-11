@@ -35,6 +35,8 @@ class SharedVars {
   static var formNameF = "";
   static var formNameE = "";
 
+  static var refreshPage = false;
+
   static Map<String, ListBoxItems> listBoxItemsMap = <String, ListBoxItems>{};
   static ErpReplyButtonsModel? replyButtons;
   static UserRoleModel? userRoles;

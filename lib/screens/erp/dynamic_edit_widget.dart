@@ -10,6 +10,7 @@ import 'package:automation_system/models/ReplyButtons.dart';
 import 'package:automation_system/models/RequestData.dart';
 import 'package:automation_system/providers/auth.dart';
 import 'package:automation_system/providers/change_provider.dart';
+import 'package:automation_system/providers/menu_provider.dart';
 import 'package:automation_system/responsive.dart';
 import 'package:automation_system/screens/erp/erp_timeline.dart';
 import 'package:automation_system/screens/erp/timeline_widget.dart';
@@ -520,8 +521,9 @@ class _State extends State<DynamicEditWidget> {
             msg,
             style: TextStyle(color: isOK ? Colors.blue : Colors.red),
           ),
+          actionsAlignment: MainAxisAlignment.center,
           actions: [
-            TextButton(
+            ElevatedButton(
               onPressed: () {
                 Navigator.of(context).pop();
                 Map<String, dynamic> params = <String, dynamic>{
@@ -529,6 +531,8 @@ class _State extends State<DynamicEditWidget> {
                 };
                 Provider.of<ChangeProvider>(context, listen: false)
                     .setMidScreen(ScreenName.messageList, params);
+                Provider.of<ErpMenuProvider>(context, listen: false)
+                    .setActiveIndex(0, true);
               },
               child: const Text("بستن"),
             ),
@@ -536,6 +540,7 @@ class _State extends State<DynamicEditWidget> {
         ));
     return showDialog(
       context: context,
+      barrierDismissible: false,
       builder: (BuildContext context) => alert,
     );
   }

@@ -1,5 +1,6 @@
 import 'package:automation_system/models/MenuDetails.dart';
 import 'package:automation_system/providers/change_provider.dart';
+import 'package:automation_system/providers/menu_provider.dart';
 import 'package:automation_system/utils/SizeConfiguration.dart';
 import 'package:automation_system/utils/shared_vars.dart';
 import 'package:flutter/material.dart';
@@ -63,6 +64,8 @@ class MainHeader extends StatelessWidget {
                           };
                           Provider.of<ChangeProvider>(context, listen: false)
                               .setMidScreen(ScreenName.messageList, params);
+                          Provider.of<ErpMenuProvider>(context, listen: false)
+                              .setActiveIndex(0, true);
                         },
                         // icon: const Icon(
                         //   Icons.message,
@@ -91,6 +94,8 @@ class MainHeader extends StatelessWidget {
                           };
                           Provider.of<ChangeProvider>(context, listen: false)
                               .setMidScreen(ScreenName.requestList, params);
+                          Provider.of<ErpMenuProvider>(context, listen: false)
+                              .setActiveIndex(3, true);
                         },
                         icon: const Icon(
                           Icons.format_align_center,
@@ -121,6 +126,8 @@ class MainHeader extends StatelessWidget {
                           Provider.of<ChangeProvider>(context, listen: false)
                               .setMidScreen(
                                   ScreenName.requestMenuScreen, params);
+                          Provider.of<ErpMenuProvider>(context, listen: false)
+                              .setActiveIndex(4, true);
                         },
                         icon: const Icon(
                           Icons.sell,

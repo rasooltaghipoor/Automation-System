@@ -3,6 +3,8 @@ import 'dart:io';
 
 import 'package:automation_system/models/BuyModel.dart';
 import 'package:automation_system/models/DynamicForm.dart';
+import 'package:automation_system/providers/change_provider.dart';
+import 'package:automation_system/providers/menu_provider.dart';
 import 'package:automation_system/utils/SizeConfiguration.dart';
 import 'package:automation_system/utils/communication/web_request.dart';
 import 'package:automation_system/utils/shared_vars.dart';
@@ -12,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:persian_datetime_picker/persian_datetime_picker.dart';
 import 'package:persian_number_utility/persian_number_utility.dart';
+import 'package:provider/provider.dart';
 
 class DynamicEditForm extends StatefulWidget {
   Map<String, dynamic>? itemsData;
@@ -298,7 +301,7 @@ class _View2State extends State<DynamicEditForm> {
                   }
 
                   // String jsonTutorial = jsonEncode(items);
-                  print(jsonEncode(items));
+                  // print(jsonEncode(items));
                   setState(() {
                     // textHolder = '';
                     // errTextHolder = '';
@@ -313,7 +316,9 @@ class _View2State extends State<DynamicEditForm> {
                       setState(() {
                         _requestStatus = RequestStatus.Done;
                         _showAlertDialog('عملیات با موفقیت انجام شد', true);
+
                         getErpSideMenuData(context);
+
                         // textHolder = response['message'];
                       });
                     } else {
@@ -369,10 +374,17 @@ class _View2State extends State<DynamicEditForm> {
             msg,
             style: TextStyle(color: isOK ? Colors.blue : Colors.red),
           ),
+          actionsAlignment: MainAxisAlignment.center,
           actions: [
-            TextButton(
+            ElevatedButton(
               onPressed: () {
                 Navigator.of(context).pop();
+
+                Map<String, dynamic> params = <String, dynamic>{"param": ''};
+                Provider.of<ChangeProvider>(context, listen: false)
+                    .setMidScreen(ScreenName.requestList, params);
+                Provider.of<ErpMenuProvider>(context, listen: false)
+                    .setActiveIndex(3, true);
               },
               child: const Text("بستن"),
             ),
@@ -380,6 +392,7 @@ class _View2State extends State<DynamicEditForm> {
         ));
     return showDialog(
       context: context,
+      barrierDismissible: false,
       builder: (BuildContext context) => alert,
     );
   }

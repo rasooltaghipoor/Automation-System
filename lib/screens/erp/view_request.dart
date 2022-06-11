@@ -224,7 +224,7 @@ class ItemList extends StatelessWidget {
                 }
               }
 
-              print(isEdited.toString() + '   ++++++++++++');
+              // print(isEdited.toString() + '   ++++++++++++');
 
               Map<String, dynamic> otherItems = {
                 'description': descriptionController.text,
@@ -237,7 +237,7 @@ class ItemList extends StatelessWidget {
 
               sendReplyData(context, jsonEncode(items), otherItems);
               // // String jsonTutorial = jsonEncode(items);
-              print(jsonEncode(items));
+              // print(jsonEncode(items));
             },
             child: Text(buttonData.cammandTitle!)));
       }

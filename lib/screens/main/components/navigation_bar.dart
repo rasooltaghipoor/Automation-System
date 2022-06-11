@@ -1,5 +1,6 @@
 import 'package:automation_system/models/MenuDetails.dart';
 import 'package:automation_system/providers/change_provider.dart';
+import 'package:automation_system/providers/menu_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:line_icons/line_icons.dart';
@@ -94,6 +95,8 @@ class _NavigationBarState extends State<MyNavigationBar> {
                         };
                         Provider.of<ChangeProvider>(context, listen: false)
                             .setMidScreen(ScreenName.messageList, params);
+                        Provider.of<ErpMenuProvider>(context, listen: false)
+                            .setActiveIndex(0, true);
                       },
                     ),
                     GButton(
@@ -107,6 +110,8 @@ class _NavigationBarState extends State<MyNavigationBar> {
                         };
                         Provider.of<ChangeProvider>(context, listen: false)
                             .setMidScreen(ScreenName.requestList, params);
+                        Provider.of<ErpMenuProvider>(context, listen: false)
+                            .setActiveIndex(3, true);
                       },
                     ),
                     GButton(
@@ -121,6 +126,8 @@ class _NavigationBarState extends State<MyNavigationBar> {
                         };
                         Provider.of<ChangeProvider>(context, listen: false)
                             .setMidScreen(ScreenName.requestMenuScreen, params);
+                        Provider.of<ErpMenuProvider>(context, listen: false)
+                            .setActiveIndex(4, true);
                       },
                     ),
                     // GButton(

@@ -44,6 +44,10 @@ class _ListOfEmailsState extends State<ListOfMessages> {
 
   @override
   Widget build(BuildContext context) {
+    if (SharedVars.refreshPage) {
+      SharedVars.refreshPage = false;
+      getErpCartableData(context, widget.itemsData);
+    }
     return Scaffold(
         key: _scaffoldKey,
         // endDrawer: ConstrainedBox(

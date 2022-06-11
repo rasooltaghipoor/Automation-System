@@ -28,7 +28,7 @@ class ErpSideMenu extends StatefulWidget {
 }
 
 class _SideMenuState extends State<ErpSideMenu> {
-  int _activeIndex = -1;
+  int activeIndex = -1;
   final ScrollController _mycontroller2 = ScrollController();
 
   void openMessageList(ErpMenuItemsData data) async {
@@ -42,7 +42,7 @@ class _SideMenuState extends State<ErpSideMenu> {
   @override
   Widget build(BuildContext context) {
     User user = Provider.of<AuthProvider>(context, listen: false).authUser;
-    print('erp sidemenu...  ' + mainUrl + user.profilePic!);
+    // print('erp sidemenu...  ' + mainUrl + user.profilePic!);
     return Container(
         height: double.infinity,
         padding: EdgeInsets.only(top: kIsWeb ? kDefaultPadding : 0),
@@ -78,11 +78,13 @@ class _SideMenuState extends State<ErpSideMenu> {
                   // Menu Items
                   Consumer<ErpMenuProvider>(
                     builder: (context, menuModel, child) {
-                      if (menuModel.sideMenu != null && _activeIndex < 0) {
+                      // menuModel.activeIndex = menuModel.activeIndex;
+                      if (menuModel.sideMenu != null &&
+                          menuModel.activeIndex < 0) {
                         // If cartabe data is available
                         if (int.parse(menuModel.sideMenu!.menuData[0].count!) >
                             0) {
-                          _activeIndex = 0;
+                          menuModel.setActiveIndex(0, false);
                           openMessageList(menuModel.sideMenu!.menuData[0]);
                         }
                       }
@@ -90,7 +92,7 @@ class _SideMenuState extends State<ErpSideMenu> {
                       //   } else if (int.parse(
                       //           menuModel.sideMenu!.menuData[3].count!) >
                       //       0) {
-                      //     _activeIndex = 3;
+                      //     menuModel.activeIndex = 3;
                       //   }
                       // }
                       return Column(
@@ -107,7 +109,7 @@ class _SideMenuState extends State<ErpSideMenu> {
                               SideMenuItem(
                                 press: () {
                                   setState(() {
-                                    _activeIndex = 0;
+                                    menuModel.setActiveIndex(0, false);
                                   });
                                   // getErpCartableData(
                                   //     context, menuModel.sideMenu!.menuData[0]);
@@ -115,6 +117,7 @@ class _SideMenuState extends State<ErpSideMenu> {
                                       <String, dynamic>{
                                     "itemData": menuModel.sideMenu!.menuData[0]
                                   };
+                                  SharedVars.refreshPage = true;
                                   Provider.of<ChangeProvider>(context,
                                           listen: false)
                                       .setMidScreen(
@@ -124,7 +127,8 @@ class _SideMenuState extends State<ErpSideMenu> {
                                     ? menuModel.sideMenu!.menuData[0].title
                                     : "...",
                                 iconSrc: "assets/Icons/File.svg",
-                                isActive: _activeIndex == 0 ? true : false,
+                                isActive:
+                                    menuModel.activeIndex == 0 ? true : false,
                                 itemCount: menuModel.sideMenu != null
                                     ? int.parse(
                                         menuModel.sideMenu!.menuData[0].count!)
@@ -133,7 +137,7 @@ class _SideMenuState extends State<ErpSideMenu> {
                               SideMenuItem(
                                 press: () {
                                   setState(() {
-                                    _activeIndex = 1;
+                                    menuModel.setActiveIndex(1, false);
                                   });
                                   // getErpCartableData(
                                   //     context, menuModel.sideMenu!.menuData[1]);
@@ -141,6 +145,7 @@ class _SideMenuState extends State<ErpSideMenu> {
                                       <String, dynamic>{
                                     "itemData": menuModel.sideMenu!.menuData[1]
                                   };
+                                  SharedVars.refreshPage = true;
                                   Provider.of<ChangeProvider>(context,
                                           listen: false)
                                       .setMidScreen(
@@ -150,7 +155,8 @@ class _SideMenuState extends State<ErpSideMenu> {
                                     ? menuModel.sideMenu!.menuData[1].title
                                     : "...",
                                 iconSrc: "assets/Icons/File.svg",
-                                isActive: _activeIndex == 1 ? true : false,
+                                isActive:
+                                    menuModel.activeIndex == 1 ? true : false,
                                 itemCount: menuModel.sideMenu != null
                                     ? int.parse(
                                         menuModel.sideMenu!.menuData[1].count!)
@@ -159,7 +165,7 @@ class _SideMenuState extends State<ErpSideMenu> {
                               SideMenuItem(
                                 press: () {
                                   setState(() {
-                                    _activeIndex = 2;
+                                    menuModel.setActiveIndex(2, false);
                                   });
                                   // getErpCartableData(
                                   //     context, menuModel.sideMenu!.menuData[2]);
@@ -167,6 +173,7 @@ class _SideMenuState extends State<ErpSideMenu> {
                                       <String, dynamic>{
                                     "itemData": menuModel.sideMenu!.menuData[2]
                                   };
+                                  SharedVars.refreshPage = true;
                                   Provider.of<ChangeProvider>(context,
                                           listen: false)
                                       .setMidScreen(
@@ -176,12 +183,57 @@ class _SideMenuState extends State<ErpSideMenu> {
                                     ? menuModel.sideMenu!.menuData[2].title
                                     : "...",
                                 iconSrc: "assets/Icons/File.svg",
-                                isActive: _activeIndex == 2 ? true : false,
+                                isActive:
+                                    menuModel.activeIndex == 2 ? true : false,
                                 itemCount: -1,
                                 // itemCount: menuModel.sideMenu != null
                                 //     ? int.parse(
                                 //         menuModel.sideMenu!.menuData[2].count!)
                                 //     : 0,
+                              ),
+                              SideMenuItem(
+                                press: () {
+                                  setState(() {
+                                    menuModel.setActiveIndex(3, false);
+                                  });
+                                  Map<String, dynamic> params =
+                                      <String, dynamic>{"param": ''};
+                                  Provider.of<ChangeProvider>(context,
+                                          listen: false)
+                                      .setMidScreen(
+                                          ScreenName.requestList, params);
+                                },
+                                title: menuModel.sideMenu != null
+                                    ? menuModel.sideMenu!.menuData[3].title
+                                    : "...",
+                                iconSrc: "assets/Icons/File.svg",
+                                isActive:
+                                    menuModel.activeIndex == 3 ? true : false,
+                                itemCount: menuModel.sideMenu != null
+                                    ? int.parse(
+                                        menuModel.sideMenu!.menuData[3].count!)
+                                    : 0,
+                              ),
+                              SideMenuItem(
+                                press: () {
+                                  setState(() {
+                                    menuModel.setActiveIndex(4, false);
+                                  });
+                                  Map<String, dynamic> params =
+                                      <String, dynamic>{
+                                    'formName': 'Buy',
+                                    'title': 'درخواست جدید'
+                                  };
+                                  Provider.of<ChangeProvider>(context,
+                                          listen: false)
+                                      .setMidScreen(
+                                          ScreenName.requestMenuScreen, params);
+                                },
+                                title: 'درخواست جدید',
+                                iconSrc: "assets/Icons/File.svg",
+                                isActive:
+                                    menuModel.activeIndex == 4 ? true : false,
+                                itemCount: -1,
                               ),
                               SideMenuItem(
                                 press: () {},
@@ -213,59 +265,57 @@ class _SideMenuState extends State<ErpSideMenu> {
                               ),
                             ],
                           ),
-                          const SizedBox(height: kDefaultPadding),
-                          SideMenuItem(
-                            press: () {
-                              setState(() {
-                                _activeIndex = 3;
-                              });
-                              // getErpCartableData(
-                              //     context, menuModel.sideMenu!.menuData[3]);
-                              Map<String, dynamic> params = <String, dynamic>{
-                                "param": ''
-                              };
-                              Provider.of<ChangeProvider>(context,
-                                      listen: false)
-                                  .setMidScreen(ScreenName.requestList, params);
-                            },
-                            title: menuModel.sideMenu != null
-                                ? menuModel.sideMenu!.menuData[3].title
-                                : "...",
-                            iconSrc: "assets/Icons/File.svg",
-                            isActive: _activeIndex == 3 ? true : false,
-                            itemCount: menuModel.sideMenu != null
-                                ? int.parse(
-                                    menuModel.sideMenu!.menuData[3].count!)
-                                : 0,
-                          ),
-                          SideMenuItem(
-                            press: () {
-                              setState(() {
-                                _activeIndex = 4;
-                              });
-                              // getErpCartableData(
-                              //     context, menuModel.sideMenu!.menuData[1]);
-                              Map<String, dynamic> params = <String, dynamic>{
-                                'formName': 'Buy',
-                                'title': 'درخواست جدید'
-                              };
-                              Provider.of<ChangeProvider>(context,
-                                      listen: false)
-                                  .setMidScreen(
-                                      ScreenName.requestMenuScreen, params);
-                            },
-                            title: 'درخواست جدید',
-                            iconSrc: "assets/Icons/File.svg",
-                            isActive: _activeIndex == 4 ? true : false,
-                            itemCount: -1,
-                          ),
+                          // const SizedBox(height: kDefaultPadding),
+                          // SideMenuItem(
+                          //   press: () {
+                          //     setState(() {
+                          //       menuModel.activeIndex = 3;
+                          //     });
+                          //     Map<String, dynamic> params = <String, dynamic>{
+                          //       "param": ''
+                          //     };
+                          //     Provider.of<ChangeProvider>(context,
+                          //             listen: false)
+                          //         .setMidScreen(ScreenName.requestList, params);
+                          //   },
+                          //   title: menuModel.sideMenu != null
+                          //       ? menuModel.sideMenu!.menuData[3].title
+                          //       : "...",
+                          //   iconSrc: "assets/Icons/File.svg",
+                          //   isActive: menuModel.activeIndex == 3 ? true : false,
+                          //   itemCount: menuModel.sideMenu != null
+                          //       ? int.parse(
+                          //           menuModel.sideMenu!.menuData[3].count!)
+                          //       : 0,
+                          // ),
+                          // SideMenuItem(
+                          //   press: () {
+                          //     setState(() {
+                          //       menuModel.activeIndex = 4;
+                          //     });
+                          //     // getErpCartableData(
+                          //     //     context, menuModel.sideMenu!.menuData[1]);
+                          //     Map<String, dynamic> params = <String, dynamic>{
+                          //       'formName': 'Buy',
+                          //       'title': 'درخواست جدید'
+                          //     };
+                          //     Provider.of<ChangeProvider>(context,
+                          //             listen: false)
+                          //         .setMidScreen(
+                          //             ScreenName.requestMenuScreen, params);
+                          //   },
+                          //   title: 'درخواست جدید',
+                          //   iconSrc: "assets/Icons/File.svg",
+                          //   isActive: menuModel.activeIndex == 4 ? true : false,
+                          //   itemCount: -1,
+                          // ),
                           Consumer<AuthProvider>(
                               builder: (context, authModel, child) {
                             return authModel.authUser.roleCount! > 1
                                 ? SideMenuItem(
                                     press: () {
                                       setState(() {
-                                        _activeIndex = 5;
+                                        menuModel.setActiveIndex(5, false);
                                       });
                                       // getErpCartableData(
                                       //     context, menuModel.sideMenu!.menuData[1]);
@@ -280,7 +330,9 @@ class _SideMenuState extends State<ErpSideMenu> {
                                     },
                                     title: 'تغییر نقش',
                                     iconSrc: "assets/Icons/File.svg",
-                                    isActive: _activeIndex == 5 ? true : false,
+                                    isActive: menuModel.activeIndex == 5
+                                        ? true
+                                        : false,
                                     itemCount: -1,
                                   )
                                 : Text('');
