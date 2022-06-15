@@ -381,44 +381,97 @@ Future<void> getErpReplyButtons(BuildContext context) async {
   }
 }
 
+Future<dynamic> getServerDataByPOST(
+    Map<String, dynamic>? queryParameters, String url) async {
+  try {
+    final response = await http.post(
+      Uri.parse(mainUrl + url),
+      headers: <String, String>{
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+      },
+      body: queryParameters,
+    );
+
+    if (response.statusCode == 200) {
+      final responseBody = utf8.decode(response.bodyBytes);
+      final responseData = json.decode(responseBody);
+      return responseData;
+    } else {
+      throw Exception('Unable to fetch info from the REST API');
+    }
+  } catch (e) {}
+}
+
+Future<dynamic> getServerDataByGET(String url) async {
+  try {
+    final response = await http.get(
+      Uri.parse(mainUrl + url),
+      headers: <String, String>{
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final responseBody = utf8.decode(response.bodyBytes);
+      final responseData = json.decode(responseBody);
+      return responseData;
+    } else {
+      throw Exception('Unable to fetch info from the REST API');
+    }
+  } catch (e) {}
+}
+
 /// Reads some data about current date from the server
 Future<UserRoleModel> getUserRoles(BuildContext context) async {
   Map<String, dynamic> queryParameters = {
-    // 'token': Provider.of<AuthProvider>(context, listen: false).authUser.token,
     'token': Provider.of<AuthProvider>(context, listen: false)
         .authUser
         .userId, // EncryptionUtil().encryptContent(oldPassword),
   };
 
-  final response = await http.post(
-    Uri.parse(mainUrl + 'api/Account/role/list'),
-    headers: <String, String>{
-      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-    },
-    body: queryParameters,
-  );
-  // print('read roles');
-  if (response.statusCode == 200) {
-    // print(utf8.decode(response.bodyBytes));
-    final responseBody = utf8.decode(response.bodyBytes);
-    final responseData = json.decode(responseBody);
-    //FIXME: This kind of 'if' doesn't work if 'menu' not present
-    if (responseData != null) {
-      // We deserialize read data but only use Date field for now
-      UserRoleModel data = UserRoleModel.fromMap(responseData);
-      SharedVars.userRoles = data;
-      Provider.of<AuthProvider>(context, listen: false)
-          .setRolesCount(data.rolesData.length);
-      return data;
-    } else {
-      throw Exception('Unable to fetch info from the REST API');
-    }
+  final responseData =
+      await getServerDataByPOST(queryParameters, 'api/Account/role/list');
+  if (responseData != null) {
+    UserRoleModel data = UserRoleModel.fromMap(responseData);
+    // print('read roles dada ' + data.rolesData[0].roleTitle!);
+    SharedVars.userRoles = data;
+    Provider.of<AuthProvider>(context, listen: false)
+        .setRolesCount(data.rolesData.length);
+    return data;
   } else {
     throw Exception('Unable to fetch info from the REST API');
   }
+  // final response = await http.post(
+  //   Uri.parse(mainUrl + 'api/Account/role/list'),
+  //   headers: <String, String>{
+  //     'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+  //   },
+  //   body: queryParameters,
+  // );
+  // print('read roles');
+  // if (response.statusCode == 200) {
+  //   print(utf8.decode(response.bodyBytes));
+  //   final responseBody = utf8.decode(response.bodyBytes);
+  //   final responseData = json.decode(responseBody);
+  //   //FIXME: This kind of 'if' doesn't work if 'menu' not present
+  //   if (responseData != null) {
+  //     // We deserialize read data but only use Date field for now
+  //     UserRoleModel data = UserRoleModel.fromMap(responseData);
+  //     SharedVars.userRoles = data;
+  //     Provider.of<AuthProvider>(context, listen: false)
+  //         .setRolesCount(data.rolesData.length);
+  //     return data;
+  //   } else {
+  //     throw Exception('Unable to fetch info from the REST API');
+  //   }
+  // } else {
+  //   throw Exception('Unable to fetch info from the REST API');
+  // }
 }
 
 /// Reads some data about current date from the server
+///
+/// Returns a Future of [ErpMenuItemsData] object
 Future<RequestMenuModel> getErpRequestMenu(BuildContext context) async {
   // Map<String, dynamic> queryParameters = {
   //   'token': Provider.of<AuthProvider>(context, listen: false).authUser.token,
@@ -426,32 +479,41 @@ Future<RequestMenuModel> getErpRequestMenu(BuildContext context) async {
   //       .authUser
   //       .roleID, // EncryptionUtil().encryptContent(oldPassword),
   // };
-
-  final response = await http.get(
-    // Uri.parse(mainUrl + 'api/info/RequestForm/Type'),
-    Uri.parse(mainUrl +
-        'api/info/RequestFormType/${Provider.of<AuthProvider>(context, listen: false).authUser.roleID!}'),
-    headers: <String, String>{
-      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-    },
-    // body: queryParameters,
-  );
-
-  if (response.statusCode == 200) {
-    // print(utf8.decode(response.bodyBytes));
-    final responseBody = utf8.decode(response.bodyBytes);
-    final responseData = json.decode(responseBody);
-    //FIXME: This kind of 'if' doesn't work if 'menu' not present
-    if (responseData['RequestType'] != null) {
-      // We deserialize read data but only use Date field for now
-      RequestMenuModel data = RequestMenuModel.fromMap(responseData);
-      return data;
-    } else {
-      throw Exception('Unable to fetch info from the REST API');
-    }
+  final responseData = await getServerDataByGET(
+          'api/info/RequestFormType/${Provider.of<AuthProvider>(context, listen: false).authUser.roleID!}')
+      as Map<String, dynamic>;
+  if (responseData['RequestType'] != null) {
+    // We deserialize read data but only use Date field for now
+    RequestMenuModel data = RequestMenuModel.fromMap(responseData);
+    return data;
   } else {
     throw Exception('Unable to fetch info from the REST API');
   }
+  // final response = await http.get(
+  //   // Uri.parse(mainUrl + 'api/info/RequestForm/Type'),
+  //   Uri.parse(mainUrl +
+  //       'api/info/RequestFormType/${Provider.of<AuthProvider>(context, listen: false).authUser.roleID!}'),
+  //   headers: <String, String>{
+  //     'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+  //   },
+  //   // body: queryParameters,
+  // );
+
+  // if (response.statusCode == 200) {
+  //   // print(utf8.decode(response.bodyBytes));
+  //   final responseBody = utf8.decode(response.bodyBytes);
+  //   final responseData = json.decode(responseBody);
+  //   //FIXME: This kind of 'if' doesn't work if 'menu' not present
+  //   if (responseData['RequestType'] != null) {
+  //     // We deserialize read data but only use Date field for now
+  //     RequestMenuModel data = RequestMenuModel.fromMap(responseData);
+  //     return data;
+  //   } else {
+  //     throw Exception('Unable to fetch info from the REST API');
+  //   }
+  // } else {
+  //   throw Exception('Unable to fetch info from the REST API');
+  // }
 }
 
 Future<void> getCartableData(
