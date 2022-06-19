@@ -176,73 +176,73 @@ class ItemList extends StatelessWidget {
           );
   }
 
-  void _pickFile() async {
-    filePath = '';
-    // opens storage to pick files and the picked file or files
-    // are assigned into result and if no file is chosen result is null.
-    // you can also toggle "allowMultiple" true or false depending on your need
-    final result = await FilePicker.platform.pickFiles(
-      allowMultiple: false,
-      type: FileType.custom,
-      allowedExtensions: ['jpg', 'pdf', 'png'],
-    );
+  // void _pickFile() async {
+  //   filePath = '';
+  //   // opens storage to pick files and the picked file or files
+  //   // are assigned into result and if no file is chosen result is null.
+  //   // you can also toggle "allowMultiple" true or false depending on your need
+  //   final result = await FilePicker.platform.pickFiles(
+  //     allowMultiple: false,
+  //     type: FileType.custom,
+  //     allowedExtensions: ['jpg', 'pdf', 'png'],
+  //   );
 
-    // if no file is picked
-    if (result == null) return;
+  //   // if no file is picked
+  //   if (result == null) return;
 
-    // we will log the name, size and path of the
-    // first picked file (if multiple are selected)
-    print(result.files.first.name);
-    print(result.files.first.size);
-    print(result.files.first.path);
-    filePath = result.files.first.path!;
-  }
+  //   // we will log the name, size and path of the
+  //   // first picked file (if multiple are selected)
+  //   print(result.files.first.name);
+  //   print(result.files.first.size);
+  //   print(result.files.first.path);
+  //   filePath = result.files.first.path!;
+  // }
 
-  List<Widget> getButtons(BuildContext context) {
-    {
-      final List<Widget> rowList = [];
-      for (ReplyButtonData buttonData in itemData!.buttonsData) {
-        rowList.add(ElevatedButton(
-            onPressed: () {
-              bool isEdited = false;
+  // List<Widget> getButtons(BuildContext context) {
+  //   {
+  //     final List<Widget> rowList = [];
+  //     for (ReplyButtonData buttonData in itemData!.buttonsData) {
+  //       rowList.add(ElevatedButton(
+  //           onPressed: () {
+  //             bool isEdited = false;
 
-              Map<String, String> items = <String, String>{};
-              for (FormItem listItem in dynamicEditWidget!.formItems) {
-                if (listItem.control == 'textbox') {
-                  items[listItem.controlName] = dynamicEditWidget!
-                      .controllerMap[listItem.controlName]!.text;
-                } else if (listItem.control == 'listbox') {
-                  items[listItem.controlName] =
-                      dynamicEditWidget!.dropDownMap[listItem.controlName]!;
-                }
-              }
+  //             Map<String, String> items = <String, String>{};
+  //             for (FormItem listItem in dynamicEditWidget!.formItems) {
+  //               if (listItem.control == 'textbox') {
+  //                 items[listItem.controlName] = dynamicEditWidget!
+  //                     .controllerMap[listItem.controlName]!.text;
+  //               } else if (listItem.control == 'listbox') {
+  //                 items[listItem.controlName] =
+  //                     dynamicEditWidget!.dropDownMap[listItem.controlName]!;
+  //               }
+  //             }
 
-              for (String key in items.keys) {
-                if (items[key] != itemData!.requestDetails.items[key]) {
-                  isEdited = true;
-                  break;
-                }
-              }
+  //             for (String key in items.keys) {
+  //               if (items[key] != itemData!.requestDetails.items[key]) {
+  //                 isEdited = true;
+  //                 break;
+  //               }
+  //             }
 
-              // print(isEdited.toString() + '   ++++++++++++');
+  //             // print(isEdited.toString() + '   ++++++++++++');
 
-              Map<String, dynamic> otherItems = {
-                'description': descriptionController.text,
-                'command': buttonData.cammandTitle,
-                'commandID': buttonData.commandID,
-                'editForm': isEdited.toString(),
-                'filePath': filePath,
-                // 'historyID': itemData!.requestDetails.requestID
-              };
+  //             Map<String, dynamic> otherItems = {
+  //               'description': descriptionController.text,
+  //               'command': buttonData.cammandTitle,
+  //               'commandID': buttonData.commandID,
+  //               'editForm': isEdited.toString(),
+  //               'filePath': filePath,
+  //               // 'historyID': itemData!.requestDetails.requestID
+  //             };
 
-              sendReplyData(context, jsonEncode(items), otherItems);
-              // // String jsonTutorial = jsonEncode(items);
-              // print(jsonEncode(items));
-            },
-            child: Text(buttonData.cammandTitle!)));
-      }
-      // sendFormData(context, jsonEncode(items));
-      return rowList;
-    }
-  }
+  //             sendReplyData(context, jsonEncode(items), otherItems);
+  //             // // String jsonTutorial = jsonEncode(items);
+  //             // print(jsonEncode(items));
+  //           },
+  //           child: Text(buttonData.cammandTitle!)));
+  //     }
+  //     // sendFormData(context, jsonEncode(items));
+  //     return rowList;
+  //   }
+  // }
 }

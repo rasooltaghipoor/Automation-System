@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
+import 'dart:typed_data';
 
 import 'package:automation_system/constants.dart';
 import 'package:automation_system/models/BuyModel.dart';
@@ -48,6 +49,7 @@ class _State extends State<DynamicEditWidget> {
   bool isEditEnabled = false;
   bool value = false;
   String filePath = "";
+  Uint8List? fileBytes;
   TextEditingController descriptionController = TextEditingController();
   RequestStatus _requestStatus = RequestStatus.NotSend;
   var loading = Row(
@@ -277,25 +279,21 @@ class _State extends State<DynamicEditWidget> {
   // }
 
   void _pickFile() async {
-    filePath = '';
     // opens storage to pick files and the picked file or files
     // are assigned into result and if no file is chosen result is null.
     // you can also toggle "allowMultiple" true or false depending on your need
     final result = await FilePicker.platform.pickFiles(
+      withData: true,
       allowMultiple: false,
       type: FileType.custom,
-      allowedExtensions: ['jpg', 'pdf', 'png'],
+      allowedExtensions: ['jpg', 'png'],
     );
 
     // if no file is picked
     if (result == null) return;
 
-    // we will log the name, size and path of the
-    // first picked file (if multiple are selected)
-    print(result.files.first.name);
-    print(result.files.first.size);
-    print(result.files.first.path);
-    filePath = result.files.first.path!;
+    fileBytes = result.files.first.bytes;
+    filePath = result.files.first.name;
 
     setState(() {});
   }
@@ -349,6 +347,7 @@ class _State extends State<DynamicEditWidget> {
                         'commandID': buttonData.commandID,
                         'editForm': isEdited.toString(),
                         'filePath': filePath,
+                        'fileBytes': fileBytes,
                         'requestID': widget.itemData!.requestDetails.requestID
                       };
 
@@ -476,11 +475,25 @@ class _State extends State<DynamicEditWidget> {
                     Text('فایل ضمیمه: '),
                     historyItem.attachFile != 'True'
                         ? Text('ندارد')
-                        : Image.network(
-                            historyItem.fileUrl,
-                            width: 200,
-                            height: 200,
-                          ),
+                        : GestureDetector(
+                            onTap: () {
+                              _showUpdatedDialog(mainUrl +
+                                  historyItem.fileUrl +
+                                  Provider.of<AuthProvider>(context,
+                                          listen: false)
+                                      .authUser
+                                      .token!);
+                            },
+                            child: Image.network(
+                              mainUrl +
+                                  historyItem.fileUrl +
+                                  Provider.of<AuthProvider>(context,
+                                          listen: false)
+                                      .authUser
+                                      .token!,
+                              width: 200,
+                              height: 200,
+                            )),
                   ],
                 ),
               ],
@@ -493,10 +506,9 @@ class _State extends State<DynamicEditWidget> {
   Future _showUpdatedDialog(String path) {
     final alert = AlertDialog(
       title: const Text("تصویر"),
-      content: Expanded(
-          child: Image.network(
+      content: Image.network(
         path,
-      )),
+      ),
       actions: [
         TextButton(
           onPressed: () {
@@ -694,8 +706,13 @@ class _State extends State<DynamicEditWidget> {
                             width: 50,
                           ),
                           filePath.isNotEmpty
-                              ? Image.file(
-                                  File(filePath),
+                              // ? Image.file(
+                              //     File(filePath),
+                              //     width: 200,
+                              //     height: 200,
+                              //   )
+                              ? Image.memory(
+                                  Uint8List.fromList(fileBytes!),
                                   width: 200,
                                   height: 200,
                                 )
