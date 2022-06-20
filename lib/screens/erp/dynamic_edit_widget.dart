@@ -464,11 +464,11 @@ class _State extends State<DynamicEditWidget> {
                 ),
                 Text(!Responsive.isDesktop(context) ? historyItem.date : ''),
                 SizedBox(
-                  height: 10,
+                  height: 5,
                 ),
                 Text('توضیحات: ' + historyItem.description),
                 SizedBox(
-                  height: 10,
+                  height: 5,
                 ),
                 Row(
                   children: [
@@ -491,8 +491,8 @@ class _State extends State<DynamicEditWidget> {
                                           listen: false)
                                       .authUser
                                       .token!,
-                              width: 200,
-                              height: 200,
+                              width: 100,
+                              height: 100,
                             )),
                   ],
                 ),

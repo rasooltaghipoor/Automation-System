@@ -16,7 +16,7 @@ Future<dynamic> getServerDataByPOST(
 
     if (response.statusCode == 200) {
       final responseBody = utf8.decode(response.bodyBytes);
-      print(responseBody);
+      // print(responseBody);
       final responseData = json.decode(responseBody);
       return responseData;
     } else {
