@@ -311,7 +311,7 @@ class _View2State extends State<DynamicEditForm> {
                   });
                   final Future<Map<String, dynamic>> successfulMessage =
                       sendFormData(context, jsonEncode(items), dropPriority,
-                          filePath, fileBytes!, _formData!.formName_E);
+                          filePath, fileBytes, _formData!.formName_E);
 
                   successfulMessage.then((response) {
                     if (response['status']) {

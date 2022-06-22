@@ -226,7 +226,7 @@ Future<Map<String, dynamic>> sendFormData(
     String jsonData,
     String priority,
     String filePath,
-    Uint8List fileBytes,
+    Uint8List? fileBytes,
     String formName_E) async {
   var result;
 
@@ -251,7 +251,7 @@ Future<Map<String, dynamic>> sendFormData(
   //       filename: filePath.split("/").last));
   // }
   if (filePath != '') {
-    request.files.add(http.MultipartFile.fromBytes('picture', fileBytes,
+    request.files.add(http.MultipartFile.fromBytes('picture', fileBytes!,
         filename: filePath.split("/").last));
   }
 
