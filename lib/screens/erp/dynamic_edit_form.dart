@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:automation_system/models/BuyModel.dart';
 import 'package:automation_system/models/DynamicForm.dart';
@@ -30,6 +31,7 @@ class _View2State extends State<DynamicEditForm> {
   Map<String, TextEditingController> _controllerMap = Map();
   Map<String, String> _dropDownMap = Map();
   String filePath = '';
+  Uint8List? fileBytes;
   String dropPriority = '0';
   RequestStatus _requestStatus = RequestStatus.NotSend;
   // Map<String, int> _listboxIndices = Map();
@@ -309,7 +311,7 @@ class _View2State extends State<DynamicEditForm> {
                   });
                   final Future<Map<String, dynamic>> successfulMessage =
                       sendFormData(context, jsonEncode(items), dropPriority,
-                          filePath, _formData!.formName_E);
+                          filePath, fileBytes, _formData!.formName_E);
 
                   successfulMessage.then((response) {
                     if (response['status']) {
@@ -398,25 +400,21 @@ class _View2State extends State<DynamicEditForm> {
   }
 
   void _pickFile() async {
-    filePath = '';
     // opens storage to pick files and the picked file or files
     // are assigned into result and if no file is chosen result is null.
     // you can also toggle "allowMultiple" true or false depending on your need
     final result = await FilePicker.platform.pickFiles(
+      withData: true,
       allowMultiple: false,
       type: FileType.custom,
-      allowedExtensions: ['jpg', 'pdf', 'png'],
+      allowedExtensions: ['jpg', 'png'],
     );
 
     // if no file is picked
     if (result == null) return;
 
-    // we will log the name, size and path of the
-    // first picked file (if multiple are selected)
-    print(result.files.first.name);
-    print(result.files.first.size);
-    print(result.files.first.path);
-    filePath = result.files.first.path!;
+    fileBytes = result.files.first.bytes;
+    filePath = result.files.first.name;
 
     setState(() {});
   }
@@ -485,8 +483,13 @@ class _View2State extends State<DynamicEditForm> {
                   width: 50,
                 ),
                 filePath.isNotEmpty
-                    ? Image.file(
-                        File(filePath),
+                    // ? Image.file(
+                    //     File(filePath),
+                    //     width: 200,
+                    //     height: 200,
+                    //   )
+                    ? Image.memory(
+                        Uint8List.fromList(fileBytes!),
                         width: 200,
                         height: 200,
                       )
