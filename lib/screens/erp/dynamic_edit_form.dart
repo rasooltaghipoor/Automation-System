@@ -132,6 +132,8 @@ class _View2State extends State<DynamicEditForm> {
                       // inputFormatters: [
                       //   _DigitPersianFormatter(),
                       // ],
+                      readOnly:
+                          data.items[index].dataType == 'date' ? true : false,
                       onTap: data.items[index].dataType == 'date'
                           ? () async {
                               Jalali? picked = await showPersianDatePicker(

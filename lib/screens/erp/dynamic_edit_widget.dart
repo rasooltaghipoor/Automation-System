@@ -162,6 +162,7 @@ class _State extends State<DynamicEditWidget> {
                         FilteringTextInputFormatter.digitsOnly
                       ]
                     : null,
+                readOnly: data.items[index].dataType == 'date' ? true : false,
                 onTap: data.items[index].dataType == 'date'
                     ? () async {
                         Jalali? picked = await showPersianDatePicker(
