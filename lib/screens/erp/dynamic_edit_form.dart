@@ -132,8 +132,10 @@ class _View2State extends State<DynamicEditForm> {
                       // inputFormatters: [
                       //   _DigitPersianFormatter(),
                       // ],
-                      readOnly:
-                          data.items[index].dataType == 'date' ? true : false,
+                      readOnly: (data.items[index].dataType == 'date' ||
+                              data.items[index].dataType == 'time')
+                          ? true
+                          : false,
                       onTap: data.items[index].dataType == 'date'
                           ? () async {
                               Jalali? picked = await showPersianDatePicker(
@@ -146,7 +148,18 @@ class _View2State extends State<DynamicEditForm> {
                                 controller.text = picked.formatCompactDate();
                               }
                             }
-                          : null,
+                          : data.items[index].dataType == 'time'
+                              ? () async {
+                                  var picked = await showPersianTimePicker(
+                                    context: context,
+                                    initialTime: TimeOfDay.now(),
+                                  );
+                                  if (picked != null) {
+                                    controller.text =
+                                        picked.persianFormat(context);
+                                  }
+                                }
+                              : null,
                     );
                     return Container(
                       child: textField,
