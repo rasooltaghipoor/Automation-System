@@ -153,10 +153,22 @@ class _View2State extends State<DynamicEditForm> {
                                   var picked = await showPersianTimePicker(
                                     context: context,
                                     initialTime: TimeOfDay.now(),
+                                    builder:
+                                        (BuildContext context, Widget? child) {
+                                      return MediaQuery(
+                                        data: MediaQuery.of(context).copyWith(
+                                            alwaysUse24HourFormat: true),
+                                        child: child!,
+                                      );
+                                    },
                                   );
                                   if (picked != null) {
-                                    controller.text =
-                                        picked.persianFormat(context);
+                                    String hour = picked.hour.toString();
+                                    if (hour.length < 2) hour = '0' + hour;
+                                    String min = picked.minute.toString();
+                                    if (min.length < 2) min = '0' + min;
+                                    controller.text = hour + ':' + min;
+                                    // controller.text = picked.format(context);
                                   }
                                 }
                               : null,
