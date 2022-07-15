@@ -803,17 +803,16 @@ class _State extends State<DynamicEditWidget> {
             margin: EdgeInsets.all(5),
             child: Column(children: getHistoryList()),
           ),
+          Container(
+            padding: EdgeInsets.all(10),
+            // color: Colors.yellow[100],
+            height: 250,
+            // width: 700,
+            child: ErpTimeline(widget.itemData!.historyChart.items),
 
-          // Container(
-          //   padding: EdgeInsets.all(10),
-          //   // color: Colors.yellow[100],
-          //   height: 250,
-          //   // width: 700,
-          //   child: ErpTimeline(widget.itemData!.historyChart.items),
-
-          //   // ProcessTimeline(
-          //   //     2, _processes, widget.itemData!.historyChart.items),
-          // ),
+            // ProcessTimeline(
+            //     2, _processes, widget.itemData!.historyChart.items),
+          ),
         ],
       ),
     );

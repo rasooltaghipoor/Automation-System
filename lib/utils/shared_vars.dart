@@ -24,8 +24,8 @@ class SharedVars {
   static bool isNetConnected = true;
   static String error = 'خطا: ';
   static bool isWebApp = false;
-  static var privateUrl = "http://teacher.iau-neyshabur.ac.ir";
-  static var publicUrl = "http://teacher.iau-neyshabur.ac.ir";
+  // static var privateUrl = "http://teacher.iau-neyshabur.ac.ir";
+  // static var publicUrl = "http://teacher.iau-neyshabur.ac.ir";
 
   static var userID = "";
   static var roleID = "";

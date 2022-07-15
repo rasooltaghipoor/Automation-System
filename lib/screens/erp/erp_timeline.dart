@@ -32,21 +32,79 @@ class ErpTimeline extends StatelessWidget {
     if (index == _processIndex) {
       return Icon(
         Icons.timer_outlined,
-        size: 30,
+        size: 60,
         color: getColor(index),
       );
     } else if (index < _processIndex) {
       return Icon(
         Icons.check_circle_outline,
-        size: 30,
+        size: 60,
         color: getColor(index),
       );
       ;
     } else {
       return Icon(
         Icons.do_not_touch_outlined,
-        size: 30,
+        size: 60,
         color: getColor(index),
+      );
+    }
+  }
+
+  Widget getCircularIndicator(int index) {
+    if (index == _processIndex) {
+      return Container(
+        width: 50,
+        height: 50,
+        decoration: BoxDecoration(
+            border: Border.all(
+              width: 5,
+              color: Colors.blue,
+            ),
+            borderRadius: BorderRadius.all(Radius.circular(30))),
+        child: Center(
+          child: Text(
+            (index + 1).toString(),
+            style: TextStyle(
+                color: Colors.blue, fontSize: 30, fontWeight: FontWeight.bold),
+          ),
+        ),
+      );
+    } else if (index < _processIndex) {
+      return Container(
+        width: 50,
+        height: 50,
+        decoration: BoxDecoration(
+            border: Border.all(
+              width: 5,
+              color: Colors.green,
+            ),
+            borderRadius: BorderRadius.all(Radius.circular(30))),
+        child: Center(
+          child: Text(
+            (index + 1).toString(),
+            style: TextStyle(
+                color: Colors.green, fontSize: 25, fontWeight: FontWeight.bold),
+          ),
+        ),
+      );
+    } else {
+      return Container(
+        width: 50,
+        height: 50,
+        decoration: BoxDecoration(
+            border: Border.all(
+              width: 5,
+              color: Colors.grey,
+            ),
+            borderRadius: BorderRadius.all(Radius.circular(30))),
+        child: Center(
+          child: Text(
+            (index + 1).toString(),
+            style: TextStyle(
+                color: Colors.grey, fontSize: 25, fontWeight: FontWeight.bold),
+          ),
+        ),
       );
     }
   }
@@ -61,7 +119,7 @@ class ErpTimeline extends StatelessWidget {
                 color: index <= _processIndex ? Colors.green : Colors.grey,
               )
             : Icon(Icons.arrow_right_rounded),
-        getIcon(index),
+        getCircularIndicator(index),
         index < items.length - 1
             ? Container(
                 width: 50,
