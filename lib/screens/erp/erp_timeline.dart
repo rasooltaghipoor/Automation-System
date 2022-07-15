@@ -1,20 +1,24 @@
 import 'dart:math';
 
 import 'package:automation_system/models/RequestData.dart';
+import 'package:automation_system/responsive.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:timelines/timelines.dart';
 
 const kTileHeight = 50.0;
 
-const completeColor = Color.fromARGB(255, 46, 64, 163);
-const inProgressColor = Color(0xff5ec792);
-const todoColor = Color(0xffd1d2d7);
+const completeColor = Colors.green;
+const inProgressColor = Colors.red;
+const todoColor = Colors.grey;
 
 class ErpTimeline extends StatelessWidget {
   int _processIndex = 0;
   List<HistoryChartItems> items;
   final ScrollController _mycontroller = ScrollController();
+  double? _lineLength;
+  bool? _isDesktop;
 
   ErpTimeline(this.items, {Key? key}) : super(key: key);
 
@@ -54,26 +58,26 @@ class ErpTimeline extends StatelessWidget {
   Widget getCircularIndicator(int index) {
     if (index == _processIndex) {
       return Container(
-        width: 50,
-        height: 50,
+        width: 60,
+        height: 60,
         decoration: BoxDecoration(
             border: Border.all(
               width: 5,
-              color: Colors.blue,
+              color: Colors.red,
             ),
             borderRadius: BorderRadius.all(Radius.circular(30))),
         child: Center(
           child: Text(
             (index + 1).toString(),
             style: TextStyle(
-                color: Colors.blue, fontSize: 30, fontWeight: FontWeight.bold),
+                color: Colors.red, fontSize: 25, fontWeight: FontWeight.bold),
           ),
         ),
       );
     } else if (index < _processIndex) {
       return Container(
-        width: 50,
-        height: 50,
+        width: 60,
+        height: 60,
         decoration: BoxDecoration(
             border: Border.all(
               width: 5,
@@ -90,8 +94,8 @@ class ErpTimeline extends StatelessWidget {
       );
     } else {
       return Container(
-        width: 50,
-        height: 50,
+        width: 60,
+        height: 60,
         decoration: BoxDecoration(
             border: Border.all(
               width: 5,
@@ -110,75 +114,219 @@ class ErpTimeline extends StatelessWidget {
   }
 
   Widget getIndicator(int index) {
-    return Row(
-      children: [
-        index > 0
-            ? Container(
-                width: 50,
+    return _isDesktop!
+        ? Row(
+            children: [
+              Container(
+                width: _lineLength,
                 height: 5,
-                color: index <= _processIndex ? Colors.green : Colors.grey,
-              )
-            : Icon(Icons.arrow_right_rounded),
-        getCircularIndicator(index),
-        index < items.length - 1
-            ? Container(
-                width: 50,
+                color: index <= 0
+                    ? Colors.white
+                    : index <= _processIndex
+                        ? Colors.green
+                        : Colors.grey,
+              ),
+              getCircularIndicator(index),
+              Container(
+                width: _lineLength,
                 height: 5,
-                color: index < _processIndex ? Colors.green : Colors.grey,
+                color: index >= items.length - 1
+                    ? Colors.white
+                    : index < _processIndex
+                        ? Colors.green
+                        : Colors.grey,
               )
-            : Icon(Icons.arrow_left_rounded),
-      ],
-    );
+            ],
+          )
+        : Column(
+            children: [
+              Container(
+                width: 5,
+                height: _lineLength,
+                color: index <= 0
+                    ? Colors.white
+                    : index <= _processIndex
+                        ? Colors.green
+                        : Colors.grey,
+              ),
+              getCircularIndicator(index),
+              Container(
+                width: 5,
+                height: _lineLength,
+                color: index >= items.length - 1
+                    ? Colors.white
+                    : index < _processIndex
+                        ? Colors.green
+                        : Colors.grey,
+              )
+            ],
+          );
+    ;
   }
 
   Widget horizontalProgressItem(int index) {
     return Container(
         child: Column(
       children: [
+        // Padding(
+        //   padding: const EdgeInsets.only(bottom: 15.0),
+        //   child: SizedBox(
+        //     height: 50,
+        //     // color: Colors.amber,
+        //     child: Column(
+        //       children: [
+        //         Text(
+        //           items[index].userName,
+        //           style: TextStyle(
+        //             fontWeight: FontWeight.bold,
+        //             color: getColor(index),
+        //           ),
+        //         ),
+        //         Text(
+        //           items[index].roleTitle,
+        //           style: TextStyle(
+        //             // fontWeight: FontWeight.bold,
+        //             color: getColor(index),
+        //           ),
+        //         ),
+        //       ],
+        //     ),
+        //   ),
+        // ),
+        getIndicator(index),
         Padding(
-          padding: const EdgeInsets.only(bottom: 15.0),
-          child: SizedBox(
-            height: 50,
-            // color: Colors.amber,
-            child: Column(
-              children: [
-                Text(
-                  items[index].userName,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: getColor(index),
-                  ),
-                ),
-                Text(
-                  items[index].roleTitle,
-                  style: TextStyle(
-                    // fontWeight: FontWeight.bold,
-                    color: getColor(index),
-                  ),
-                ),
-              ],
-            ),
-          ),
+            padding: const EdgeInsets.only(top: 5.0),
+            child: RotatedBox(
+                quarterTurns: 3,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      items[index].date,
+                      style: TextStyle(
+                        fontSize: 16,
+                        // fontWeight: FontWeight.bold,
+                        color: getColor(index),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Text(
+                      !items[index].userName.isEmpty
+                          ? items[index].userName
+                          : items[index].roleTitle,
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: getColor(index),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Text(
+                      !items[index].userName.isEmpty
+                          ? items[index].roleTitle
+                          : '',
+                      style: TextStyle(
+                        fontSize: 16,
+                        // fontWeight: FontWeight.bold,
+                        color: getColor(index),
+                      ),
+                    ),
+                    // Text(
+                    //   items[index].command,
+                    //   style: TextStyle(
+                    //     fontWeight: FontWeight.bold,
+                    //     color: getColor(index),
+                    //   ),
+                    // ),
+                  ],
+                ))),
+      ],
+    ));
+  }
+
+  Widget verticalProgressItem(int index) {
+    return Container(
+        child: Row(
+      children: [
+        // Padding(
+        //   padding: const EdgeInsets.only(bottom: 15.0),
+        //   child: SizedBox(
+        //     height: 50,
+        //     // color: Colors.amber,
+        //     child: Column(
+        //       children: [
+        //         Text(
+        //           items[index].userName,
+        //           style: TextStyle(
+        //             fontWeight: FontWeight.bold,
+        //             color: getColor(index),
+        //           ),
+        //         ),
+        //         Text(
+        //           items[index].roleTitle,
+        //           style: TextStyle(
+        //             // fontWeight: FontWeight.bold,
+        //             color: getColor(index),
+        //           ),
+        //         ),
+        //       ],
+        //     ),
+        //   ),
+        // ),
+        SizedBox(
+          width: 75,
         ),
         getIndicator(index),
         Padding(
-            padding: const EdgeInsets.only(top: 15.0),
+            padding: const EdgeInsets.only(right: 5.0),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   items[index].date,
                   style: TextStyle(
+                    fontSize: 16,
                     // fontWeight: FontWeight.bold,
                     color: getColor(index),
                   ),
                 ),
+                SizedBox(
+                  height: 5,
+                ),
                 Text(
-                  items[index].command,
+                  !items[index].userName.isEmpty
+                      ? items[index].userName
+                      : items[index].roleTitle,
                   style: TextStyle(
+                    fontSize: 16,
                     fontWeight: FontWeight.bold,
                     color: getColor(index),
                   ),
                 ),
+                SizedBox(
+                  height: 5,
+                ),
+                Text(
+                  !items[index].userName.isEmpty ? items[index].roleTitle : '',
+                  style: TextStyle(
+                    fontSize: 16,
+                    // fontWeight: FontWeight.bold,
+                    color: getColor(index),
+                  ),
+                ),
+                // Text(
+                //   items[index].command,
+                //   style: TextStyle(
+                //     fontWeight: FontWeight.bold,
+                //     color: getColor(index),
+                //   ),
+                // ),
               ],
             )),
       ],
@@ -188,7 +336,9 @@ class ErpTimeline extends StatelessWidget {
   List<Widget> generateTimelineItems() {
     final List<Widget> rowList = [];
     for (int i = 0; i < items.length; i++) {
-      rowList.add(horizontalProgressItem(i));
+      _isDesktop!
+          ? rowList.add(horizontalProgressItem(i))
+          : rowList.add(verticalProgressItem(i));
       // rowList.add(Container(
       //   width: 50,
       //   height: 5,
@@ -260,15 +410,26 @@ class ErpTimeline extends StatelessWidget {
 
   Widget build(BuildContext context) {
     _processIndex = 0;
+    _isDesktop = Responsive.isDesktop(context);
+    _isDesktop!
+        ? _lineLength = MediaQuery.of(context).size.width * 0.5 * 0.04
+        : _lineLength = 20;
+
     for (HistoryChartItems item in items) {
       if (item.command == 'منتظر بررسی') break;
       _processIndex++;
     }
-    return Row(
-      // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: generateTimelineItems(),
-    );
+    return Responsive.isDesktop(context)
+        ? Row(
+            // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: generateTimelineItems(),
+          )
+        : Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: generateTimelineItems(),
+          );
   }
 }
 

@@ -806,7 +806,7 @@ class _State extends State<DynamicEditWidget> {
           Container(
             padding: EdgeInsets.all(10),
             // color: Colors.yellow[100],
-            height: 250,
+            height: 700,
             // width: 700,
             child: ErpTimeline(widget.itemData!.historyChart.items),
 
