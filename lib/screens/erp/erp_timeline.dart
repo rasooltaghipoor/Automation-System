@@ -3,11 +3,15 @@ import 'dart:math';
 import 'package:automation_system/models/RequestData.dart';
 import 'package:automation_system/responsive.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:timelines/timelines.dart';
 
 const kTileHeight = 50.0;
+const circleDiameter = 60.0;
+const horizontalContainerHeight = 150.0;
+const verticalLineLength = 20.0;
 
 const completeColor = Colors.green;
 const inProgressColor = Colors.red;
@@ -32,34 +36,34 @@ class ErpTimeline extends StatelessWidget {
     }
   }
 
-  Icon getIcon(int index) {
-    if (index == _processIndex) {
-      return Icon(
-        Icons.timer_outlined,
-        size: 60,
-        color: getColor(index),
-      );
-    } else if (index < _processIndex) {
-      return Icon(
-        Icons.check_circle_outline,
-        size: 60,
-        color: getColor(index),
-      );
-      ;
-    } else {
-      return Icon(
-        Icons.do_not_touch_outlined,
-        size: 60,
-        color: getColor(index),
-      );
-    }
-  }
+  // Icon getIcon(int index) {
+  //   if (index == _processIndex) {
+  //     return Icon(
+  //       Icons.timer_outlined,
+  //       size: 60,
+  //       color: getColor(index),
+  //     );
+  //   } else if (index < _processIndex) {
+  //     return Icon(
+  //       Icons.check_circle_outline,
+  //       size: 60,
+  //       color: getColor(index),
+  //     );
+  //     ;
+  //   } else {
+  //     return Icon(
+  //       Icons.do_not_touch_outlined,
+  //       size: 60,
+  //       color: getColor(index),
+  //     );
+  //   }
+  // }
 
   Widget getCircularIndicator(int index) {
     if (index == _processIndex) {
       return Container(
-        width: 60,
-        height: 60,
+        width: circleDiameter,
+        height: circleDiameter,
         decoration: BoxDecoration(
             border: Border.all(
               width: 5,
@@ -76,8 +80,8 @@ class ErpTimeline extends StatelessWidget {
       );
     } else if (index < _processIndex) {
       return Container(
-        width: 60,
-        height: 60,
+        width: circleDiameter,
+        height: circleDiameter,
         decoration: BoxDecoration(
             border: Border.all(
               width: 5,
@@ -94,8 +98,8 @@ class ErpTimeline extends StatelessWidget {
       );
     } else {
       return Container(
-        width: 60,
-        height: 60,
+        width: circleDiameter,
+        height: circleDiameter,
         decoration: BoxDecoration(
             border: Border.all(
               width: 5,
@@ -168,33 +172,10 @@ class ErpTimeline extends StatelessWidget {
     return Container(
         child: Column(
       children: [
-        // Padding(
-        //   padding: const EdgeInsets.only(bottom: 15.0),
-        //   child: SizedBox(
-        //     height: 50,
-        //     // color: Colors.amber,
-        //     child: Column(
-        //       children: [
-        //         Text(
-        //           items[index].userName,
-        //           style: TextStyle(
-        //             fontWeight: FontWeight.bold,
-        //             color: getColor(index),
-        //           ),
-        //         ),
-        //         Text(
-        //           items[index].roleTitle,
-        //           style: TextStyle(
-        //             // fontWeight: FontWeight.bold,
-        //             color: getColor(index),
-        //           ),
-        //         ),
-        //       ],
-        //     ),
-        //   ),
-        // ),
         getIndicator(index),
-        Padding(
+        Container(
+            width: circleDiameter + 2 * _lineLength!,
+            height: horizontalContainerHeight,
             padding: const EdgeInsets.only(top: 5.0),
             child: RotatedBox(
                 quarterTurns: 3,
@@ -253,31 +234,6 @@ class ErpTimeline extends StatelessWidget {
     return Container(
         child: Row(
       children: [
-        // Padding(
-        //   padding: const EdgeInsets.only(bottom: 15.0),
-        //   child: SizedBox(
-        //     height: 50,
-        //     // color: Colors.amber,
-        //     child: Column(
-        //       children: [
-        //         Text(
-        //           items[index].userName,
-        //           style: TextStyle(
-        //             fontWeight: FontWeight.bold,
-        //             color: getColor(index),
-        //           ),
-        //         ),
-        //         Text(
-        //           items[index].roleTitle,
-        //           style: TextStyle(
-        //             // fontWeight: FontWeight.bold,
-        //             color: getColor(index),
-        //           ),
-        //         ),
-        //       ],
-        //     ),
-        //   ),
-        // ),
         SizedBox(
           width: 75,
         ),
@@ -413,7 +369,7 @@ class ErpTimeline extends StatelessWidget {
     _isDesktop = Responsive.isDesktop(context);
     _isDesktop!
         ? _lineLength = MediaQuery.of(context).size.width * 0.5 * 0.04
-        : _lineLength = 20;
+        : _lineLength = verticalLineLength;
 
     for (HistoryChartItems item in items) {
       if (item.command == 'منتظر بررسی') break;
