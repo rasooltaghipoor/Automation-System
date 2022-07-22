@@ -16,6 +16,13 @@ const verticalLineLength = 20.0;
 const completeColor = Colors.green;
 const inProgressColor = Colors.red;
 const todoColor = Colors.grey;
+const rejectedColor = Colors.green;
+
+enum ProgressState {
+  Completed,
+  InProgress,
+  Rejected,
+}
 
 class ErpTimeline extends StatelessWidget {
   int _processIndex = 0;
@@ -23,12 +30,16 @@ class ErpTimeline extends StatelessWidget {
   final ScrollController _mycontroller = ScrollController();
   double? _lineLength;
   bool? _isDesktop;
+  ProgressState? _progressState;
 
   ErpTimeline(this.items, {Key? key}) : super(key: key);
 
   Color getColor(int index) {
     if (index == _processIndex) {
-      return inProgressColor;
+      if (_progressState == ProgressState.InProgress)
+        return inProgressColor;
+      else
+        return rejectedColor;
     } else if (index < _processIndex) {
       return completeColor;
     } else {
@@ -61,23 +72,38 @@ class ErpTimeline extends StatelessWidget {
 
   Widget getCircularIndicator(int index) {
     if (index == _processIndex) {
-      return Container(
-        width: circleDiameter,
-        height: circleDiameter,
-        decoration: BoxDecoration(
-            border: Border.all(
-              width: 5,
-              color: Colors.red,
+      return Stack(alignment: AlignmentDirectional.center, children: [
+        Container(
+          width: circleDiameter,
+          height: circleDiameter,
+          decoration: BoxDecoration(
+              border: Border.all(
+                width: 5,
+                color: _progressState == ProgressState.InProgress
+                    ? Colors.red
+                    : Colors.green,
+              ),
+              borderRadius: BorderRadius.all(Radius.circular(30))),
+          child: Center(
+            child: Text(
+              (index + 1).toString(),
+              style: TextStyle(
+                  color: _progressState == ProgressState.InProgress
+                      ? Colors.red
+                      : Colors.green,
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold),
             ),
-            borderRadius: BorderRadius.all(Radius.circular(30))),
-        child: Center(
-          child: Text(
-            (index + 1).toString(),
-            style: TextStyle(
-                color: Colors.red, fontSize: 25, fontWeight: FontWeight.bold),
           ),
         ),
-      );
+        _progressState == ProgressState.InProgress
+            ? Text('')
+            : Image.asset(
+                'assets/images/rejected.png',
+                width: circleDiameter * 0.75,
+                height: circleDiameter * 0.75,
+              ),
+      ]);
     } else if (index < _processIndex) {
       return Container(
         width: circleDiameter,
@@ -134,7 +160,9 @@ class ErpTimeline extends StatelessWidget {
               Container(
                 width: _lineLength,
                 height: 5,
-                color: index >= items.length - 1
+                color: index >= items.length - 1 ||
+                        (index == _processIndex &&
+                            _progressState == ProgressState.Rejected)
                     ? Colors.white
                     : index < _processIndex
                         ? Colors.green
@@ -371,10 +399,19 @@ class ErpTimeline extends StatelessWidget {
         ? _lineLength = MediaQuery.of(context).size.width * 0.5 * 0.04
         : _lineLength = verticalLineLength;
 
+    _progressState = ProgressState.Completed;
     for (HistoryChartItems item in items) {
-      if (item.command == 'منتظر بررسی') break;
+      if (item.state == '0') {
+        _progressState = ProgressState.InProgress;
+        break;
+      }
+      if (item.state == '-1') {
+        _progressState = ProgressState.Rejected;
+        break;
+      }
       _processIndex++;
     }
+
     return Responsive.isDesktop(context)
         ? Row(
             // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
