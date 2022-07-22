@@ -1,12 +1,7 @@
-import 'dart:math';
-
 import 'package:automation_system/models/RequestData.dart';
 import 'package:automation_system/responsive.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
-import 'package:timelines/timelines.dart';
+import 'package:just_the_tooltip/just_the_tooltip.dart';
 
 const kTileHeight = 50.0;
 const circleDiameter = 60.0;
@@ -26,13 +21,14 @@ enum ProgressState {
 
 class ErpTimeline extends StatelessWidget {
   int _processIndex = 0;
-  List<HistoryChartItems> items;
+  RequestData requestData;
   final ScrollController _mycontroller = ScrollController();
   double? _lineLength;
+  double? _tooltipWidth;
   bool? _isDesktop;
   ProgressState? _progressState;
 
-  ErpTimeline(this.items, {Key? key}) : super(key: key);
+  ErpTimeline(this.requestData, {Key? key}) : super(key: key);
 
   Color getColor(int index) {
     if (index == _processIndex) {
@@ -47,57 +43,176 @@ class ErpTimeline extends StatelessWidget {
     }
   }
 
+  Widget getDetailsTip(int index) {
+    return Directionality(
+        textDirection: TextDirection.rtl,
+        child: Container(
+            color: Colors.yellow[50],
+            padding: EdgeInsets.all(5),
+            margin: EdgeInsets.all(5),
+            width: _tooltipWidth,
+            height: 275,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  width: 200,
+                  height: 50,
+                  child: ListTile(
+                    leading: Container(
+                      width: 35,
+                      height: 35,
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.blueGrey,
+                          ),
+                          borderRadius: BorderRadius.all(Radius.circular(20))),
+                      child: Center(
+                        child: Text(
+                          requestData.history.items[index].step,
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+                    title: Text(
+                      requestData.history.items[index].userName,
+                    ),
+                    subtitle: Text(requestData.history.items[index].roleTitle),
+                  ),
+                ),
+                SizedBox(
+                  height: 30,
+                ),
+                Padding(
+                  padding: EdgeInsets.only(right: 20),
+                  child: Text(
+                    'وضعیت: ' + requestData.history.items[index].command,
+                    style: TextStyle(),
+                  ),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Padding(
+                  padding: EdgeInsets.only(right: 20),
+                  child: requestData.history.items[index].editForm == 'True'
+                      ? Text(
+                          'ویرایش شده: بله',
+                          style: TextStyle(),
+                        )
+                      : Text(
+                          'ویرایش شده: خیر',
+                          style: TextStyle(),
+                        ),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Padding(
+                  padding: EdgeInsets.only(right: 20),
+                  child:
+                      Text('تاریخ: ' + requestData.history.items[index].date),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Padding(
+                  padding: EdgeInsets.only(right: 20),
+                  child: Text('توضیحات: ' +
+                      requestData.history.items[index].description),
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                // Row(
+                //   children: [
+                //     Text('فایل ضمیمه: '),
+                //     requestData.history.items[index].attachFile != 'True'
+                //         ? Text('ندارد')
+                //         : GestureDetector(
+                //             onTap: () {
+                //               _showUpdatedDialog(mainUrl +
+                //                   requestData.history.items[index].fileUrl +
+                //                   Provider.of<AuthProvider>(context, listen: false)
+                //                       .authUser
+                //                       .token!);
+                //             },
+                //             child: Image.network(
+                //               mainUrl +
+                //                   requestData.history.items[index].fileUrl +
+                //                   Provider.of<AuthProvider>(context, listen: false)
+                //                       .authUser
+                //                       .token!,
+                //               width: 100,
+                //               height: 100,
+                //             )),
+                //   ],
+                // ),
+              ],
+            )));
+  }
+
   Widget getCircularIndicator(int index) {
     if (index == _processIndex) {
-      return Stack(alignment: AlignmentDirectional.center, children: [
-        Container(
+      return JustTheTooltip(
+        preferredDirection: AxisDirection.up,
+        child: Stack(alignment: AlignmentDirectional.center, children: [
+          Container(
+            width: circleDiameter,
+            height: circleDiameter,
+            decoration: BoxDecoration(
+                border: Border.all(
+                  width: 5,
+                  color: _progressState == ProgressState.InProgress
+                      ? Colors.red
+                      : Colors.green,
+                ),
+                borderRadius: BorderRadius.all(Radius.circular(30))),
+            child: Center(
+              child: Text(
+                (index + 1).toString(),
+                style: TextStyle(
+                    color: _progressState == ProgressState.InProgress
+                        ? Colors.red
+                        : Colors.green,
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold),
+              ),
+            ),
+          ),
+          _progressState == ProgressState.InProgress
+              ? Text('')
+              : Image.asset(
+                  'assets/images/rejected.png',
+                  width: circleDiameter * 0.75,
+                  height: circleDiameter * 0.75,
+                ),
+        ]),
+        content: getDetailsTip(index),
+      );
+    } else if (index < _processIndex) {
+      return JustTheTooltip(
+        preferredDirection: AxisDirection.up,
+        child: Container(
           width: circleDiameter,
           height: circleDiameter,
           decoration: BoxDecoration(
               border: Border.all(
                 width: 5,
-                color: _progressState == ProgressState.InProgress
-                    ? Colors.red
-                    : Colors.green,
+                color: Colors.green,
               ),
               borderRadius: BorderRadius.all(Radius.circular(30))),
           child: Center(
             child: Text(
               (index + 1).toString(),
               style: TextStyle(
-                  color: _progressState == ProgressState.InProgress
-                      ? Colors.red
-                      : Colors.green,
+                  color: Colors.green,
                   fontSize: 25,
                   fontWeight: FontWeight.bold),
             ),
           ),
         ),
-        _progressState == ProgressState.InProgress
-            ? Text('')
-            : Image.asset(
-                'assets/images/rejected.png',
-                width: circleDiameter * 0.75,
-                height: circleDiameter * 0.75,
-              ),
-      ]);
-    } else if (index < _processIndex) {
-      return Container(
-        width: circleDiameter,
-        height: circleDiameter,
-        decoration: BoxDecoration(
-            border: Border.all(
-              width: 5,
-              color: Colors.green,
-            ),
-            borderRadius: BorderRadius.all(Radius.circular(30))),
-        child: Center(
-          child: Text(
-            (index + 1).toString(),
-            style: TextStyle(
-                color: Colors.green, fontSize: 25, fontWeight: FontWeight.bold),
-          ),
-        ),
+        content: getDetailsTip(index),
       );
     } else {
       return Container(
@@ -137,7 +252,7 @@ class ErpTimeline extends StatelessWidget {
               Container(
                 width: _lineLength,
                 height: 5,
-                color: index >= items.length - 1 ||
+                color: index >= requestData.historyChart.items.length - 1 ||
                         (index == _processIndex &&
                             _progressState == ProgressState.Rejected)
                     ? Colors.white
@@ -162,7 +277,7 @@ class ErpTimeline extends StatelessWidget {
               Container(
                 width: 5,
                 height: _lineLength,
-                color: index >= items.length - 1 ||
+                color: index >= requestData.historyChart.items.length - 1 ||
                         (index == _processIndex &&
                             _progressState == ProgressState.Rejected)
                     ? Colors.white
@@ -191,7 +306,7 @@ class ErpTimeline extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      items[index].date,
+                      requestData.historyChart.items[index].date,
                       style: TextStyle(
                         fontSize: 16,
                         // fontWeight: FontWeight.bold,
@@ -202,9 +317,9 @@ class ErpTimeline extends StatelessWidget {
                       height: 5,
                     ),
                     Text(
-                      !items[index].userName.isEmpty
-                          ? items[index].userName
-                          : items[index].roleTitle,
+                      !requestData.historyChart.items[index].userName.isEmpty
+                          ? requestData.historyChart.items[index].userName
+                          : requestData.historyChart.items[index].roleTitle,
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
@@ -215,8 +330,8 @@ class ErpTimeline extends StatelessWidget {
                       height: 5,
                     ),
                     Text(
-                      !items[index].userName.isEmpty
-                          ? items[index].roleTitle
+                      !requestData.historyChart.items[index].userName.isEmpty
+                          ? requestData.historyChart.items[index].roleTitle
                           : '',
                       style: TextStyle(
                         fontSize: 16,
@@ -252,7 +367,7 @@ class ErpTimeline extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  items[index].date,
+                  requestData.historyChart.items[index].date,
                   style: TextStyle(
                     fontSize: 16,
                     // fontWeight: FontWeight.bold,
@@ -263,9 +378,9 @@ class ErpTimeline extends StatelessWidget {
                   height: 5,
                 ),
                 Text(
-                  !items[index].userName.isEmpty
-                      ? items[index].userName
-                      : items[index].roleTitle,
+                  !requestData.historyChart.items[index].userName.isEmpty
+                      ? requestData.historyChart.items[index].userName
+                      : requestData.historyChart.items[index].roleTitle,
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
@@ -276,7 +391,9 @@ class ErpTimeline extends StatelessWidget {
                   height: 5,
                 ),
                 Text(
-                  !items[index].userName.isEmpty ? items[index].roleTitle : '',
+                  !requestData.historyChart.items[index].userName.isEmpty
+                      ? requestData.historyChart.items[index].roleTitle
+                      : '',
                   style: TextStyle(
                     fontSize: 16,
                     // fontWeight: FontWeight.bold,
@@ -291,7 +408,7 @@ class ErpTimeline extends StatelessWidget {
 
   List<Widget> generateTimelineItems() {
     final List<Widget> rowList = [];
-    for (int i = 0; i < items.length; i++) {
+    for (int i = 0; i < requestData.historyChart.items.length; i++) {
       _isDesktop!
           ? rowList.add(horizontalProgressItem(i))
           : rowList.add(verticalProgressItem(i));
@@ -305,9 +422,12 @@ class ErpTimeline extends StatelessWidget {
     _isDesktop!
         ? _lineLength = MediaQuery.of(context).size.width * 0.5 * 0.04
         : _lineLength = verticalLineLength;
+    _isDesktop!
+        ? _tooltipWidth = MediaQuery.of(context).size.width * 0.25
+        : _tooltipWidth = MediaQuery.of(context).size.width * 0.75;
 
     _progressState = ProgressState.Completed;
-    for (HistoryChartItems item in items) {
+    for (HistoryChartItems item in requestData.historyChart.items) {
       if (item.state == '0') {
         _progressState = ProgressState.InProgress;
         break;
