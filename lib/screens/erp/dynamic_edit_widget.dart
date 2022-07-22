@@ -778,23 +778,40 @@ class _State extends State<DynamicEditWidget> {
                     : const Text(
                         'امکان پاسخ گویی یا ویرایش برای شما میسر نمی باشد'),
           ),
-          Responsive.isDesktop(context)
-              ? Container(
-                  width: MediaQuery.of(context).size.width * 0.6,
-                  height: MediaQuery.of(context).size.width * 0.6 / 3,
-                  child: SvgPicture.network(
-                    'http://cms2.iau-neyshabur.ac.ir/api/Request/svghistory/${SharedVars.requestID}?dir=horiz&rnd=${Random().nextInt(1000000)}',
-                    // fit: BoxFit.fill,
-                  ),
-                )
-              : Container(
-                  width: MediaQuery.of(context).size.width * 0.7,
-                  height: MediaQuery.of(context).size.width * 0.7 * 3,
-                  child: Image.network(
-                    'http://cms2.iau-neyshabur.ac.ir/api/Request/pnghistory/${SharedVars.requestID}?dir=vert&rnd=${Random().nextInt(1000000)}',
-                    // fit: BoxFit.fill,
-                  ),
-                ),
+          // Responsive.isDesktop(context)
+          //     ? Container(
+          //         width: MediaQuery.of(context).size.width * 0.6,
+          //         height: MediaQuery.of(context).size.width * 0.6 / 3,
+          //         child: SvgPicture.network(
+          //           'http://cms2.iau-neyshabur.ac.ir/api/Request/svghistory/${SharedVars.requestID}?dir=horiz&rnd=${Random().nextInt(1000000)}',
+          //           // fit: BoxFit.fill,
+          //         ),
+          //       )
+          //     : Container(
+          //         width: MediaQuery.of(context).size.width * 0.7,
+          //         height: MediaQuery.of(context).size.width * 0.7 * 3,
+          //         child: Image.network(
+          //           'http://cms2.iau-neyshabur.ac.ir/api/Request/pnghistory/${SharedVars.requestID}?dir=vert&rnd=${Random().nextInt(1000000)}',
+          //           // fit: BoxFit.fill,
+          //         ),
+          //       ),
+          SizedBox(
+            height: 20,
+          ),
+          Container(
+            padding: EdgeInsets.all(10),
+            // color: Colors.yellow[100],
+            height: Responsive.isDesktop(context)
+                ? horizontalContainerHeight * 1.25 + circleDiameter
+                : (circleDiameter + 2 * verticalLineLength) *
+                    widget.itemData!.historyChart.items.length *
+                    1.05,
+            // width: 700,
+            child: ErpTimeline(widget.itemData!.historyChart.items),
+
+            // ProcessTimeline(
+            //     2, _processes, widget.itemData!.historyChart.items),
+          ),
           SizedBox(
             height: 10,
           ),
@@ -803,17 +820,6 @@ class _State extends State<DynamicEditWidget> {
             margin: EdgeInsets.all(5),
             child: Column(children: getHistoryList()),
           ),
-
-          // Container(
-          //   padding: EdgeInsets.all(10),
-          //   // color: Colors.yellow[100],
-          //   height: 250,
-          //   // width: 700,
-          //   child: ErpTimeline(widget.itemData!.historyChart.items),
-
-          //   // ProcessTimeline(
-          //   //     2, _processes, widget.itemData!.historyChart.items),
-          // ),
         ],
       ),
     );

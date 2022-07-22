@@ -163,6 +163,7 @@ class HistoryChartItems {
   String date;
   String userName;
   String roleTitle;
+  String state;
 
   HistoryChartItems(
     this.step,
@@ -170,6 +171,7 @@ class HistoryChartItems {
     this.date,
     this.userName,
     this.roleTitle,
+    this.state,
   );
 
   factory HistoryChartItems.fromMap(Map<String, dynamic> parsedJson) {
@@ -179,6 +181,7 @@ class HistoryChartItems {
       parsedJson['Date'],
       parsedJson['username'],
       parsedJson['Roletitle'],
+      parsedJson['state'],
     );
   }
 }
