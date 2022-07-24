@@ -807,7 +807,7 @@ class _State extends State<DynamicEditWidget> {
                     widget.itemData!.historyChart.items.length *
                     1.05,
             // width: 700,
-            child: ErpTimeline(widget.itemData!.historyChart.items),
+            child: ErpTimeline(widget.itemData!),
 
             // ProcessTimeline(
             //     2, _processes, widget.itemData!.historyChart.items),
