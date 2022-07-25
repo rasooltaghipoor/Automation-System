@@ -1,14 +1,7 @@
-import 'package:automation_system/components/side_menu.dart';
-import 'package:automation_system/models/Email.dart';
 import 'package:automation_system/models/MenuDetails.dart';
 import 'package:automation_system/providers/cartable_provider.dart';
 import 'package:automation_system/providers/change_provider.dart';
-import 'package:automation_system/providers/request_list_provider.dart';
-import 'package:automation_system/responsive.dart';
-import 'package:automation_system/screens/email/email_screen.dart';
 import 'package:automation_system/screens/erp/message_card.dart';
-import 'package:automation_system/screens/erp/request_card.dart';
-import 'package:automation_system/screens/main/components/letter_card.dart';
 import 'package:automation_system/utils/SizeConfiguration.dart';
 import 'package:automation_system/utils/communication/web_request.dart';
 import 'package:automation_system/utils/shared_vars.dart';

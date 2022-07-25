@@ -1,19 +1,16 @@
 import 'dart:async';
 
-import 'package:automation_system/components/erp_side_menu.dart';
-import 'package:automation_system/components/side_menu.dart';
 import 'package:automation_system/constants.dart';
-import 'package:automation_system/models/MenuDetails.dart';
 import 'package:automation_system/responsive.dart';
 import 'package:automation_system/screens/main/components/middle_screem_selector.dart';
 import 'package:automation_system/screens/main/components/navigation_bar.dart';
 import 'package:automation_system/screens/main/components/main_header.dart';
 import 'package:automation_system/screens/main/components/screen_header.dart';
+import 'package:automation_system/screens/menu/erp_side_menu.dart';
 import 'package:automation_system/utils/SizeConfiguration.dart';
 import 'package:automation_system/utils/communication/web_request.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_framework/responsive_framework.dart';
-import 'components/list_of_emails.dart';
 
 class MainScreen extends StatelessWidget {
   bool _isFirstLoad = true;

@@ -1,6 +1,3 @@
-import 'package:automation_system/utils/communication/web_request.dart';
-import 'package:flutter/cupertino.dart';
-
 class User {
   String? userId;
   String? name;

@@ -1,7 +1,6 @@
+import 'package:automation_system/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:websafe_svg/websafe_svg.dart';
-
-import '../constants.dart';
 
 class Tags extends StatelessWidget {
   const Tags({

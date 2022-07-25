@@ -1,15 +1,10 @@
 import 'dart:async';
 import 'package:automation_system/models/User.dart';
 import 'package:automation_system/providers/auth.dart';
-import 'package:automation_system/providers/user_provider.dart';
-import 'package:automation_system/screens/buy_process/buy_request_screen.dart';
-import 'package:automation_system/screens/main/components/main_header.dart';
 import 'package:automation_system/screens/main/main_screen.dart';
 import 'package:automation_system/utils/SizeConfiguration.dart';
-import 'package:automation_system/utils/communication/web_request.dart';
 import 'package:automation_system/utils/shared_vars.dart';
 import 'package:automation_system/utils/useful_widgets.dart';
-import 'package:automation_system/utils/validators.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';

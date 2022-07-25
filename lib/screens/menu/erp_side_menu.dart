@@ -1,22 +1,13 @@
-import 'package:automation_system/components/side_drawer_menu.dart';
+import 'package:automation_system/constants.dart';
 import 'package:automation_system/models/MenuDetails.dart';
 import 'package:automation_system/models/User.dart';
 import 'package:automation_system/providers/auth.dart';
 import 'package:automation_system/providers/change_provider.dart';
 import 'package:automation_system/providers/menu_provider.dart';
-import 'package:automation_system/providers/user_provider.dart';
-import 'package:automation_system/responsive.dart';
-import 'package:automation_system/utils/communication/web_request.dart';
 import 'package:automation_system/utils/shared_vars.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:websafe_svg/websafe_svg.dart';
-
-import '../constants.dart';
-import '../extensions.dart';
 import 'side_menu_item.dart';
-import 'tags.dart';
-
 import 'package:flutter/foundation.dart' show kIsWeb;
 
 class ErpSideMenu extends StatefulWidget {

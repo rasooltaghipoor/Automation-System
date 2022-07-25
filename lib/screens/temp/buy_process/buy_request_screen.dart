@@ -1,4 +1,4 @@
-import 'package:automation_system/screens/buy_process/components/item_data.dart';
+import 'package:automation_system/screens/temp/buy_process/components/item_data.dart';
 import 'package:automation_system/utils/SizeConfiguration.dart';
 import 'package:flutter/material.dart';
 import 'package:persian_datetime_picker/persian_datetime_picker.dart';

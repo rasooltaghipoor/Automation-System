@@ -1,20 +1,10 @@
-import 'dart:convert';
-
 import 'package:automation_system/constants.dart';
-import 'package:automation_system/models/DynamicForm.dart';
-import 'package:automation_system/models/ReplyButtons.dart';
 import 'package:automation_system/models/RequestData.dart';
-import 'package:automation_system/models/RequestList.dart';
-import 'package:automation_system/providers/change_provider.dart';
 import 'package:automation_system/screens/erp/dynamic_edit_widget.dart';
-import 'package:automation_system/screens/erp/timeline.dart';
-import 'package:automation_system/screens/erp/timeline_widget.dart';
 import 'package:automation_system/utils/SizeConfiguration.dart';
 import 'package:automation_system/utils/communication/web_request.dart';
 import 'package:automation_system/utils/shared_vars.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class ViewRequestScreen extends StatefulWidget {
   // final String title;

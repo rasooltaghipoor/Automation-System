@@ -1,9 +1,4 @@
-import 'package:automation_system/models/Email.dart';
 import 'package:flutter/material.dart';
-import 'package:websafe_svg/websafe_svg.dart';
-
-import '../../../constants.dart';
-import '../../../extensions.dart';
 
 class ErpIntroScreen extends StatelessWidget {
   

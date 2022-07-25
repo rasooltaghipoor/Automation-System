@@ -1,10 +1,7 @@
 import 'dart:convert';
-import 'dart:io';
-import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:automation_system/constants.dart';
-import 'package:automation_system/models/BuyModel.dart';
 import 'package:automation_system/models/DynamicForm.dart';
 import 'package:automation_system/models/MenuDetails.dart';
 import 'package:automation_system/models/ReplyButtons.dart';
@@ -14,7 +11,6 @@ import 'package:automation_system/providers/change_provider.dart';
 import 'package:automation_system/providers/menu_provider.dart';
 import 'package:automation_system/responsive.dart';
 import 'package:automation_system/screens/erp/erp_timeline.dart';
-import 'package:automation_system/screens/erp/timeline_widget.dart';
 import 'package:automation_system/utils/SizeConfiguration.dart';
 import 'package:automation_system/utils/communication/web_request.dart';
 import 'package:automation_system/utils/shared_vars.dart';
@@ -22,7 +18,6 @@ import 'package:automation_system/utils/useful_widgets.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:persian_datetime_picker/persian_datetime_picker.dart';
 import 'package:provider/provider.dart';
 
