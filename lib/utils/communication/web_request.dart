@@ -1,22 +1,17 @@
 import 'dart:convert';
-import 'dart:io';
 import 'dart:typed_data';
 import 'package:automation_system/constants.dart';
-import 'package:automation_system/models/BuyModel.dart';
 import 'package:automation_system/models/Cartable.dart';
 import 'package:automation_system/models/DynamicForm.dart';
 import 'package:automation_system/models/MenuDetails.dart';
-import 'package:automation_system/models/ReplyButtons.dart';
 import 'package:automation_system/models/RequestData.dart';
 import 'package:automation_system/models/RequestList.dart';
 import 'package:automation_system/models/RequestMenu.dart';
-import 'package:automation_system/models/User.dart';
 import 'package:automation_system/models/UserRoles.dart';
 import 'package:automation_system/providers/auth.dart';
 import 'package:automation_system/providers/cartable_provider.dart';
 import 'package:automation_system/providers/menu_provider.dart';
 import 'package:automation_system/providers/request_list_provider.dart';
-import 'package:automation_system/providers/user_provider.dart';
 import 'package:automation_system/utils/communication/connection_manager.dart';
 import 'package:automation_system/utils/shared_vars.dart';
 import 'package:flutter/cupertino.dart';
@@ -47,20 +42,7 @@ Future<DynamicFormModel> getFormDetails(String? formID) async {
   }
 }
 
-/// Reads requested form data from the server
-Future<FullDynamicForm> getFullFormDetails(String? formID) async {
-  final responseData = await getServerDataByGET('api/info/FormFull/$formID/');
-  if (responseData['form'] != null) {
-    FullDynamicForm data = FullDynamicForm.fromMap(responseData);
-    // print('form id: ' + data.forms[0].formID);
-
-    return data;
-  } else {
-    throw Exception('Unable to fetch info from the REST API');
-  }
-}
-
-/// Reads requested form data from the server
+/// Reads request list from the server
 Future<void> getRequestList(BuildContext context) async {
   try {
     Map<String, dynamic> queryParameters = {
@@ -92,7 +74,7 @@ Future<void> getRequestList(BuildContext context) async {
   } catch (e) {}
 }
 
-/// Reads requested form data from the server
+/// Reads requested data data from the server
 Future<RequestData> getRequestDetails(BuildContext context) async {
   Map<String, dynamic> queryParameters = {
     'token': Provider.of<AuthProvider>(context, listen: false).authUser.token,
@@ -110,7 +92,7 @@ Future<RequestData> getRequestDetails(BuildContext context) async {
   }
 }
 
-/// Reads some data about current date from the server
+/// Reads side menu items information from the server
 Future<void> getErpSideMenuData(BuildContext context) async {
   try {
     Map<String, dynamic> queryParameters = {
@@ -126,7 +108,6 @@ Future<void> getErpSideMenuData(BuildContext context) async {
     if (responseData['menu'] != null) {
       // We deserialize read data but only use Date field for now
       ErpSideMenuModel data = ErpSideMenuModel.fromMap(responseData);
-      // print('name: ' + data.menuData[0].title!);
       Provider.of<ErpMenuProvider>(context, listen: false).setMenu(data);
     } else {
       throw Exception('Unable to fetch info from the REST API');
@@ -134,7 +115,7 @@ Future<void> getErpSideMenuData(BuildContext context) async {
   } catch (e) {}
 }
 
-/// Reads some data about current date from the server
+/// Reads all messages from other user (Requests the player must reply to)
 Future<void> getErpCartableData(
     BuildContext context, ErpMenuItemsData itemData) async {
   try {
@@ -205,7 +186,7 @@ Future<RequestMenuModel> getErpRequestMenu(BuildContext context) async {
   }
 }
 
-Future<void> getCartableData(
+/*Future<void> getCartableData(
     BuildContext context, MenuItemsData itemData) async {
   final responseData = await getServerDataByGET(
           'api/Cartable/List/${SharedVars.username}?action=${itemData.action}')
@@ -219,7 +200,7 @@ Future<void> getCartableData(
   } else {
     throw Exception('Unable to fetch info from the REST API');
   }
-}
+}*/
 
 Future<Map<String, dynamic>> sendFormData(
     BuildContext context,

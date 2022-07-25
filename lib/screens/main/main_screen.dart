@@ -52,10 +52,7 @@ class MainScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //Provider.of<AuthProvider>(context).login('309', '309');
-    //getUserDetails2(context, '309');
-    //getSideMenuData(context, '309');
-    // print('first ' + _isFirstLoad.toString());
+    // Perform some initial actions needed in the first App appearing
     if (_isFirstLoad) {
       _isFirstLoad = false;
       _showFirstMessageDialog(context, mainUrl + 'erp/images/message.jpg');
@@ -66,10 +63,7 @@ class MainScreen extends StatelessWidget {
         getErpSideMenuData(context);
       });
     }
-    // getUserRoles(context);
-    // getErpReplyButtons(context);
-    //getCartableData(context, MenuItemsData('همه نامه ها', '0', 'All'));
-    // getErpRequestMenu(context);
+
     SizeConfig().init(context);
     // It provide us the width and height
     Size _size = MediaQuery.of(context).size;

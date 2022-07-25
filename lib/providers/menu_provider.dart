@@ -18,14 +18,3 @@ class ErpMenuProvider extends ChangeNotifier {
     if (notify) notifyListeners();
   }
 }
-
-class MenuProvider extends ChangeNotifier {
-  SideMenuModel? _sideMenu;
-
-  SideMenuModel? get sideMenu => _sideMenu;
-
-  void setMenu(SideMenuModel menu) {
-    _sideMenu = menu;
-    notifyListeners();
-  }
-}
