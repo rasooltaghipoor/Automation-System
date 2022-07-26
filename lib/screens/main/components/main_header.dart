@@ -1,38 +1,18 @@
 import 'package:automation_system/models/MenuDetails.dart';
 import 'package:automation_system/providers/change_provider.dart';
 import 'package:automation_system/providers/menu_provider.dart';
-import 'package:automation_system/utils/SizeConfiguration.dart';
-import 'package:automation_system/utils/shared_vars.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
-import 'package:websafe_svg/websafe_svg.dart';
 
 import '../../../constants.dart';
 
 class MainHeader extends StatelessWidget {
   const MainHeader({Key? key}) : super(key: key);
 
-  /*const MainHeader({
-    Key? key,
-    this.isActive = true,
-    this.email,
-    this.press,
-  }) : super(key: key);
-
-  final bool? isActive;
-  final Email? email;
-  final VoidCallback? press;*/
-
   @override
   Widget build(BuildContext context) {
-    //  Here the shadow is not showing properly
-    return
-        // Padding(
-        //     padding: const EdgeInsets.symmetric(
-        //         horizontal: kDefaultPadding, vertical: kDefaultPadding / 2),
-        // child:
-        Directionality(
+    return Directionality(
       textDirection: TextDirection.rtl,
       child: Container(
         color: kMenuColor,
@@ -67,18 +47,8 @@ class MainHeader extends StatelessWidget {
                           Provider.of<ErpMenuProvider>(context, listen: false)
                               .setActiveIndex(0, true);
                         },
-                        // icon: const Icon(
-                        //   Icons.message,
-                        //   color: Colors.white,
-                        //   size: 20.0,
-                        // ),
                         style: ElevatedButton.styleFrom(
                           primary: Colors.blueAccent,
-                          /*textStyle: const TextStyle(
-                                color: Colors.white,
-                                fontSize:
-                                SharedVars.buttonFontSize * 0.8,
-                                fontWeight: FontWeight.bold)*/
                         ),
                         child: const Text('کارتابل'),
                       ),
@@ -104,11 +74,6 @@ class MainHeader extends StatelessWidget {
                         ),
                         style: ElevatedButton.styleFrom(
                           primary: Colors.blueAccent,
-                          /*textStyle: const TextStyle(
-                                color: Colors.white,
-                                fontSize:
-                                SharedVars.buttonFontSize * 0.8,
-                                fontWeight: FontWeight.bold)*/
                         ),
                         label: const Text('درخواست های من'),
                       ),
@@ -131,16 +96,10 @@ class MainHeader extends StatelessWidget {
                         },
                         icon: const Icon(
                           Icons.sell,
-                          //color: Colors.pink,
                           size: 20.0,
                         ),
                         style: ElevatedButton.styleFrom(
                           primary: Colors.blueAccent,
-                          /*textStyle: const TextStyle(
-                                color: Colors.white,
-                                fontSize:
-                                SharedVars.buttonFontSize * 0.8,
-                                fontWeight: FontWeight.bold)*/
                         ),
                         label: const Text('درخواست جدید'),
                       ),
@@ -149,49 +108,10 @@ class MainHeader extends StatelessWidget {
                       width: 20,
                     ),
                     Text('تاریخ: ')
-                    // Container(
-                    //   padding: const EdgeInsets.all(1),
-                    //   height: 45,
-                    //   width: 140,
-                    //   child: ElevatedButton.icon(
-                    //     onPressed: () {},
-                    //     icon: const Icon(
-                    //       Icons.save_outlined,
-                    //       color: Colors.white,
-                    //       size: 24.0,
-                    //     ),
-                    //     label: const Text('بایگانی'),
-                    //   ),
-                    // ),
                   ],
                 ),
               ),
             ),
-            /*const Expanded(
-                  flex: 1,
-                  child: SizedBox(),),*/
-            // Expanded(
-            //   flex: 3,
-            //   child: TextField(
-            //     onChanged: (value) {},
-            //     decoration: InputDecoration(
-            //       hintText: "جستجو",
-            //       fillColor: kBgLightColor,
-            //       filled: true,
-            //       suffixIcon: Padding(
-            //         padding: const EdgeInsets.all(kDefaultPadding * 0.75), //15
-            //         child: WebsafeSvg.asset(
-            //           "assets/Icons/Search.svg",
-            //           width: 24,
-            //         ),
-            //       ),
-            //       border: const OutlineInputBorder(
-            //         borderRadius: BorderRadius.all(Radius.circular(10)),
-            //         borderSide: BorderSide.none,
-            //       ),
-            //     ),
-            //   ),
-            // ),
           ],
         ),
       ),

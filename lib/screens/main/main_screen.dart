@@ -17,6 +17,7 @@ class MainScreen extends StatelessWidget {
   MainScreen({Key? key}) : super(key: key);
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
+  /// Shows an alert dialog containing a picture related to some event or person.
   Future _showFirstMessageDialog(BuildContext context, String path) async {
     await Future.delayed(const Duration(seconds: 1), () {
       double width = MediaQuery.of(context).size.width * 0.5;
@@ -52,7 +53,7 @@ class MainScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Perform some initial actions needed in the first App appearing
+    // Perform some initial actions needed in the first App appearing (everyday)
     if (_isFirstLoad) {
       _isFirstLoad = false;
       _showFirstMessageDialog(context, mainUrl + 'erp/images/message.jpg');
@@ -69,7 +70,7 @@ class MainScreen extends StatelessWidget {
     Size _size = MediaQuery.of(context).size;
     return Scaffold(
       key: _scaffoldKey,
-      //appBar: AppBar(),
+      // endDrawer: a side menu to be displayed in mobile platforms
       endDrawer: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 250),
         child: const ErpSideMenu(),
@@ -88,7 +89,7 @@ class MainScreen extends StatelessWidget {
                   textDirection: TextDirection.rtl,
                   child: Row(
                     children: [
-                      // Once user click the menu icon the menu shows like drawer
+                      // Once the user clicks on the menu icon the menu will be appeared like a drawer
                       // Also we want to hide this menu icon on desktop
                       if (!Responsive.isDesktop(context))
                         IconButton(
@@ -112,10 +113,6 @@ class MainScreen extends StatelessWidget {
               children: [
                 // Once our width is less then 1300 then it start showing errors
                 // Now there is no error if our width is less then 1340
-                /*Expanded(
-              flex: _size.width > 1340 ? 8 : 10,
-              child: const EmailScreen(),
-            ),*/
                 Expanded(
                   flex: _size.width > 1340 ? 15 : 16,
                   child: Column(

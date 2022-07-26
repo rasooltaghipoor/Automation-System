@@ -149,7 +149,7 @@ Future<void> getErpCartableData(
   } catch (e) {}
 }
 
-/// Reads some data about current date from the server
+/// Reads all user roles
 Future<UserRoleModel> getUserRoles(BuildContext context) async {
   Map<String, dynamic> queryParameters = {
     'token': Provider.of<AuthProvider>(context, listen: false)
@@ -186,22 +186,12 @@ Future<RequestMenuModel> getErpRequestMenu(BuildContext context) async {
   }
 }
 
-/*Future<void> getCartableData(
-    BuildContext context, MenuItemsData itemData) async {
-  final responseData = await getServerDataByGET(
-          'api/Cartable/List/${SharedVars.username}?action=${itemData.action}')
-      as Map<String, dynamic>;
-
-  if (responseData['result'] == 'OK') {
-    // We deserialize read data but only use Date field for now
-    CartableModel data = CartableModel.fromMap(responseData);
-    Provider.of<CartableProvider>(context, listen: false)
-        .setCartable(data, itemData.title!);
-  } else {
-    throw Exception('Unable to fetch info from the REST API');
-  }
-}*/
-
+/// Sends all data filled by the user in a request form to the server
+///
+/// Paramerters: [jsonData] - the data to send, [priority]  - the priority, [filePath] - the image path if exists,
+/// [fileBytes] - the image bytes if exists, [formNameE] - the requst form name
+///
+/// Returns: a [Map] containing a message from the server
 Future<Map<String, dynamic>> sendFormData(
     BuildContext context,
     String jsonData,
@@ -257,6 +247,9 @@ Future<Map<String, dynamic>> sendFormData(
   return result;
 }
 
+/// Send a request to the server to edit some information
+///
+/// Paramerters: [jsonData] - the data to send, [filePath] - the image path if exists,
 Future<Map<String, dynamic>> editFormData(
     BuildContext context, String jsonData, String filePath) async {
   var result;
@@ -294,6 +287,9 @@ Future<Map<String, dynamic>> editFormData(
   return result;
 }
 
+/// Send a user's response to a request
+///
+/// Paramerters: [itemsData] - detials of th  request, [otherData] - other Data :))
 Future<Map<String, dynamic>> sendReplyData(BuildContext context,
     String itemsData, Map<String, dynamic> otherData) async {
   var result;

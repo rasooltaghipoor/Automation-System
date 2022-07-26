@@ -9,6 +9,7 @@ import 'package:automation_system/screens/erp/role_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 
+/// This class is responsible for changing the active page in middle of the main screen
 class MiddleScreenSelector extends StatelessWidget {
   const MiddleScreenSelector({Key? key}) : super(key: key);
 
@@ -16,7 +17,7 @@ class MiddleScreenSelector extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<ChangeProvider>(
         builder: (context, requestListModel, child) {
-      //TODO: This code ca be changed to setState method!
+      //TODO: This code can be changed to setState method!
       switch (requestListModel.screenName) {
         case ScreenName.introScreen:
           return const ErpIntroScreen();
@@ -48,9 +49,6 @@ class MiddleScreenSelector extends StatelessWidget {
         default:
           return ListOfRequests();
       }
-
-      // return requestListModel.requestList == null
-      //     ? const Center(child: CircularProgressIndicator())
     });
   }
 }

@@ -22,6 +22,7 @@ class _SideMenuState extends State<ErpSideMenu> {
   int activeIndex = -1;
   final ScrollController _mycontroller2 = ScrollController();
 
+  /// Waits for a while (some seconds) and then tries to load and show recieved messages
   void openMessageList(ErpMenuItemsData data) async {
     await Future.delayed(const Duration(seconds: 1), () {
       Map<String, dynamic> params = <String, dynamic>{"itemData": data};
@@ -33,7 +34,6 @@ class _SideMenuState extends State<ErpSideMenu> {
   @override
   Widget build(BuildContext context) {
     User user = Provider.of<AuthProvider>(context, listen: false).authUser;
-    // print('erp sidemenu...  ' + mainUrl + user.profilePic!);
     return Container(
         height: double.infinity,
         padding: EdgeInsets.only(top: kIsWeb ? kDefaultPadding : 0),
@@ -48,13 +48,12 @@ class _SideMenuState extends State<ErpSideMenu> {
               child: Column(
                 children: [
                   const SizedBox(height: kDefaultPadding),
+                  // This [ListTile] shows the user's profile (username, role and photo)
                   ListTile(
                     leading: CircleAvatar(
                       backgroundImage: user.profilePic != null
                           ? NetworkImage(mainUrl + user.profilePic!)
-                          // ? Image.asset("assets/images/user_3.png")
                           : NetworkImage("assets/images/user_3.png"),
-                      //backgroundColor: Colors.purple,
                     ),
                     title: user.name != null
                         ? Text(user.name!)
@@ -66,10 +65,10 @@ class _SideMenuState extends State<ErpSideMenu> {
                   ),
 
                   const SizedBox(height: kDefaultPadding),
-                  // Menu Items
+                  // Menu Items, We define a consumer (listener) for [ErpMenuProvider].
+                  // This provides us the ability to update the menu every time new messages recieved
                   Consumer<ErpMenuProvider>(
                     builder: (context, menuModel, child) {
-                      // menuModel.activeIndex = menuModel.activeIndex;
                       if (menuModel.sideMenu != null &&
                           menuModel.activeIndex < 0) {
                         // If cartabe data is available
@@ -79,31 +78,18 @@ class _SideMenuState extends State<ErpSideMenu> {
                           openMessageList(menuModel.sideMenu!.menuData[0]);
                         }
                       }
-                      // else if my request data is available
-                      //   } else if (int.parse(
-                      //           menuModel.sideMenu!.menuData[3].count!) >
-                      //       0) {
-                      //     menuModel.activeIndex = 3;
-                      //   }
-                      // }
                       return Column(
                         children: [
                           ExpansionTile(
                             backgroundColor: Colors.white,
                             initiallyExpanded: true,
                             title: const Text('کارتابل'),
-                            /*leading: ListTile(
-                      onTap: () {},
-                      title: Text('sdfdfd'),
-                    ),*/
                             children: <Widget>[
                               SideMenuItem(
                                 press: () {
                                   setState(() {
                                     menuModel.setActiveIndex(0, false);
                                   });
-                                  // getErpCartableData(
-                                  //     context, menuModel.sideMenu!.menuData[0]);
                                   Map<String, dynamic> params =
                                       <String, dynamic>{
                                     "itemData": menuModel.sideMenu!.menuData[0]
@@ -117,6 +103,7 @@ class _SideMenuState extends State<ErpSideMenu> {
                                 title: menuModel.sideMenu != null
                                     ? menuModel.sideMenu!.menuData[0].title
                                     : "...",
+                                // TODO: All these default icons must be replaced with some related ones.
                                 iconSrc: "assets/Icons/File.svg",
                                 isActive:
                                     menuModel.activeIndex == 0 ? true : false,
@@ -130,8 +117,6 @@ class _SideMenuState extends State<ErpSideMenu> {
                                   setState(() {
                                     menuModel.setActiveIndex(1, false);
                                   });
-                                  // getErpCartableData(
-                                  //     context, menuModel.sideMenu!.menuData[1]);
                                   Map<String, dynamic> params =
                                       <String, dynamic>{
                                     "itemData": menuModel.sideMenu!.menuData[1]
@@ -158,8 +143,6 @@ class _SideMenuState extends State<ErpSideMenu> {
                                   setState(() {
                                     menuModel.setActiveIndex(2, false);
                                   });
-                                  // getErpCartableData(
-                                  //     context, menuModel.sideMenu!.menuData[2]);
                                   Map<String, dynamic> params =
                                       <String, dynamic>{
                                     "itemData": menuModel.sideMenu!.menuData[2]
@@ -177,10 +160,6 @@ class _SideMenuState extends State<ErpSideMenu> {
                                 isActive:
                                     menuModel.activeIndex == 2 ? true : false,
                                 itemCount: -1,
-                                // itemCount: menuModel.sideMenu != null
-                                //     ? int.parse(
-                                //         menuModel.sideMenu!.menuData[2].count!)
-                                //     : 0,
                               ),
                               SideMenuItem(
                                 press: () {
@@ -256,50 +235,6 @@ class _SideMenuState extends State<ErpSideMenu> {
                               ),
                             ],
                           ),
-                          // const SizedBox(height: kDefaultPadding),
-                          // SideMenuItem(
-                          //   press: () {
-                          //     setState(() {
-                          //       menuModel.activeIndex = 3;
-                          //     });
-                          //     Map<String, dynamic> params = <String, dynamic>{
-                          //       "param": ''
-                          //     };
-                          //     Provider.of<ChangeProvider>(context,
-                          //             listen: false)
-                          //         .setMidScreen(ScreenName.requestList, params);
-                          //   },
-                          //   title: menuModel.sideMenu != null
-                          //       ? menuModel.sideMenu!.menuData[3].title
-                          //       : "...",
-                          //   iconSrc: "assets/Icons/File.svg",
-                          //   isActive: menuModel.activeIndex == 3 ? true : false,
-                          //   itemCount: menuModel.sideMenu != null
-                          //       ? int.parse(
-                          //           menuModel.sideMenu!.menuData[3].count!)
-                          //       : 0,
-                          // ),
-                          // SideMenuItem(
-                          //   press: () {
-                          //     setState(() {
-                          //       menuModel.activeIndex = 4;
-                          //     });
-                          //     // getErpCartableData(
-                          //     //     context, menuModel.sideMenu!.menuData[1]);
-                          //     Map<String, dynamic> params = <String, dynamic>{
-                          //       'formName': 'Buy',
-                          //       'title': 'درخواست جدید'
-                          //     };
-                          //     Provider.of<ChangeProvider>(context,
-                          //             listen: false)
-                          //         .setMidScreen(
-                          //             ScreenName.requestMenuScreen, params);
-                          //   },
-                          //   title: 'درخواست جدید',
-                          //   iconSrc: "assets/Icons/File.svg",
-                          //   isActive: menuModel.activeIndex == 4 ? true : false,
-                          //   itemCount: -1,
-                          // ),
                           Consumer<AuthProvider>(
                               builder: (context, authModel, child) {
                             return authModel.authUser.roleCount! > 1
@@ -308,8 +243,6 @@ class _SideMenuState extends State<ErpSideMenu> {
                                       setState(() {
                                         menuModel.setActiveIndex(5, false);
                                       });
-                                      // getErpCartableData(
-                                      //     context, menuModel.sideMenu!.menuData[1]);
                                       Map<String, dynamic> params =
                                           <String, dynamic>{
                                         'formName': 'ChangeRole',

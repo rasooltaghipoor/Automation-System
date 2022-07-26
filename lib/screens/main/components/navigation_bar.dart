@@ -3,18 +3,7 @@ import 'package:automation_system/providers/change_provider.dart';
 import 'package:automation_system/providers/menu_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
-
-/*void main() => runApp(MaterialApp(
-    builder: (context, child) {
-      return Directionality(textDirection: TextDirection.ltr, child: child!);
-    },
-    title: 'GNav',
-    theme: ThemeData(
-      primaryColor: Colors.grey[800],
-    ),
-    home: NavigationBar()));*/
 
 class MyNavigationBar extends StatefulWidget {
   @override
@@ -48,13 +37,6 @@ class _NavigationBarState extends State<MyNavigationBar> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.white,
-        /*appBar: AppBar(
-        elevation: 20,
-        title: const Text('GoogleNavBar'),
-      ),
-      body: Center(
-        child: _widgetOptions.elementAt(_selectedIndex),
-      ),*/
         bottomNavigationBar: Container(
           decoration: BoxDecoration(
             color: Colors.white,
@@ -130,12 +112,6 @@ class _NavigationBarState extends State<MyNavigationBar> {
                             .setActiveIndex(4, true);
                       },
                     ),
-                    // GButton(
-                    //   backgroundColor: Colors.amber,
-                    //   iconActiveColor: Colors.blue,
-                    //   icon: LineIcons.addressBook,
-                    //   text: 'بایگانی',
-                    // ),
                   ],
                   selectedIndex: _selectedIndex,
                   onTabChange: (index) {
