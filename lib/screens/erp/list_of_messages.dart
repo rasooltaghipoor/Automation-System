@@ -43,10 +43,6 @@ class _ListOfEmailsState extends State<ListOfMessages> {
     }
     return Scaffold(
         key: _scaffoldKey,
-        // endDrawer: ConstrainedBox(
-        //   constraints: const BoxConstraints(maxWidth: 250),
-        //   child: const SideMenu(),
-        // ),
         body: Container(
           padding: EdgeInsets.only(top: kIsWeb ? kDefaultPadding : 0),
           color: kBgDarkColor,
@@ -149,9 +145,6 @@ class _ListOfEmailsState extends State<ListOfMessages> {
                                     // On mobile this active dosen't mean anything
                                     itemBuilder: (context, index) =>
                                         MessageCard(
-                                          // isActive: Responsive.isMobile(context)
-                                          //     ? false
-                                          //     : index == 0,
                                           cartableData: cartablrModel
                                               .cartable!.catableData[index],
                                           press: () {
@@ -172,22 +165,11 @@ class _ListOfEmailsState extends State<ListOfMessages> {
                                                 .cartable!
                                                 .catableData[index]
                                                 .formName_F!;
-                                            // SharedVars.formNameE = requestListModel
-                                            //     .requestList!
-                                            //     .items[index]
-                                            //     .formName_E;
                                             Provider.of<ChangeProvider>(context,
                                                     listen: false)
                                                 .setMidScreen(
                                                     ScreenName.viewRequest,
                                                     params);
-                                            // Navigator.push(
-                                            //   context,
-                                            //   MaterialPageRoute(
-                                            //     builder: (context) => EmailScreen(
-                                            //         email: emails[index]),
-                                            //   ),
-                                            // );
                                           },
                                         ));
                       },

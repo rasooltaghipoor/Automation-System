@@ -124,30 +124,6 @@ class ErpTimeline extends StatelessWidget {
                 SizedBox(
                   height: 5,
                 ),
-                // Row(
-                //   children: [
-                //     Text('فایل ضمیمه: '),
-                //     requestData.history.items[index].attachFile != 'True'
-                //         ? Text('ندارد')
-                //         : GestureDetector(
-                //             onTap: () {
-                //               _showUpdatedDialog(mainUrl +
-                //                   requestData.history.items[index].fileUrl +
-                //                   Provider.of<AuthProvider>(context, listen: false)
-                //                       .authUser
-                //                       .token!);
-                //             },
-                //             child: Image.network(
-                //               mainUrl +
-                //                   requestData.history.items[index].fileUrl +
-                //                   Provider.of<AuthProvider>(context, listen: false)
-                //                       .authUser
-                //                       .token!,
-                //               width: 100,
-                //               height: 100,
-                //             )),
-                //   ],
-                // ),
               ],
             )));
   }
@@ -309,7 +285,6 @@ class ErpTimeline extends StatelessWidget {
                       requestData.historyChart.items[index].date,
                       style: TextStyle(
                         fontSize: 16,
-                        // fontWeight: FontWeight.bold,
                         color: getColor(index),
                       ),
                     ),
@@ -335,17 +310,9 @@ class ErpTimeline extends StatelessWidget {
                           : '',
                       style: TextStyle(
                         fontSize: 16,
-                        // fontWeight: FontWeight.bold,
                         color: getColor(index),
                       ),
                     ),
-                    // Text(
-                    //   items[index].command,
-                    //   style: TextStyle(
-                    //     fontWeight: FontWeight.bold,
-                    //     color: getColor(index),
-                    //   ),
-                    // ),
                   ],
                 ))),
       ],
@@ -370,7 +337,6 @@ class ErpTimeline extends StatelessWidget {
                   requestData.historyChart.items[index].date,
                   style: TextStyle(
                     fontSize: 16,
-                    // fontWeight: FontWeight.bold,
                     color: getColor(index),
                   ),
                 ),
@@ -396,7 +362,6 @@ class ErpTimeline extends StatelessWidget {
                       : '',
                   style: TextStyle(
                     fontSize: 16,
-                    // fontWeight: FontWeight.bold,
                     color: getColor(index),
                   ),
                 ),
@@ -441,7 +406,6 @@ class ErpTimeline extends StatelessWidget {
 
     return Responsive.isDesktop(context)
         ? Row(
-            // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: generateTimelineItems(),
           )

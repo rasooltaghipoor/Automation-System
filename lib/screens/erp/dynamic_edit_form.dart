@@ -1,8 +1,6 @@
 import 'dart:convert';
-import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:automation_system/models/BuyModel.dart';
 import 'package:automation_system/models/DynamicForm.dart';
 import 'package:automation_system/providers/change_provider.dart';
 import 'package:automation_system/providers/menu_provider.dart';
@@ -14,7 +12,6 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:persian_datetime_picker/persian_datetime_picker.dart';
-import 'package:persian_number_utility/persian_number_utility.dart';
 import 'package:provider/provider.dart';
 
 class DynamicEditForm extends StatefulWidget {
@@ -34,7 +31,6 @@ class _View2State extends State<DynamicEditForm> {
   Uint8List? fileBytes;
   String dropPriority = '0';
   RequestStatus _requestStatus = RequestStatus.NotSend;
-  // Map<String, int> _listboxIndices = Map();
   DynamicFormModel? _formData;
   Future<DynamicFormModel>? formData;
 
@@ -45,23 +41,7 @@ class _View2State extends State<DynamicEditForm> {
       Text("لطفا منتظر بمانید...")
     ],
   );
-  // List<String> _data = [
-  //   "one",
-  //   "two",
-  //   "three",
-  //   "four",
-  // ];
-  // Future<List<String>> _retrieveData() {
-  //   return Future.value(_data);
-  // }
 
-  // Fetch content from the json file
-  // Future<FullDynamicForm> readJson() async {
-  //   final String response = await rootBundle.loadString('assets/test.json');
-  //   // final responseBody = utf8.decode(response.bodyBytes);
-  //   final parsed = json.decode(response);
-  //   return FullDynamicForm.fromMap(parsed);
-  // }
   @override
   void initState() {
     super.initState();
@@ -69,8 +49,6 @@ class _View2State extends State<DynamicEditForm> {
   }
 
   Widget _futureBuilder() {
-    // SharedVars.formNameE = 'ConsumBuy';
-    // print(' ************** ' + SharedVars.formNameE);
     return FutureBuilder(
       future: formData,
       builder:
@@ -81,13 +59,6 @@ class _View2State extends State<DynamicEditForm> {
 
         final data = snapshot.data!;
         _formData = data;
-
-        // Save listbox data indices to use in future (This eliminates the future searchs for such indices)
-        // int i = 0;
-        // _listboxIndices.clear();
-        // for (ListBoxItems item in data.listBoxItems) {
-        //   _listboxIndices[item.listboxType] = i++;
-        // }
 
         return Form(
           key: formKey,
@@ -128,10 +99,6 @@ class _View2State extends State<DynamicEditForm> {
                               FilteringTextInputFormatter.digitsOnly
                             ]
                           : null,
-                      // keyboardType: TextInputType.number,
-                      // inputFormatters: [
-                      //   _DigitPersianFormatter(),
-                      // ],
                       readOnly: (data.items[index].dataType == 'date' ||
                               data.items[index].dataType == 'time')
                           ? true
@@ -168,7 +135,6 @@ class _View2State extends State<DynamicEditForm> {
                                     String min = picked.minute.toString();
                                     if (min.length < 2) min = '0' + min;
                                     controller.text = hour + ':' + min;
-                                    // controller.text = picked.format(context);
                                   }
                                 }
                               : null,
@@ -178,10 +144,6 @@ class _View2State extends State<DynamicEditForm> {
                       padding: const EdgeInsets.only(bottom: 10),
                     );
                   } else if (data.items[index].control == 'listbox') {
-                    // var dropDownValue = _getDropDownValue(
-                    //     data.items[index].controlName,
-                    //     SharedVars.listBoxItemsMap[data.items[index].dataType]!
-                    //         .items[0].title);
                     if (_dropDownMap[data.items[index].controlName] == null) {
                       if (widget.isEdit!) {
                         _dropDownMap[data.items[index].controlName] =
@@ -190,12 +152,6 @@ class _View2State extends State<DynamicEditForm> {
                         _dropDownMap[data.items[index].controlName] =
                             data.items[index].dataType[0].title;
                       }
-
-                      // SharedVars
-                      //     .listBoxItemsMap[
-                      //         data.forms[0].items[index].dataType]!
-                      //     .items[0]
-                      //     .title;
                     }
                     return Row(children: <Widget>[
                       Text(data.items[index].title),
@@ -217,13 +173,9 @@ class _View2State extends State<DynamicEditForm> {
                                     newValue!;
                               });
                             },
-                            items:
-                                // SharedVars
-                                //     .listBoxItemsMap[
-                                //         data.forms[0].items[index].dataType]!
-                                data.items[index].dataType
-                                    .map<DropdownMenuItem<String>>(
-                                        (ListItem value) {
+                            items: data.items[index].dataType
+                                .map<DropdownMenuItem<String>>(
+                                    (ListItem value) {
                               return DropdownMenuItem<String>(
                                 value: value.title,
                                 child: Text(value.title),
@@ -258,15 +210,6 @@ class _View2State extends State<DynamicEditForm> {
     }
     return controller;
   }
-
-  // String _getDropDownValue(String name, String initialValue) {
-  //   var dropValue = _dropDownMap[name];
-  //   if (dropValue == null) {
-  //     dropValue = initialValue;
-  //     _dropDownMap[name] = dropValue;
-  //   }
-  //   return dropValue;
-  // }
 
   Widget _cancelOkButton() {
     return Row(
@@ -305,19 +248,6 @@ class _View2State extends State<DynamicEditForm> {
                 if (form!.validate()) {
                   form.save();
 
-                  // String text = _controllerMap.values
-                  //     .where((element) => element.text != "")
-                  //     .fold("", (acc, element) => acc += "${element.text}\n");
-                  // await _showUpdatedDialog(text);
-
-                  // setState(() {
-                  //   _controllerMap.forEach((key, controller) {
-                  //     // get the index of original text
-                  //     int index = _controllerMap.keys.toList().indexOf(key);
-                  //     key = controller.text;
-                  //     _data[index] = controller.text;
-                  //   });
-                  // });
                   Map<String, String> items = <String, String>{};
                   for (FormItem listItem in _formData!.items) {
                     if (listItem.control == 'textbox') {
@@ -329,11 +259,7 @@ class _View2State extends State<DynamicEditForm> {
                     }
                   }
 
-                  // String jsonTutorial = jsonEncode(items);
-                  // print(jsonEncode(items));
                   setState(() {
-                    // textHolder = '';
-                    // errTextHolder = '';
                     _requestStatus = RequestStatus.Sending;
                   });
                   final Future<Map<String, dynamic>> successfulMessage =
@@ -347,14 +273,11 @@ class _View2State extends State<DynamicEditForm> {
                         _showAlertDialog('عملیات با موفقیت انجام شد', true);
 
                         getErpSideMenuData(context);
-
-                        // textHolder = response['message'];
                       });
                     } else {
                       setState(() {
                         _requestStatus = RequestStatus.Done;
                         _showAlertDialog('عملیات نا موفق بود', false);
-                        // errTextHolder = response['message'];
                       });
                     }
                   });
@@ -464,10 +387,6 @@ class _View2State extends State<DynamicEditForm> {
         child: ListView(
           children: [
             Container(child: _futureBuilder()),
-            // _cancelOkButton(),
-            // SizedBox(
-            //   height: 20,
-            // ),
             Row(children: <Widget>[
               Text('اولویت: '),
               Container(
@@ -510,11 +429,6 @@ class _View2State extends State<DynamicEditForm> {
                   width: 50,
                 ),
                 filePath.isNotEmpty
-                    // ? Image.file(
-                    //     File(filePath),
-                    //     width: 200,
-                    //     height: 200,
-                    //   )
                     ? Image.memory(
                         Uint8List.fromList(fileBytes!),
                         width: 200,
