@@ -4,6 +4,7 @@ import 'package:automation_system/models/User.dart';
 import 'package:automation_system/providers/auth.dart';
 import 'package:automation_system/providers/change_provider.dart';
 import 'package:automation_system/providers/menu_provider.dart';
+import 'package:automation_system/screens/report/print/preview_page.dart';
 import 'package:automation_system/utils/shared_vars.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -265,6 +266,19 @@ class _SideMenuState extends State<ErpSideMenu> {
                           SideMenuItem(
                             press: () {},
                             title: "جستجوی پیشرفته",
+                            iconSrc: "assets/Icons/File.svg",
+                            isActive: false,
+                            itemCount: -1,
+                          ),
+                          SideMenuItem(
+                            press: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => PreviewPage()),
+                              );
+                            },
+                            title: "گزارش و پرینت",
                             iconSrc: "assets/Icons/File.svg",
                             isActive: false,
                             itemCount: -1,

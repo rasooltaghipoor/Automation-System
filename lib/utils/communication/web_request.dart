@@ -116,8 +116,8 @@ Future<void> getErpSideMenuData(BuildContext context) async {
 }
 
 /// Reads all messages from other user (Requests the player must reply to)
-Future<void> getErpCartableData(
-    BuildContext context, ErpMenuItemsData itemData) async {
+Future<void> getErpCartableData(BuildContext context, ErpMenuItemsData itemData,
+    {String? search}) async {
   try {
     Map<String, dynamic> queryParameters = {
       'token': Provider.of<AuthProvider>(context, listen: false).authUser.token,
@@ -125,6 +125,7 @@ Future<void> getErpCartableData(
           .authUser
           .roleID, // EncryptionUtil().encryptContent(oldPassword),
     };
+    if (search != null) queryParameters['txtSearch'] = search;
 
     final responseData = await getServerDataByPOST(
         queryParameters, 'api/Request/Messagelist/${itemData.id}');
