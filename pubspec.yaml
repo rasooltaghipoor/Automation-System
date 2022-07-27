@@ -49,6 +49,10 @@ dependencies:
   flutter_svg: ^1.0.3
   persian_number_utility: ^1.1.2
   just_the_tooltip: ^0.0.12
+  pdf: ^3.8.2
+  printing: ^5.9.2
+  open_file: ^3.2.1
+  url_launcher: ^6.1.5
 
 dev_dependencies:
   flutter_test:
@@ -123,6 +127,9 @@ flutter:
     - family: Koodak
       fonts:
         - asset: assets/fonts/Yekan.ttf
+    - family: IranSans
+      fonts:
+        - asset: assets/fonts/sans.ttf    
     - family: Roboto
       fonts:
         - asset: assets/fonts/KFOmCnqEu92Fr1Me5WZLCzYlKw.ttf    
