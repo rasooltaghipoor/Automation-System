@@ -60,7 +60,7 @@ class MyApp extends StatelessWidget {
                 ),
             title: '',
             theme: ThemeData(
-              fontFamily: 'IranSans',
+              fontFamily: 'Koodak',
               primarySwatch: Colors.blue,
               visualDensity: VisualDensity.adaptivePlatformDensity,
             ),
