@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 import 'package:automation_system/constants.dart';
-import 'package:automation_system/main.dart';
 import 'package:automation_system/models/User.dart';
 import 'package:automation_system/utils/shared_preference.dart';
 import 'package:automation_system/utils/shared_vars.dart';
@@ -55,9 +53,7 @@ class AuthProvider with ChangeNotifier {
       //'user': username,
       'pass': password //EncryptionUtil().encryptContent(password)
     };
-    // print(queryParameters.values);
 
-    // print('login...');
     final response = await post(
       Uri.parse(mainUrl + 'api/Account/login/$username'),
       headers: <String, String>{
@@ -65,31 +61,12 @@ class AuthProvider with ChangeNotifier {
       },
       body: queryParameters,
     );
-    /*final response = await get(
-        Uri.parse(mainUrl + 'api/Account/login/$username?pass=$password'));*/
-    // final uri = Uri.http('cms2.iau-neyshabur.ac.ir',
-    //     '/api/Account/login/$username', queryParameters);
-    // final response = await get(uri, headers: {
-    //   //HttpHeaders.contentTypeHeader: 'application/form',
-    //   'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-    // });
-    // final response = await get(SharedVars.mainURL + '/LoginJSON.aspx?user=$email&pass=$password');
-    // print(response.body);
+
     if (response.statusCode == 200) {
       final responseBody = utf8.decode(response.bodyBytes);
       final Map<String, dynamic> responseData = json.decode(responseBody);
 
-      // print(responseData);
       if (responseData['UserID'] != null) {
-        // User authUser = User(
-        //     userId: responseData['UserID'],
-        //     name: responseData['username'],
-        //     username: username,
-        //     phone: '',
-        //     type: 'teacher',
-        //     token: responseData['token'],
-        //     renewalToken: '');
-
         _authUser = User.fromJson(responseData);
         _loggedInStatus = Status.LoggedIn;
         notifyListeners();
@@ -97,7 +74,6 @@ class AuthProvider with ChangeNotifier {
           'status': true,
           'message': 'Successful',
           'user': _authUser,
-          //'date': responseData['Time']
         };
 
         SharedVars.username = username;
@@ -107,12 +83,6 @@ class AuthProvider with ChangeNotifier {
         SharedVars.roleTitle = _authUser!.defaultRole!;
 
         UserPreferences().saveUser(_authUser!);
-
-        /*print('Testing the token....');
-        String ff = authUser.token!;
-        final response2 =
-            await get(Uri.parse(mainUrl + 'api/Account/Auth/1?token=$ff'));
-        print(response2.body);*/
       } else {
         _loggedInStatus = Status.NotLoggedIn;
         notifyListeners();
@@ -145,7 +115,6 @@ class AuthProvider with ChangeNotifier {
       'newPass': newPassword // EncryptionUtil().encryptContent(newPassword)
     };
 
-    // print('change password...');
     final response = await post(
       Uri.parse(mainUrl + '/ChangePassJSON.aspx'),
       headers: <String, String>{
@@ -157,8 +126,6 @@ class AuthProvider with ChangeNotifier {
     final responseBody = utf8.decode(response.bodyBytes);
     final Map<String, dynamic> responseData = json.decode(responseBody);
     if (response.statusCode == 200) {
-      // print(responseData);
-      //User authUser = new User(userId: 0, name: responseData['ProfName'], email: '', phone: '', type: 'teacher', token:responseData['Token'], renewalToken: '');
       if (responseData['Code'] == '1') {
         _passStatus = PassStatus.Changed;
         notifyListeners();
@@ -209,7 +176,6 @@ class AuthProvider with ChangeNotifier {
     var result;
     final Map<String, dynamic> responseData = json.decode(response.body);
 
-    // print(response.statusCode);
     if (response.statusCode == 200) {
       var userData = responseData['data'];
 
@@ -222,7 +188,6 @@ class AuthProvider with ChangeNotifier {
         'data': authUser
       };
     } else {
-//      if (response.statusCode == 401) Get.toNamed("/login");
       result = {
         'status': false,
         'message': 'Registration failed',
