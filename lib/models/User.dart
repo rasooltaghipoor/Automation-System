@@ -1,7 +1,6 @@
 class User {
   String? userId;
   String? name;
-  //String? user44name;
   String? roleID;
   String? defaultRole;
   String? profilePic;
@@ -12,7 +11,6 @@ class User {
   User(
       {this.userId,
       this.name,
-      //this.username,
       this.roleID,
       this.defaultRole,
       this.profilePic,
@@ -24,7 +22,6 @@ class User {
     return User(
         userId: responseData['UserID'],
         name: responseData['username'],
-        //username: responseData['UserID'],
         roleID: responseData['DefaultRoleid'],
         defaultRole: responseData['DefaultRole'],
         profilePic: responseData['profile'],
@@ -42,7 +39,6 @@ class UserModel {
 
   factory UserModel.fromMap(Map<String, dynamic> parsedJson) {
     var list = parsedJson['data'] as List;
-    //print(list.runtimeType);
     List<UserData> msgList = list.map((i) => UserData.fromMap(i)).toList();
     return UserModel(msgList);
   }

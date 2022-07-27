@@ -5,8 +5,8 @@ import 'package:automation_system/utils/SizeConfiguration.dart';
 import 'package:automation_system/utils/communication/web_request.dart';
 import 'package:automation_system/utils/shared_vars.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
-import 'package:websafe_svg/websafe_svg.dart';
 
 import '../../../constants.dart';
 
@@ -110,7 +110,7 @@ class _ListOfEmailsState extends State<ListOfRequests> {
                         MaterialButton(
                           minWidth: 20,
                           onPressed: () {},
-                          child: WebsafeSvg.asset(
+                          child: SvgPicture.asset(
                             "assets/Icons/Sort.svg",
                             width: 16,
                           ),

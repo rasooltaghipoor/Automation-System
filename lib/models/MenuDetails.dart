@@ -4,7 +4,6 @@ class SideMenuModel {
   SideMenuModel(this.menuData);
   factory SideMenuModel.fromMap(Map<String, dynamic> parsedJson) {
     var list = parsedJson['data'] as List;
-    //print(list.runtimeType);
     List<MenuItemsData> msgList =
         list.map((i) => MenuItemsData.fromMap(i)).toList();
     return SideMenuModel(msgList);
@@ -32,7 +31,6 @@ class ErpSideMenuModel {
   ErpSideMenuModel(this.menuData);
   factory ErpSideMenuModel.fromMap(Map<String, dynamic> parsedJson) {
     var list = parsedJson['menu'] as List;
-    //print(list.runtimeType);
     List<ErpMenuItemsData> msgList =
         list.map((i) => ErpMenuItemsData.fromMap(i)).toList();
     return ErpSideMenuModel(msgList);

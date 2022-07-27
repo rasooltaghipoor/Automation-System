@@ -1,6 +1,6 @@
 import 'package:automation_system/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:websafe_svg/websafe_svg.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class Tags extends StatelessWidget {
   const Tags({
@@ -13,9 +13,9 @@ class Tags extends StatelessWidget {
       children: [
         Row(
           children: [
-            WebsafeSvg.asset("assets/Icons/Angle down.svg", width: 16),
+            SvgPicture.asset("assets/Icons/Angle down.svg", width: 16),
             const SizedBox(width: kDefaultPadding / 4),
-            WebsafeSvg.asset("assets/Icons/Markup.svg", width: 20),
+            SvgPicture.asset("assets/Icons/Markup.svg", width: 20),
             const SizedBox(width: kDefaultPadding / 2),
             Text(
               "برچسب ها (تگ)",
@@ -54,7 +54,7 @@ class Tags extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(kDefaultPadding * 1.5, 10, 0, 10),
         child: Row(
           children: [
-            WebsafeSvg.asset(
+            SvgPicture.asset(
               "assets/Icons/Markup filled.svg",
               height: 18,
               color: color!,
