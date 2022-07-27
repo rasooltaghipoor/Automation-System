@@ -1,10 +1,7 @@
 import 'dart:convert';
-import 'dart:io';
-import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:automation_system/constants.dart';
-import 'package:automation_system/models/BuyModel.dart';
 import 'package:automation_system/models/DynamicForm.dart';
 import 'package:automation_system/models/MenuDetails.dart';
 import 'package:automation_system/models/ReplyButtons.dart';
@@ -14,7 +11,6 @@ import 'package:automation_system/providers/change_provider.dart';
 import 'package:automation_system/providers/menu_provider.dart';
 import 'package:automation_system/responsive.dart';
 import 'package:automation_system/screens/erp/erp_timeline.dart';
-import 'package:automation_system/screens/erp/timeline_widget.dart';
 import 'package:automation_system/utils/SizeConfiguration.dart';
 import 'package:automation_system/utils/communication/web_request.dart';
 import 'package:automation_system/utils/shared_vars.dart';
@@ -22,7 +18,6 @@ import 'package:automation_system/utils/useful_widgets.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:persian_datetime_picker/persian_datetime_picker.dart';
 import 'package:provider/provider.dart';
 
@@ -42,7 +37,6 @@ class DynamicEditWidget extends StatefulWidget {
 }
 
 class _State extends State<DynamicEditWidget> {
-  // Map<String, int> _listboxIndices = Map();
   final formKey = new GlobalKey<FormState>();
   DynamicFormModel? _formData;
   Future<DynamicFormModel>? formData;
@@ -59,15 +53,6 @@ class _State extends State<DynamicEditWidget> {
       Text("لطفا منتظر بمانید...")
     ],
   );
-  final _processes = [
-    'مدیر بخش',
-    'مدیر کل',
-    'معاون',
-    'رییس',
-    'آقای سهرابی',
-    'علی',
-    'نقی'
-  ];
 
   @override
   void initState() {
@@ -76,7 +61,6 @@ class _State extends State<DynamicEditWidget> {
   }
 
   Widget _requestOverviewBuilder() {
-    // SharedVars.formNameE = 'ConsumBuy';
     return FutureBuilder(
       future: formData,
       builder:
@@ -121,7 +105,6 @@ class _State extends State<DynamicEditWidget> {
   }
 
   Widget _futureBuilder() {
-    // SharedVars.formNameE = 'ConsumBuy';
     return FutureBuilder(
       future: formData,
       builder:
@@ -197,7 +180,6 @@ class _State extends State<DynamicEditWidget> {
                               String min = picked.minute.toString();
                               if (min.length < 2) min = '0' + min;
                               controller.text = hour + ':' + min;
-                              // controller.text = picked.format(context);
                             }
                           }
                         : null,
@@ -244,12 +226,8 @@ class _State extends State<DynamicEditWidget> {
                               });
                             }
                           : null,
-                      items:
-                          // SharedVars
-                          //     .listBoxItemsMap[
-                          //         data.forms[0].items[index].dataType]!
-                          data.items[index].dataType
-                              .map<DropdownMenuItem<String>>((ListItem value) {
+                      items: data.items[index].dataType
+                          .map<DropdownMenuItem<String>>((ListItem value) {
                         return DropdownMenuItem<String>(
                           value: value.title,
                           child: Text(value.title),
@@ -281,28 +259,6 @@ class _State extends State<DynamicEditWidget> {
     }
     return controller;
   }
-
-  // Widget _okButton() {
-  //   return ElevatedButton(
-  //     onPressed: () async {
-  //       Map<String, String> items = <String, String>{};
-  //       for (FormItem listItem in _formData!.items) {
-  //         if (listItem.control == 'textbox') {
-  //           items[listItem.controlName] =
-  //               _getControllerOf(listItem.controlName).text;
-  //         } else if (listItem.control == 'listbox') {
-  //           items[listItem.controlName] =
-  //               widget.dropDownMap[listItem.controlName]!;
-  //         }
-  //       }
-
-  //       // String jsonTutorial = jsonEncode(items);
-  //       print(jsonEncode(items));
-  //       sendFormData(context, jsonEncode(items));
-  //     },
-  //     child: widget.isEdit! ? const Text('ویرایش') : const Text('ارسال'),
-  //   );
-  // }
 
   void _pickFile() async {
     // opens storage to pick files and the picked file or files
@@ -365,7 +321,7 @@ class _State extends State<DynamicEditWidget> {
                         }
                       }
 
-                      print(isEdited.toString() + '   ++++++++++++');
+                      // print(isEdited.toString() + '   ++++++++++++');
 
                       Map<String, dynamic> otherItems = {
                         'description': descriptionController.text,
@@ -377,12 +333,9 @@ class _State extends State<DynamicEditWidget> {
                         'requestID': widget.itemData!.requestDetails.requestID
                       };
 
-                      // // String jsonTutorial = jsonEncode(items);
-                      print(jsonEncode(items));
+                      // print(jsonEncode(items));
 
                       setState(() {
-                        // textHolder = '';
-                        // errTextHolder = '';
                         _requestStatus = RequestStatus.Sending;
                       });
                       final Future<Map<String, dynamic>> successfulMessage =
@@ -394,13 +347,11 @@ class _State extends State<DynamicEditWidget> {
                             _requestStatus = RequestStatus.Done;
                             _showAlertDialog('عملیات با موفقیت انجام شد', true);
                             getErpSideMenuData(context);
-                            // textHolder = response['message'];
                           });
                         } else {
                           setState(() {
                             _requestStatus = RequestStatus.Done;
                             _showAlertDialog('عملیات نا موفق بود', false);
-                            // errTextHolder = response['message'];
                           });
                         }
                       });
@@ -415,7 +366,6 @@ class _State extends State<DynamicEditWidget> {
                   child: Text(buttonData.cammandTitle!))),
         );
       }
-      // sendFormData(context, jsonEncode(items));
       return rowList;
     }
   }
@@ -593,11 +543,8 @@ class _State extends State<DynamicEditWidget> {
         items[listItem.controlName] = widget.dropDownMap[listItem.controlName]!;
       }
     }
-    // String jsonTutorial = jsonEncode(items);
     print(jsonEncode(items));
     setState(() {
-      // textHolder = '';
-      // errTextHolder = '';
       _requestStatus = RequestStatus.Sending;
     });
     final Future<Map<String, dynamic>> successfulMessage =
@@ -608,13 +555,11 @@ class _State extends State<DynamicEditWidget> {
         setState(() {
           _requestStatus = RequestStatus.Done;
           _showAlertDialog('ویرایش با موفقیت انجام شد', true);
-          // textHolder = response['message'];
         });
       } else {
         setState(() {
           _requestStatus = RequestStatus.Done;
           _showAlertDialog('خطا در ویرایش اطلاعات', false);
-          // errTextHolder = response['message'];
         });
       }
     });
@@ -628,9 +573,6 @@ class _State extends State<DynamicEditWidget> {
 
   @override
   Widget build(BuildContext context) {
-    //TODO: This line should be removed in the future
-    SizeConfig().init(context);
-
     return Form(
       key: formKey,
       child: Column(
@@ -732,11 +674,6 @@ class _State extends State<DynamicEditWidget> {
                             width: 50,
                           ),
                           filePath.isNotEmpty
-                              // ? Image.file(
-                              //     File(filePath),
-                              //     width: 200,
-                              //     height: 200,
-                              //   )
                               ? Image.memory(
                                   Uint8List.fromList(fileBytes!),
                                   width: 200,
@@ -800,17 +737,12 @@ class _State extends State<DynamicEditWidget> {
           ),
           Container(
             padding: EdgeInsets.all(10),
-            // color: Colors.yellow[100],
             height: Responsive.isDesktop(context)
                 ? horizontalContainerHeight * 1.25 + circleDiameter
                 : (circleDiameter + 2 * verticalLineLength) *
                     widget.itemData!.historyChart.items.length *
                     1.05,
-            // width: 700,
             child: ErpTimeline(widget.itemData!),
-
-            // ProcessTimeline(
-            //     2, _processes, widget.itemData!.historyChart.items),
           ),
           SizedBox(
             height: 10,

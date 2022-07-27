@@ -1,47 +1,12 @@
 import 'package:automation_system/constants.dart';
-import 'package:automation_system/models/UserRoles.dart';
 import 'package:automation_system/providers/auth.dart';
 import 'package:automation_system/providers/request_list_provider.dart';
 import 'package:automation_system/responsive.dart';
 import 'package:automation_system/utils/SizeConfiguration.dart';
-import 'package:automation_system/utils/communication/web_request.dart';
 import 'package:automation_system/utils/shared_vars.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
-import 'package:websafe_svg/websafe_svg.dart';
-
-// class RoleScreenWidget extends StatelessWidget {
-//   final Future<UserRoleModel>? userRoleModel;
-
-//   RoleScreenWidget({Key? key, this.userRoleModel}) : super(key: key);
-
-//   // final items = Product.getProducts();
-//   @override
-//   Widget build(BuildContext context) {
-//     return Center(
-//         child: Directionality(
-//       textDirection: TextDirection.rtl,
-//       child: FutureBuilder<UserRoleModel>(
-//         future: userRoleModel,
-//         builder: (context, snapshot) {
-//           if (snapshot.hasError) print(snapshot.error);
-//           // if (snapshot.hasData) {
-//           //   if (snapshot.data!.rolesData.length <= 1) {
-//           //     Navigator.pushReplacementNamed(context, '/main_screen');
-//           //   }
-//           // }
-//           return snapshot.hasData
-//               ? RoleScreen()
-//               :
-//               // return the ListView widget :
-//               const Center(child: CircularProgressIndicator());
-//         },
-//       ),
-//     ));
-//   }
-// }
 
 class RoleScreen extends StatefulWidget {
   RoleScreen({
@@ -58,9 +23,6 @@ class _RoleScreenState extends State<RoleScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        // appBar: AppBar(
-        //   title: const Text('انتخاب نقش'),
-        // ),
         body: SafeArea(
       child: Directionality(
         textDirection: TextDirection.rtl,
@@ -88,7 +50,7 @@ class _RoleScreenState extends State<RoleScreen> {
                   MaterialButton(
                     minWidth: 20,
                     onPressed: () {},
-                    child: WebsafeSvg.asset(
+                    child: SvgPicture.asset(
                       "assets/Icons/Sort.svg",
                       width: 16,
                     ),
@@ -115,9 +77,6 @@ class _RoleScreenState extends State<RoleScreen> {
                       return RadioListTile<String>(
                         title: Text(
                             SharedVars.userRoles!.rolesData[index].roleTitle!),
-                        // selected:
-                        //     SharedVars.userRoles!.rolesData[index].roleID! ==
-                        //         SharedVars.roleID,
                         value: SharedVars.userRoles!.rolesData[index].roleID!,
                         contentPadding: EdgeInsets.only(left: 100, right: 100),
                         groupValue: _roleID,
@@ -144,10 +103,6 @@ class _RoleScreenState extends State<RoleScreen> {
                               SizeConfig.safeBlockHorizontal! * 30,
                               SizeConfig.safeBlockHorizontal! * 3)
                           : EdgeInsets.all(20),
-                      // SizeConfig.safeBlockHorizontal! * 20,
-                      // SizeConfig.safeBlockHorizontal! * 5,
-                      // SizeConfig.safeBlockHorizontal! * 20,
-                      // SizeConfig.safeBlockHorizontal! * 3),
                       child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                               shape: RoundedRectangleBorder(
@@ -173,30 +128,6 @@ class _RoleScreenState extends State<RoleScreen> {
                 ],
               ),
             ),
-            // RadioListTile<String>(
-            //   title: const Text('استاد'),
-            //   value: 'استاد',
-            //   contentPadding: EdgeInsets.only(left: 100, right: 100),
-            //   groupValue: _roleID,
-            //   onChanged: (String? value) {
-            //     setState(() {
-            //       print('Teacher is selected');
-            //       _roleID = value;
-            //     });
-            //   },
-            // ),
-            // RadioListTile<String>(
-            //   title: const Text('مدیر کل'),
-            //   value: 'مدیر کل',
-            //   contentPadding: EdgeInsets.only(left: 100, right: 100),
-            //   groupValue: _roleID,
-            //   onChanged: (String? value) {
-            //     setState(() {
-            //       print('Manager is selected');
-            //       _roleID = value;
-            //     });
-            //   },
-            // ),
           ],
         ),
       ),

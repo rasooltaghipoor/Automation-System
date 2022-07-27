@@ -22,7 +22,6 @@ class RequestData {
     HistoryChart historyChartData = HistoryChart.fromMap(list3[0]);
 
     var list4 = parsedJson['button'] as List;
-    //print(list.runtimeType);
     List<ReplyButtonData> btnList = [];
     if (list4.isNotEmpty) {
       btnList = list4.map((i) => ReplyButtonData.fromMap(i)).toList();

@@ -7,7 +7,6 @@ class RequestMenuModel {
     var list = parsedJson['RequestType'] as List;
     var listItem = list[0];
     var items = listItem['items'] as List;
-    //print(list.runtimeType);
     List<RequestItem> itemList =
         items.map((i) => RequestItem.fromMap(i)).toList();
     return RequestMenuModel(listItem['title'], itemList);

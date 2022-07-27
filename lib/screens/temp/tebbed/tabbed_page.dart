@@ -1,5 +1,6 @@
-import 'package:automation_system/screens/register/components/text_editor.dart';
 import 'package:flutter/material.dart';
+
+import './components/text_editor.dart';
 
 /*void main() {
   runApp(const IncomingLetterScreen());

@@ -1,7 +1,7 @@
+import 'package:automation_system/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:websafe_svg/websafe_svg.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
-import '../constants.dart';
 import 'counter_badge.dart';
 
 class SideMenuItem extends StatelessWidget {
@@ -46,7 +46,7 @@ class SideMenuItem extends StatelessWidget {
               : null,
           child: Row(
             children: [
-              WebsafeSvg.asset(
+              SvgPicture.asset(
                 iconSrc!,
                 height: 20,
                 color: (isActive! || isHover!) ? kPrimaryColor : kGrayColor,

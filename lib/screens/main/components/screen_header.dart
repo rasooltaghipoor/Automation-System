@@ -1,9 +1,6 @@
-import 'package:automation_system/constants.dart';
-import 'package:automation_system/responsive.dart';
 import 'package:automation_system/screens/login_screen.dart';
 import 'package:automation_system/utils/shared_vars.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class ScreenHeader extends StatelessWidget {
   const ScreenHeader({Key? key}) : super(key: key);
@@ -46,26 +43,7 @@ class ScreenHeader extends StatelessWidget {
                       ],
                     ),
                   ],
-                )
-                // child: ListTile(
-                //   leading:
-                //   //backgroundColor: Colors.purple,
-                //   title:
-                //   subtitle:
-                // ),
-                ),
-            // Expanded(
-            //   child: Column(
-            //     mainAxisAlignment: MainAxisAlignment.center,
-            //     children: [
-            //       Text('تاریخ:'),
-            //       SizedBox(
-            //         height: 10,
-            //       ),
-            //       Text('صفحه اصلی'),
-            //     ],
-            //   ),
-            // ),
+                )),
             Expanded(
                 flex: 1,
                 child: Row(

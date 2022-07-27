@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:automation_system/constants.dart';
 import 'package:http/http.dart' as http;
 
+/// Sends a POST request to the server and returns the response as a json object
 Future<dynamic> getServerDataByPOST(
     Map<String, dynamic>? queryParameters, String url) async {
   try {
@@ -17,7 +18,7 @@ Future<dynamic> getServerDataByPOST(
     if (response.statusCode == 200) {
       final responseBody = utf8.decode(response.bodyBytes);
       // TODO: remove this print statement
-      print(responseBody);
+      // print(responseBody);
       final responseData = json.decode(responseBody);
       return responseData;
     } else {
@@ -26,6 +27,7 @@ Future<dynamic> getServerDataByPOST(
   } catch (e) {}
 }
 
+/// Sends a GET request to the server and returns the response as a json object
 Future<dynamic> getServerDataByGET(String url) async {
   try {
     final response = await http.get(

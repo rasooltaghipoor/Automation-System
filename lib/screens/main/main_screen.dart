@@ -1,25 +1,23 @@
 import 'dart:async';
 
-import 'package:automation_system/components/erp_side_menu.dart';
-import 'package:automation_system/components/side_menu.dart';
 import 'package:automation_system/constants.dart';
-import 'package:automation_system/models/MenuDetails.dart';
 import 'package:automation_system/responsive.dart';
 import 'package:automation_system/screens/main/components/middle_screem_selector.dart';
 import 'package:automation_system/screens/main/components/navigation_bar.dart';
 import 'package:automation_system/screens/main/components/main_header.dart';
 import 'package:automation_system/screens/main/components/screen_header.dart';
+import 'package:automation_system/screens/menu/erp_side_menu.dart';
 import 'package:automation_system/utils/SizeConfiguration.dart';
 import 'package:automation_system/utils/communication/web_request.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_framework/responsive_framework.dart';
-import 'components/list_of_emails.dart';
 
 class MainScreen extends StatelessWidget {
   bool _isFirstLoad = true;
   MainScreen({Key? key}) : super(key: key);
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
+  /// Shows an alert dialog containing a picture related to some event or person.
   Future _showFirstMessageDialog(BuildContext context, String path) async {
     await Future.delayed(const Duration(seconds: 1), () {
       double width = MediaQuery.of(context).size.width * 0.5;
@@ -55,10 +53,7 @@ class MainScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //Provider.of<AuthProvider>(context).login('309', '309');
-    //getUserDetails2(context, '309');
-    //getSideMenuData(context, '309');
-    // print('first ' + _isFirstLoad.toString());
+    // Perform some initial actions needed in the first App appearing (everyday)
     if (_isFirstLoad) {
       _isFirstLoad = false;
       _showFirstMessageDialog(context, mainUrl + 'erp/images/message.jpg');
@@ -69,16 +64,13 @@ class MainScreen extends StatelessWidget {
         getErpSideMenuData(context);
       });
     }
-    // getUserRoles(context);
-    // getErpReplyButtons(context);
-    //getCartableData(context, MenuItemsData('همه نامه ها', '0', 'All'));
-    // getErpRequestMenu(context);
+
     SizeConfig().init(context);
     // It provide us the width and height
     Size _size = MediaQuery.of(context).size;
     return Scaffold(
       key: _scaffoldKey,
-      //appBar: AppBar(),
+      // endDrawer: a side menu to be displayed in mobile platforms
       endDrawer: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 250),
         child: const ErpSideMenu(),
@@ -97,7 +89,7 @@ class MainScreen extends StatelessWidget {
                   textDirection: TextDirection.rtl,
                   child: Row(
                     children: [
-                      // Once user click the menu icon the menu shows like drawer
+                      // Once the user clicks on the menu icon the menu will be appeared like a drawer
                       // Also we want to hide this menu icon on desktop
                       if (!Responsive.isDesktop(context))
                         IconButton(
@@ -121,10 +113,6 @@ class MainScreen extends StatelessWidget {
               children: [
                 // Once our width is less then 1300 then it start showing errors
                 // Now there is no error if our width is less then 1340
-                /*Expanded(
-              flex: _size.width > 1340 ? 8 : 10,
-              child: const EmailScreen(),
-            ),*/
                 Expanded(
                   flex: _size.width > 1340 ? 15 : 16,
                   child: Column(

@@ -1,24 +1,18 @@
-import 'package:automation_system/components/side_menu.dart';
-import 'package:automation_system/models/Email.dart';
 import 'package:automation_system/providers/change_provider.dart';
 import 'package:automation_system/providers/request_list_provider.dart';
-import 'package:automation_system/responsive.dart';
-import 'package:automation_system/screens/email/email_screen.dart';
 import 'package:automation_system/screens/erp/request_card.dart';
-import 'package:automation_system/screens/main/components/letter_card.dart';
 import 'package:automation_system/utils/SizeConfiguration.dart';
 import 'package:automation_system/utils/communication/web_request.dart';
 import 'package:automation_system/utils/shared_vars.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
-import 'package:websafe_svg/websafe_svg.dart';
 
 import '../../../constants.dart';
 
 import 'package:flutter/foundation.dart' show kIsWeb;
 
 class ListOfRequests extends StatefulWidget {
-  // Press "Command + ."
   const ListOfRequests({
     Key? key,
   }) : super(key: key);
@@ -41,10 +35,6 @@ class _ListOfEmailsState extends State<ListOfRequests> {
   Widget build(BuildContext context) {
     return Scaffold(
         key: _scaffoldKey,
-        // endDrawer: ConstrainedBox(
-        //   constraints: const BoxConstraints(maxWidth: 250),
-        //   child: const SideMenu(),
-        // ),
         body: Container(
           padding: EdgeInsets.only(top: kIsWeb ? kDefaultPadding : 0),
           color: kBgLightColor,
@@ -120,7 +110,7 @@ class _ListOfEmailsState extends State<ListOfRequests> {
                         MaterialButton(
                           minWidth: 20,
                           onPressed: () {},
-                          child: WebsafeSvg.asset(
+                          child: SvgPicture.asset(
                             "assets/Icons/Sort.svg",
                             width: 16,
                           ),
@@ -147,9 +137,6 @@ class _ListOfEmailsState extends State<ListOfRequests> {
                                     // On mobile this active dosen't mean anything
                                     itemBuilder: (context, index) =>
                                         RequestCard(
-                                          // isActive: Responsive.isMobile(context)
-                                          //     ? false
-                                          //     : index == 0,
                                           request: requestListModel
                                               .requestList!.items[index],
                                           press: () {
@@ -164,22 +151,11 @@ class _ListOfEmailsState extends State<ListOfRequests> {
                                             SharedVars.formNameF =
                                                 requestListModel.requestList!
                                                     .items[index].formName_F;
-                                            // SharedVars.formNameE = requestListModel
-                                            //     .requestList!
-                                            //     .items[index]
-                                            //     .formName_E;
                                             Provider.of<ChangeProvider>(context,
                                                     listen: false)
                                                 .setMidScreen(
                                                     ScreenName.viewRequest,
                                                     params);
-                                            // Navigator.push(
-                                            //   context,
-                                            //   MaterialPageRoute(
-                                            //     builder: (context) => EmailScreen(
-                                            //         email: emails[index]),
-                                            //   ),
-                                            // );
                                           },
                                         ));
                       },
