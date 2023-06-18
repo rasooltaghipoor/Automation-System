@@ -18,7 +18,7 @@ class ErpIntroScreen extends StatelessWidget {
         height: 15,
       ),
       Text(
-        'فرایار',
+        'فرآیند',
         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
       ),
       SizedBox(height: 15),
