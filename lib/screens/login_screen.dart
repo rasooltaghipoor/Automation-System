@@ -112,7 +112,7 @@ class _LoginState extends State<Login> {
     return SafeArea(
       child: Scaffold(
         appBar: myCustomAppBar(
-            'دانشگاه آزاد اسلامی', SizeConfig.safeBlockVertical! * 10, null),
+            'دانشگاه فنی قلی آباد و حومه', SizeConfig.safeBlockVertical! * 10, null),
         body: Container(
           padding: MediaQuery.of(context).size.width <
                   MediaQuery.of(context).size.height

@@ -33,7 +33,7 @@ class ScreenHeader extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Text(
-                          'فرایار',
+                          'فرآیند',
                           style: TextStyle(color: Colors.white),
                         ),
                         const Text(
